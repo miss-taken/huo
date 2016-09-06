@@ -1,4 +1,5 @@
 import React from 'react';
+import './style/antd-mobile.min';
 // import Home from './views/Home';
 
 class App extends React.Component {
@@ -14,7 +15,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        Home
+        {this.props.children || 'Home' }
       </div>
     );
   }

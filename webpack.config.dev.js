@@ -36,6 +36,10 @@ module.exports = {
         loaders: ['style', 'css', 'sass'],
       },
       {
+        test: /\.less$/,
+        loaders: ['style', 'css', 'less'],
+      },
+      {
         test: /\.(png|jpg|woff|woff2|eot|ttf|svg)$/,
         loader: 'url?limit=25000',
       },
@@ -53,6 +57,9 @@ module.exports = {
     }),
   ],
   resolve: {
-    extensions: ['', '.js', '.jsx', '.json', '.css', '.scss'],
+    extensions: ['', '.web.js', '.js', '.jsx', '.json', '.css', '.less', '.scss'],
+    modulesDirectories: [
+      'node_modules',
+    ],
   },
 };
