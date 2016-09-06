@@ -1,5 +1,6 @@
 import React from 'react';
 import './style/antd-mobile.min';
+import './style/app';
 // import Home from './views/Home';
 
 class App extends React.Component {
