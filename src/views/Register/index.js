@@ -84,6 +84,7 @@ class Login extends Component {
               </InputItem>
               <Picker
                 {...getFieldProps('car')}
+                className="reg-picker"
                 labelNumber={2}
                 cols={2}
                 extra="请选择车长车型"

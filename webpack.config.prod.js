@@ -8,7 +8,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   entry: {
     index: path.join(__dirname, 'src/index.js'),
-    // vendor: ['react'],
+    vendor: ['react', 'react-router'],
   },
   output: {
     path: path.resolve(__dirname, './build'),
@@ -26,16 +26,16 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        loaders: ['style', 'css'],
+        loader: ExtractTextPlugin.extract('style-loader', 'css-loader'),
       },
       {
         test: /\.scss$/,
         loader: ExtractTextPlugin.extract('style-loader', 'css-loader!postcss-loader!sass-loader'),
       },
-      {
-        test: /\.less$/,
-        loaders: ['style', 'css', 'less'],
-      },
+      // {
+      //   test: /\.less$/,
+      //   loaders: ['style', 'css', 'less'],
+      // },
       {
         test: /\.(png|jpg|woff|woff2|eot|ttf|svg)$/,
         loader: 'url?limit=25000',
@@ -47,7 +47,7 @@ module.exports = {
   },
   plugins: [
     new ExtractTextPlugin('[name].[contenthash:20].css'),
-    // new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.[chunkhash].js'),
+    new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.[chunkhash].js'),
     new webpack.DefinePlugin({
       'process.env': {
         'NODE_ENV': JSON.stringify('production')
@@ -64,9 +64,6 @@ module.exports = {
     }),
   ],
   resolve: {
-    extensions: ['', '.web.js', '.js', '.jsx', '.json', '.css', '.scss', 'less'],
-    modulesDirectories: [
-      'node_modules',
-    ],
+    extensions: ['', '.web.js', '.js', '.jsx', '.json', '.css', '.scss'],
   },
 };

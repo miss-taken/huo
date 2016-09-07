@@ -5,7 +5,7 @@
       "presets": ["react-hmre"],
       "plugins": [
         ["antd", {
-          "style": "less",
+          "style": "css",
           "libraryName": "antd-mobile"
         }]
       ]
