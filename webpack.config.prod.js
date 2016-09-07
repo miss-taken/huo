@@ -5,10 +5,6 @@ const precss = require('precss');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const nodeModulesPath = path.join(__dirname, 'node_modules');
-const componentsPath = path.join(__dirname, 'src/components');
-const utilsPath = path.join(__dirname, 'src/utils');
-
 module.exports = {
   entry: {
     index: path.join(__dirname, 'src/index.js'),
@@ -17,7 +13,6 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, './build'),
     filename: 'bundle.[chunkhash].js',
-    // publicPath: 'http://10.0.40.138',
     chunkFilename: '[id].[chunkhash].js',
   },
   devtool: null,
@@ -36,6 +31,10 @@ module.exports = {
       {
         test: /\.scss$/,
         loader: ExtractTextPlugin.extract('style-loader', 'css-loader!postcss-loader!sass-loader'),
+      },
+      {
+        test: /\.less$/,
+        loaders: ['style', 'css', 'less'],
       },
       {
         test: /\.(png|jpg|woff|woff2|eot|ttf|svg)$/,
@@ -65,6 +64,9 @@ module.exports = {
     }),
   ],
   resolve: {
-    extensions: ['', '.js', '.jsx', '.json', '.css', '.scss'],
+    extensions: ['', '.web.js', '.js', '.jsx', '.json', '.css', '.scss', 'less'],
+    modulesDirectories: [
+      'node_modules',
+    ],
   },
 };

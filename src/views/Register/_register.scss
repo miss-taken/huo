@@ -5,10 +5,13 @@
     top: 50%;
     transform: translate(-50%, -50%);
     text-indent: -9999px;
-    width: 200px;
+    width: 150px;
     height: 100px;
     background: #fff;
     margin: 0 auto;
+    background: transparent url(./logo.png) no-repeat;
+    background-position: center;
+    background-size: cover;
   }
   .login-bg {
     position: relative;

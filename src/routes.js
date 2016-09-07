@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, Route, browserHistory } from 'react-router';
+import { Router, IndexRoute, Route, browserHistory } from 'react-router';
 import App from './App';
 import Login from './views/Login';
 import Register from './views/Register';
@@ -14,6 +14,7 @@ class Routes extends React.Component {
     return (
       <Router history={browserHistory}>
         <Route path="/" component={App}>
+          <IndexRoute component={Login}/>
           <Route path="login" component={Login}/>
           <Route path="register" component={Register}/>
         </Route>
