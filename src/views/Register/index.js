@@ -21,7 +21,7 @@ const carLength = [
 const carType = [
   { label: '低栏车', value: 10, children: carLength },
   { label: '其他', value: 0, children: carLength },
-  { label: '冷藏车', value: 8, chilren: carLength },
+  { label: '冷藏车', value: 8, children: carLength },
   { label: '半箱式', value: 6, children: carLength },
   { label: '平板车', value: 1, children: carLength },
   { label: '特型车', value: 9, children: carLength },
