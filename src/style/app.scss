@@ -1,8 +1,10 @@
 .login {
+  overflow-y: hidden;
   .am-list .am-list-item.am-input-item {
-    min-height: 56px;
-    height: 56px;
-    line-height: 56px;
+    min-height: 50px;
+    height: 50px;
+    line-height: 50px;
+    padding-right: 10px;
   }
   .am-list .am-list-item .am-input-label {
     font-size: 14px;
@@ -30,8 +32,9 @@
   .am-picker-popup-item {
     font-size: 14px;
   }
+  // Button
   .am-button {
-    font-size: 14px;
+    font-size: 18px;
     height: 50px;
     line-height: 50px;
     &:after {
@@ -42,23 +45,29 @@
     color: #ffa416;
     border-color: #ffa416;
   }
+  .am-button-warning:after {
+    border-color: #ffa416;
+  }
+  .am-button-disabled:disabled:after {
+    border-color: #ffa416;
+  }
   .am-list .am-list-body:after {
     border: none;
   }
   // List
   .am-list-item {
-    height: 56px;
-    min-height: 56px;
+    height: 50px;
+    min-height: 50px;
   }
   // Input
   .am-list .am-list-item .am-input-control input {
-    line-height: 56px;
+    line-height: 50px;
   }
   // Picker
   .am-list-item.am-list-item-middle .am-list-line {
-    min-height: 56px;
-    height: 56px;
-    line-height: 56px;
+    min-height: 50px;
+    height: 50px;
+    line-height: 50px;
   }
   // WingBlank
   .am-wingblank.am-wingblank-lg {

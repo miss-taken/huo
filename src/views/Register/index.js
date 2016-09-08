@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { createForm } from 'rc-form';
+import _ from 'lodash';
 import { Icon, List, InputItem, Button, Toast, WingBlank, Picker } from 'antd-mobile';
 import './_register';
 
@@ -36,8 +37,11 @@ class Login extends Component {
     super(props);
     this.state = {
       data: carType,
+      verifyButtonState: false,
+      countDown: 60,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.sendVerify = _.throttle(this.sendVerify.bind(this), 60000);
   }
 
   handleSubmit() {
@@ -46,8 +50,19 @@ class Login extends Component {
     Toast.success(`成功提交账号信息, ${username} ${password}`);
   }
 
+  sendVerify() {
+    console.log('click');
+    this.setState({ verifyButtonState: true, countDown: 60 });
+    const text = setInterval(() => this.setState({ countDown: this.state.countDown - 1 }), 1000);
+    setTimeout(() => {
+      this.setState({ verifyButtonState: false, countDown: 60 });
+      clearInterval(text);
+    }, 60000);
+  }
   render() {
+    const { verifyButtonState, countDown } = this.state;
     const { getFieldProps } = this.props.form;
+    const verifyText = verifyButtonState ? `倒计时${countDown}` : '获取验证码';
     return (
       <div className="login">
         <div className="login-bg">
@@ -78,6 +93,13 @@ class Login extends Component {
                 type="number"
                 maxLength={6}
                 labelNumber={2}
+                extra = {<Button
+                  className="verify"
+                  size="small"
+                  inline
+                  disabled={verifyButtonState}
+                  onClick={this.sendVerify}
+                  >{verifyText}</Button>}
                 clear
               >
                 <Icon type="link"/>

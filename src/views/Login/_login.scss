@@ -34,7 +34,7 @@
       letter-spacing: 8px;
       line-height: 40px;
       color: #8d8f91;
-      font-size: 14px;
+      font-size: 18px;
       border-top: 1px solid rgba(204, 204, 204, 0.4);
       &.active {
         color: #e3e3e3;
@@ -47,6 +47,17 @@
       margin-top: 30px;
       // margin-left: 50px;
       // margin-right: 50px;
+    }
+  }
+  .verify {
+    font-size: 12px;
+    height: 30px;
+    line-height: 30px;
+    color: #ffa416;
+    border-color: #ffa416!important;
+    background-color: rgba(0, 0, 0, 0);
+    &:after {
+      border: 1px solid #ffa416!important;
     }
   }
 }
