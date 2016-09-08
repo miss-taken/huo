@@ -79,3 +79,27 @@
 .am-picker-popup-item, .am-picker-picker-item {
     font-size: 14px!important;
 }
+
+.person {
+  .am-list-item {
+    min-height: 58px;
+  }
+  .am-list-item .am-list-line {
+    min-height: 58px;
+    height: 58px;
+  }
+  .am-list-item .am-list-line .am-list-content {
+    font-size: 15px;
+    color: #4b4b4b;
+  }
+
+  .am-list-item .am-list-line .am-list-extra {
+    font-size: 15px;
+    color: #898989;
+  }
+  .am-list-item .am-list-line .am-list-arrow {
+    width: 15px;
+    height: 15px;
+    margin-left: 12px;
+  }
+}

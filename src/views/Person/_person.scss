@@ -1,0 +1,60 @@
+.person {
+  .panel {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    padding: 15px;
+    position: relative;
+    height: 70px;
+    background: #000;
+  }
+  .panel-media {
+    padding-right: 15px;
+    img {
+      border-radius: 4px;
+    }
+  }
+  .panel-text {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+    min-width: 0;
+    .panel-text-title {
+      font-weight: 400;
+      font-size: 16px;
+      margin-top: 10px;
+      margin-bottom: 5px;
+      width: auto;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      word-wrap: normal;
+      word-wrap: break-word;
+      word-break: break-all;
+      color: #fff;
+
+      & > span:first-child {
+        display: inline-block;
+        padding-right: 10px;
+        font-size: 16px;
+      }
+      & > span {
+        font-size: 14px;
+      }
+    }
+
+    .panel-text-desc {
+      color: #ffa032;
+      font-size: 13px;
+      line-height: 1.2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
+  }
+}
