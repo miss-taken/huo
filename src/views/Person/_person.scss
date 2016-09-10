@@ -57,4 +57,50 @@
       -webkit-line-clamp: 2;
     }
   }
+  .am-button {
+    font-size: 18px;
+    height: 50px;
+    line-height: 50px;
+    &:after {
+      border-radius: 50px;
+    }
+  }
+  // .tag-container{
+  //   display: flex;
+  //   padding-top: 0.18rem;
+  //   flex-direction: row;
+  //   flex-wrap: wrap;
+  // }
+  // .tag-container > div {
+  //   margin-left: 0.18rem;
+  //   margin-bottom: 0.18rem;
+  // }
+  .am-tag-normal {
+    border: 1px solid #a5a5a5;
+    border-radius: 28px;
+    margin-right: 25px;
+    margin-bottom: 22px;
+    font-size: 12px;
+    width: auto;
+    padding: 5px 10px;
+    line-height: 18px;
+    height: 18px;
+    & > .am-tag-text {
+      color: #a5a5a5;
+    }
+  }
+  .am-tag-active {
+    border: 1px solid #ffa032;
+    border-radius: 28px;
+    margin-right: 25px;
+    margin-bottom: 22px;
+    font-size: 12px;
+    width: auto;
+    padding: 5px 10px;
+    line-height: 18px;
+    height: 18px;
+    & > .am-tag-text {
+      color: #ffa032;
+    }
+  }
 }

@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { Icon, List, ImagePicker } from 'antd-mobile';
+import Weight from './Weight';
+import Name from './Name';
+import Fu from './Fu';
 import './_person';
 
 class Person extends Component {
@@ -52,19 +55,21 @@ class Person extends Component {
             >车牌号</List.Item>
             <List.Item
               arrow="horizontal"
-              extra="半箱式"
-            >车型</List.Item>
-            <List.Item
-              arrow="horizontal"
-              extra="9.6米"
-            >车长</List.Item>
+              extra="半箱式/9.6米"
+            >车型车长</List.Item>
             <List.Item
               arrow="horizontal"
               extra="2.6吨/30方"
+            >方位吨量</List.Item>
+            <List.Item
+            arrow="horizontal"
+            extra="绳索"
             >附属物</List.Item>
-
           </List.Body>
         </List>
+        <Weight/>
+        <Name/>
+        <Fu/>
       </div>
     );
   }

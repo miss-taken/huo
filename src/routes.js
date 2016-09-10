@@ -4,6 +4,7 @@ import App from './App';
 import Login from './views/Login';
 import Register from './views/Register';
 import Person from './views/Person';
+import Cargo from './views/Cargo';
 
 class Routes extends React.Component {
   constructor(props) {
@@ -19,6 +20,7 @@ class Routes extends React.Component {
           <Route path="login" component={Login}/>
           <Route path="register" component={Register}/>
           <Route path="person" component={Person}/>
+          <Route path="cargo" component={Cargo}/>
         </Route>
       </Router>
     );
