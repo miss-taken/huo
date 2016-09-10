@@ -1,0 +1,37 @@
+.cargo {
+  .am-list-header {
+    display: none;
+  }
+  .panel {
+     display: -webkit-box;
+     display: flex;
+     margin-bottom: 20px;
+     border-top: 1px solid #6daadd;
+     border-bottom: 1px solid #6daadd;
+     position: relative;
+
+    p {
+      margin: 8px;
+      &+p {
+        margin-bottom: 0;
+      }
+    }
+     .cargo-tip {
+       position: absolute;
+       bottom: 0;
+       right: 0;
+       background: #ffab2d;
+       color: #fff;
+       font-size: 12px;
+       height: 20px;
+       line-height: 20px;
+
+       &:before {
+        border-bottom: 100px solid red;
+        border-left: 50px solid transparent;
+        height: 0;
+        width: 20px;
+       }
+     }
+  }
+}

@@ -15,7 +15,7 @@ class Fu extends Component {
           placeholder="请输入吨位方量"
         />
         <div className="tag-container">
-          <Tag>自带工具</Tag>
+          <Tag selected>自带工具</Tag>
           <Tag>篷布</Tag>
           <Tag>绳索</Tag>
           <Tag>枕木</Tag>
