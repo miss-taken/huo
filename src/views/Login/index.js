@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { createForm } from 'rc-form';
-import { Icon, List, InputItem, Button, Toast, WingBlank } from 'antd-mobile';
+import { Icon, List, InputItem, Button, WingBlank } from 'antd-mobile';
+import request from 'superagent-bluebird-promise';
+import url from '../../utils/url';
 import './_login';
 
 class Login extends Component {
@@ -13,8 +15,29 @@ class Login extends Component {
 
   handleSubmit() {
     const { form } = this.props;
-    const { username = '', password = '' } = form.getFieldsValue();
-    Toast.success(`成功提交账号信息, ${username} ${password}`);
+    form.validateFields((errors, values) => {
+      if (!!errors) {
+        console.log('Errors in form!!!');
+        return;
+      }
+      console.log('values', values);
+      values.openId = '12345';
+      const data = {
+        data: values,
+        service: 'SERVICE_LOGIN',
+        uuid: '',
+        timestamp: '',
+        signatures: '',
+      };
+      request.post(url.login)
+      .withCredentials()
+      .send(data)
+      .then((res) => console.log('res', res));
+    });
+    // const { username = '', password = '' } = form.getFieldsValue();
+    // request.post()
+    // .send(values);
+    // Toast.success(`成功提交账号信息, ${username} ${password}`);
   }
 
   render() {
@@ -32,18 +55,27 @@ class Login extends Component {
           <List>
             <List.Body>
               <InputItem
-                {...getFieldProps('username')}
+                {...getFieldProps('username', {
+                  initialValue: '',
+                  rules: [
+                    { required: true, message: '该项为必填项' },
+                  ],
+                })}
                 className="form-mobile"
                 placeholder="请输入手机号"
                 labelNumber={2}
-                type="number"
+                type="phone"
                 clear
-                maxLength={11}
               >
                 <Icon type="mobile"/>
               </InputItem>
               <InputItem
-                {...getFieldProps('password')}
+                {...getFieldProps('password', {
+                  initialValue: '',
+                  rules: [
+                    { required: true, message: '该项为必填项' },
+                  ],
+                })}
                 className="form-password"
                 placeholder="请输入密码"
                 type="password"

@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 // const session = require('express-session');
 const bodyParser = require('body-parser');
 const cors = require('./middleware/cors');
+// const request = require('superagent-bluebird-promise');
 
 const app = express();
 
@@ -20,9 +21,16 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+console.log('bug');
 app.use(cors);
 
 app.post('/api', (req, res) => {
+  res.send('ok');
+});
+
+
+app.post('/login', (req, res) => {
+  console.log('body', req.body);
   res.send('ok');
 });
 
@@ -43,7 +51,7 @@ app.use((err, req, res) => {
   });
 });
 
-app.listen(8089, (err) => {
+app.listen(8090, (err) => {
   if (err) {
     console.log('Error: ', err);
   }
