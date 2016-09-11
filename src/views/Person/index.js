@@ -73,6 +73,41 @@ class Person extends Component {
       </div>
     );
   }
+  componentDidMount(){
+    this.prepareData();
+  }
+  // 修改吨位放量
+  prepareData() {
+    const uuid = sessionStorage.getItem('uuid');
+    if (uuid == undefined){
+      Toast.fail('请登陆');
+      return;
+    }
+    const data = {
+      data: {
+        cubic: cubic,
+        weight: weight,
+        type: 'DRIVER_INFO',
+      },
+      service: 'SERVICE_DRIVER',
+      uuid: uuid,
+      timestamp: '',
+      signatures: '',
+    };
+    console.log('values', data);
+    request.post(url.login)
+    .withCredentials()
+    .send(data)
+    .then((res) => {
+      if (res.sucess) {
+        //to-do 更新个人中心数据
+        Toast.success(res.msg);
+      } else {
+        Toast.fail(res.msg);
+      }
+    });
+  }
+
 }
 
 export default Person;

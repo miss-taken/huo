@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { InputItem, WingBlank, Button } from 'antd-mobile';
+import { InputItem, WingBlank, Toast, Button } from 'antd-mobile';
 import { createForm } from 'rc-form';
 
 class Weight extends Component {
@@ -24,6 +24,41 @@ class Weight extends Component {
         </WingBlank>
       </div>
     );
+  }
+
+  handleSubmit() {
+    const uuid = sessionStorage.getItem('uuid');
+    const name = this.props.form.getFieldProps('name').value;
+    if(name == undefined){
+      Toast.fail('请填写姓名');
+      return;
+    }
+    if (uuid == undefined){
+      Toast.fail('请登陆');
+      return;
+    }
+    const data = {
+      data: {
+        name: name,
+        type: 'DRIVER_NAME',
+      },
+      service: 'SERVICE_DRIVER',
+      uuid: uuid,
+      timestamp: '',
+      signatures: '',
+    };
+    console.log('values', data);
+    request.post(url.login)
+    .withCredentials()
+    .send(data)
+    .then((res) => {
+      if (res.sucess) {
+        //to-do 更新个人中心司机姓名 
+        Toast.success(res.msg);
+      } else {
+        Toast.fail(res.msg);
+      }
+    });
   }
 }
 const _Weight = createForm()(Weight);
