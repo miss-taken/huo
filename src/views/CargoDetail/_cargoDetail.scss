@@ -1,0 +1,74 @@
+.cargo-detail {
+  .info {
+    position: relative;
+    background: #75aade;
+    height: 150px;
+    color: #fff;
+    padding: 20px 16px;
+
+    .info-place {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+    .info-item {
+      font-size: 16px;
+      line-height: 24px;
+    }
+    .trapezoid {
+      bottom: 0;
+    }
+  }
+  .title {
+    margin-left: 30px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #cfcfcf;
+  }
+  .am-table {
+    border: 1px solid #cfcfcf;
+    border-bottom: none;
+  }
+  .am-table-body {
+
+  }
+  .am-table .am-table-horizonTitle {
+    background: #fff;
+    color: #8b8b8b;
+    border-right: 1px solid #cfcfcf;
+    font-size: 14px;
+    text-align: center;
+    font-weight: normal;
+    line-height: 40px;
+    padding: 0;
+    text-indent: 0;
+  }
+  .am-table td {
+    padding: 0;
+    font-size: 14px;
+    text-align: left;
+    line-height: 40px;
+    text-indent: 12px;
+  }
+
+  .apply-for {
+    position: absolute;
+    bottom: 0;
+    border-radius: 0;
+    color: #fff;
+    text-align: center;
+    background: #ff9307;
+    line-height: 50px;
+    height: 50px;
+    letter-spacing: 5px;
+    font-size: 18px;
+  }
+}
+.global {
+  .am-modal-body {
+    font-size: 14px;
+  }
+  .am-modal-button-group-v .am-modal-button {
+    font-size: 14px;
+    height: 44px;
+    line-height: 44px;
+  }
+}
