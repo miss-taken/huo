@@ -12,7 +12,14 @@ class Weight extends Component {
             initialValue: '',
           })}
           clear
-          placeholder="请输入吨位方量"
+          placeholder="请输入吨位"
+        />
+        <InputItem
+          {...getFieldProps('cubic', {
+            initialValue: '',
+          })}
+          clear
+          placeholder="请输入方量"
         />
         <WingBlank>
           <Button
@@ -24,6 +31,49 @@ class Weight extends Component {
         </WingBlank>
       </div>
     );
+  }
+
+ // 修改吨位放量
+  handleSubmit() {
+    const uuid = sessionStorage.getItem('uuid');
+    const weight = this.props.form.getFieldProps('weight').value;
+    const cubic = this.props.form.getFieldProps('cubic').value;
+
+    if(weight == undefined){
+      Toast.fail('请填写吨位');
+      return;
+    }
+    if(cubic == undefined){
+      Toast.fail('请填写吨位');
+      return;
+    }
+    if (uuid == undefined){
+      Toast.fail('请登陆');
+      return;
+    }
+    const data = {
+      data: {
+        cubic: cubic,
+        weight: weight,
+        type: 'DRIVER_CAR_WEIGHT',
+      },
+      service: 'SERVICE_DRIVER',
+      uuid: uuid,
+      timestamp: '',
+      signatures: '',
+    };
+    console.log('values', data);
+    request.post(url.login)
+    .withCredentials()
+    .send(data)
+    .then((res) => {
+      if (res.sucess) {
+        //to-do 更新个人中心吨位放量 
+        Toast.success(res.msg);
+      } else {
+        Toast.fail(res.msg);
+      }
+    });
   }
 }
 const _Weight = createForm()(Weight);
