@@ -12,10 +12,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors);
 
 app.post('/login', (req, res) => {
-  request.post('http://majorszhang.imwork.net/wechat/webapp.htm')
+  request.post('http://106.75.13.249:8078')
   .send(req.body)
   .then((data) => {
-    console.log('res', data);
+    console.log('res', data.body);
     res.send('ok');
   })
   .catch(err => console.log('err', err));
