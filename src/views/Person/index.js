@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { Icon, List, ImagePicker } from 'antd-mobile';
+import { Toast, Icon, List, ImagePicker } from 'antd-mobile';
 import Weight from './Weight';
 import Name from './Name';
 import Fu from './Fu';
+import request from 'superagent-bluebird-promise';
+import url from '../../utils/url';
 import './_person';
 
 class Person extends Component {
@@ -73,24 +75,24 @@ class Person extends Component {
       </div>
     );
   }
-  componentDidMount(){
+  componentDidMount() {
     this.prepareData();
   }
   // 修改吨位放量
   prepareData() {
     const uuid = sessionStorage.getItem('uuid');
-    if (uuid == undefined){
+    if (uuid === undefined) {
       Toast.fail('请登陆');
       return;
     }
     const data = {
       data: {
-        cubic: cubic,
-        weight: weight,
+        // cubic,
+        // weight,
         type: 'DRIVER_INFO',
       },
       service: 'SERVICE_DRIVER',
-      uuid: uuid,
+      uuid,
       timestamp: '',
       signatures: '',
     };
@@ -100,7 +102,7 @@ class Person extends Component {
     .send(data)
     .then((res) => {
       if (res.sucess) {
-        //to-do 更新个人中心数据
+        // to-do 更新个人中心数据
         Toast.success(res.msg);
       } else {
         Toast.fail(res.msg);

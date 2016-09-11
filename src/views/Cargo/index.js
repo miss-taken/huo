@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { ListView } from 'antd-mobile';
+import { ListView, Toast } from 'antd-mobile';
+import request from 'superagent-bluebird-promise';
+import url from '../../utils/url';
 import './_cargo';
 import a from './a.png';
 
-const data = [
+const _data = [
   {
     title: '相约酒店',
     des: '',
@@ -17,12 +19,12 @@ const data = [
     des: '不是所有的兼职汪都需要风吹日晒',
   },
 ];
-let index = data.length - 1;
+let index = _data.length - 1;
 const NUM_ROWS = 20;
 let pageIndex = 0;
 
-const currPage = 1;
-const totalPage = 2;
+let currPage = 1;
+let totalPage = 2;
 class Cargo extends Component {
   constructor(props) {
     super(props);
@@ -68,7 +70,7 @@ class Cargo extends Component {
     );
     const row = (rowData, sectionID, rowID) => {
       if (index < 0) {
-        index = data.length - 1;
+        index = _data.length - 1;
       }
       // const obj = data[index--];
       return (
@@ -115,12 +117,12 @@ class Cargo extends Component {
   }
 
   requestForCargo(page) {
-    if (currPage>=totalPage){
+    if (currPage >= totalPage) {
       Toast.fail('没有下一页了');
       return;
     }
-    const uuid = sessionStorage.getItem('uuid');
-    if (uuid == undefined){
+    let uuid = sessionStorage.getItem('uuid');
+    if (uuid === undefined) {
       uuid = '';
       return;
     }
@@ -130,7 +132,7 @@ class Cargo extends Component {
         type: 'CARGO_LIST_COMMEN',
       },
       service: 'SERVICE_CARGO',
-      uuid: uuid,
+      uuid,
       timestamp: '',
       signatures: '',
     };

@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import { InputItem, WingBlank, Button } from 'antd-mobile';
+import { Toast, InputItem, WingBlank, Button } from 'antd-mobile';
 import { createForm } from 'rc-form';
+import request from 'superagent-bluebird-promise';
+import url from '../../utils/url';
+
 
 class Weight extends Component {
   render() {
@@ -39,26 +42,26 @@ class Weight extends Component {
     const weight = this.props.form.getFieldProps('weight').value;
     const cubic = this.props.form.getFieldProps('cubic').value;
 
-    if(weight == undefined){
+    if (weight === undefined) {
       Toast.fail('请填写吨位');
       return;
     }
-    if(cubic == undefined){
+    if (cubic === undefined) {
       Toast.fail('请填写吨位');
       return;
     }
-    if (uuid == undefined){
+    if (uuid === undefined) {
       Toast.fail('请登陆');
       return;
     }
     const data = {
       data: {
-        cubic: cubic,
-        weight: weight,
+        cubic,
+        weight,
         type: 'DRIVER_CAR_WEIGHT',
       },
       service: 'SERVICE_DRIVER',
-      uuid: uuid,
+      uuid,
       timestamp: '',
       signatures: '',
     };
@@ -68,7 +71,7 @@ class Weight extends Component {
     .send(data)
     .then((res) => {
       if (res.sucess) {
-        //to-do 更新个人中心吨位放量 
+        // to-do 更新个人中心吨位放量
         Toast.success(res.msg);
       } else {
         Toast.fail(res.msg);
