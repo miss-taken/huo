@@ -1,5 +1,6 @@
 module.exports = (req, res, next) => {
   const allowOrigin = req.headers.origin;
+  console.log('res', res.headers);
   res.header('Access-Control-Allow-Origin', allowOrigin);
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
   res.header('Access-Control-Allow-Credentials', true);
