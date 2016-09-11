@@ -21,6 +21,8 @@ let index = data.length - 1;
 const NUM_ROWS = 20;
 let pageIndex = 0;
 
+const currPage = 1;
+const totalPage = 2;
 class Cargo extends Component {
   constructor(props) {
     super(props);
@@ -106,6 +108,46 @@ class Cargo extends Component {
         onEndReachedThreshold={10}
       />
     </div>);
+  }
+
+  componentDidMount() {
+    this.requestForCargo(currPage = 1);
+  }
+
+  requestForCargo(page) {
+    if (currPage>=totalPage){
+      Toast.fail('没有下一页了');
+      return;
+    }
+    const uuid = sessionStorage.getItem('uuid');
+    if (uuid == undefined){
+      uuid = '';
+      return;
+    }
+    const data = {
+      data: {
+        currPage: page,
+        type: 'CARGO_LIST_COMMEN',
+      },
+      service: 'SERVICE_CARGO',
+      uuid: uuid,
+      timestamp: '',
+      signatures: '',
+    };
+    console.log('values', data);
+    request.post(url.login)
+    .withCredentials()
+    .send(data)
+    .then((res) => {
+      if (res.sucess) {
+        Toast.success(res.msg);
+        currPage = res.data.currPage;
+        totalPage = res.data.totalPage;
+        console.log(res.result);
+      } else {
+        Toast.fail(res.msg);
+      }
+    });
   }
 }
 

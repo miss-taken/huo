@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { createForm } from 'rc-form';
-import { Icon, List, InputItem, Button, WingBlank } from 'antd-mobile';
+import { Icon, List, InputItem, Toast, Button, WingBlank } from 'antd-mobile';
 import request from 'superagent-bluebird-promise';
 import url from '../../utils/url';
 import './_login';
+
 
 class Login extends Component {
   constructor(props) {
@@ -13,6 +14,8 @@ class Login extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+
+ // 登陆请求
   handleSubmit() {
     const { form } = this.props;
     form.validateFields((errors, values) => {
@@ -21,6 +24,7 @@ class Login extends Component {
         return;
       }
       console.log('values', values);
+      console.log('username', this.getFieldProps('username'));
       values.openId = '12345';
       const data = {
         data: values,
@@ -32,12 +36,15 @@ class Login extends Component {
       request.post(url.login)
       .withCredentials()
       .send(data)
-      .then((res) => console.log('res', res));
+      .then((res) => {
+        if (res.sucess) {
+          sessionStorage.setItem('uuid', res.result);
+          Toast.success(res.msg);
+        } else {
+          Toast.fail(res.msg);
+        }
+      });
     });
-    // const { username = '', password = '' } = form.getFieldsValue();
-    // request.post()
-    // .send(values);
-    // Toast.success(`成功提交账号信息, ${username} ${password}`);
   }
 
   render() {

@@ -4,6 +4,8 @@ import { createForm } from 'rc-form';
 import _ from 'lodash';
 import { Icon, List, InputItem, Button, Toast, WingBlank, Picker } from 'antd-mobile';
 import './_register';
+import url from '../../utils/url';
+import request from 'superagent-bluebird-promise';
 
 const carLength = [
   { label: '11米', value: 8 },
@@ -45,19 +47,64 @@ class Login extends Component {
   }
 
   handleSubmit() {
-    const { form } = this.props;
-    const { username = '', password = '' } = form.getFieldsValue();
-    Toast.success(`成功提交账号信息, ${username} ${password}`);
+    const carProp = this.props.form.getFieldProps('car').value;
+    console.log(carProp);
+    const data = {
+      data: {
+        mobile: this.props.form.getFieldProps('username').value,
+        verify: this.props.form.getFieldProps('verify').value,
+        carLength: carProp[0],
+        carType: carProp[1],
+        type: 'DRIVER_REGISTER',
+        openId: '固定值',
+      },
+      service: 'SERVICE_REGISTER',
+      uuid: '',
+      timestamp: '',
+      signatures: '',
+    };
+    console.log('values', data);
+    request.post(url.login)
+    .withCredentials()
+    .send(data)
+    .then((res) => {
+      if (res.sucess) {
+        sessionStorage.setItem('uuid', res.data);
+        Toast.success(res.msg);
+      } else {
+        Toast.fail(res.msg);
+      }
+    });
   }
 
   sendVerify() {
-    console.log('click');
     this.setState({ verifyButtonState: true, countDown: 60 });
     const text = setInterval(() => this.setState({ countDown: this.state.countDown - 1 }), 1000);
     setTimeout(() => {
       this.setState({ verifyButtonState: false, countDown: 60 });
       clearInterval(text);
     }, 60000);
+    const data = {
+      data: {
+        mobile: this.props.form.getFieldProps('username').value,
+        type: 'DRIVER_REGISTER',
+      },
+      service: 'SERVICE_IDENTIFY_CODE',
+      uuid: '',
+      timestamp: '',
+      signatures: '',
+    };
+    console.log('values', data);
+    request.post(url.login)
+    .withCredentials()
+    .send(data)
+    .then((res) => {
+      if (res.sucess) {
+        Toast.success(res.msg);
+      } else {
+        Toast.fail(res.msg);
+      }
+    });
   }
   render() {
     const { verifyButtonState, countDown } = this.state;
