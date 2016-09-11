@@ -6,6 +6,8 @@ const cookieParser = require('cookie-parser');
 // const session = require('express-session');
 const bodyParser = require('body-parser');
 const cors = require('./middleware/cors');
+const request = require('superagent-bluebird-promise');
+
 // const request = require('superagent-bluebird-promise');
 
 const app = express();
@@ -24,13 +26,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 console.log('bug');
 app.use(cors);
 
-app.post('/api', (req, res) => {
-  res.send('ok');
-});
+
+app.post('/wechat/webapp.htm', (req, res) => {
+  Console.log(req.body);
+  request.post('http://106.75.13.249:8078/wechat/webapp.htm')
+  .withCredentials()
+  .send(req.body)
+  .then((res) => {
+      res.send(res);
+  });
 
 
-app.post('/login', (req, res) => {
-  console.log('body', req.body);
   res.send('ok');
 });
 
@@ -57,4 +63,5 @@ app.listen(8090, (err) => {
   }
   console.log('port 8089 in opened');
 });
+
 // module.exports = app;

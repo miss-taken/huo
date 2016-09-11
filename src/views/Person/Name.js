@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { InputItem, WingBlank, Toast, Button } from 'antd-mobile';
 import { createForm } from 'rc-form';
+import url from '../../utils/url';
+import request from 'superagent-bluebird-promise';
 
 class Weight extends Component {
   render() {
@@ -29,31 +31,30 @@ class Weight extends Component {
   handleSubmit() {
     const uuid = sessionStorage.getItem('uuid');
     const name = this.props.form.getFieldProps('name').value;
-    if(name == undefined){
+    if (name === undefined) {
       Toast.fail('请填写姓名');
       return;
     }
-    if (uuid == undefined){
+    if (uuid === undefined) {
       Toast.fail('请登陆');
       return;
     }
     const data = {
       data: {
-        name: name,
+        name,
         type: 'DRIVER_NAME',
       },
       service: 'SERVICE_DRIVER',
-      uuid: uuid,
+      uuid,
       timestamp: '',
       signatures: '',
     };
     console.log('values', data);
-    request.post(url.login)
+    request.post(url.webapp)
     .withCredentials()
     .send(data)
     .then((res) => {
       if (res.sucess) {
-        //to-do 更新个人中心司机姓名 
         Toast.success(res.msg);
       } else {
         Toast.fail(res.msg);
