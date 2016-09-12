@@ -11,14 +11,34 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors);
 
-app.post('/login', (req, res) => {
-  request.post('http://106.75.13.249:8078')
+app.post('/wechat/webapp.htm', (req, res) => {
+  console.log(req.body);
+  request.post('http://106.75.13.249:8078/wechat/webapp.htm')
+  .withCredentials()
   .send(req.body)
   .then((data) => {
-    console.log('res', data.body);
-    res.send('ok');
-  })
-  .catch(err => console.log('err', err));
+    res.send(data);
+  });
+
+
+  res.send('ok');
+});
+
+// catch 404 and forward to error handler
+app.use((req, res, next) => {
+  const err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
+
+// error handler
+// no stacktraces leaked to user unless in development environment
+app.use((err, req, res) => {
+  res.status(err.status || 500);
+  res.render('error', {
+    message: err.message,
+    error: (app.get('env') === 'development') ? err : {},
+  });
 });
 
 app.listen(7011, (err) => {

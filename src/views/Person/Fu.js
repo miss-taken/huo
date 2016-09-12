@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { InputItem, Tag, WingBlank, Button } from 'antd-mobile';
 import { createForm } from 'rc-form';
+// import url from '../../utils/url';
 
 class Fu extends Component {
   render() {

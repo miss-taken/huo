@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Toast, Icon, List, ImagePicker } from 'antd-mobile';
+import { Icon, List, Toast, ImagePicker } from 'antd-mobile';
 import Weight from './Weight';
 import Name from './Name';
 import Fu from './Fu';
@@ -87,8 +87,6 @@ class Person extends Component {
     }
     const data = {
       data: {
-        // cubic,
-        // weight,
         type: 'DRIVER_INFO',
       },
       service: 'SERVICE_DRIVER',
@@ -97,12 +95,11 @@ class Person extends Component {
       signatures: '',
     };
     console.log('values', data);
-    request.post(url.login)
+    request.post(url.webapp)
     .withCredentials()
     .send(data)
     .then((res) => {
       if (res.sucess) {
-        // to-do 更新个人中心数据
         Toast.success(res.msg);
       } else {
         Toast.fail(res.msg);
