@@ -33,7 +33,7 @@ class Login extends Component {
         timestamp: '',
         signatures: '',
       };
-      request.post(url.login)
+      request.post(url.webapp)
       .withCredentials()
       .send(data)
       .then((res) => {

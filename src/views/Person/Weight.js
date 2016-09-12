@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { Toast, InputItem, WingBlank, Button } from 'antd-mobile';
+import { InputItem, Toast, WingBlank, Button } from 'antd-mobile';
 import { createForm } from 'rc-form';
-import request from 'superagent-bluebird-promise';
 import url from '../../utils/url';
-
+import request from 'superagent-bluebird-promise';
 
 class Weight extends Component {
   render() {
@@ -66,7 +65,7 @@ class Weight extends Component {
       signatures: '',
     };
     console.log('values', data);
-    request.post(url.login)
+    request.post(url.webapp)
     .withCredentials()
     .send(data)
     .then((res) => {

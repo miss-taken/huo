@@ -22,14 +22,14 @@ let index = _data.length - 1;
 const NUM_ROWS = 20;
 let pageIndex = 0;
 
-let currPage = 1;
-let totalPage = 2;
 class Cargo extends Component {
   constructor(props) {
     super(props);
     const dataSource = new ListView.DataSource({
       rowHasChanged: (row1, row2) => row1 !== row2,
     });
+    this.currPage = 1;
+    this.totalPage = 2;
     this.genData = (pIndex = 0) => {
       const dataBlob = {};
       for (let i = 0; i < NUM_ROWS; i++) {
@@ -114,20 +114,20 @@ class Cargo extends Component {
   }
 
   componentDidMount() {
-    this.requestForCargo(currPage = 1);
+    this.requestForCargo(this.currPage = 1);
   }
 
   requestForCargo(page) {
-    if (currPage >= totalPage) {
+    let uuid = sessionStorage.getItem('uuid');
+    if (page >= this.totalPage) {
       Toast.fail('没有下一页了');
       return;
     }
-    let uuid = sessionStorage.getItem('uuid');
     if (uuid === undefined) {
       uuid = '';
       return;
     }
-    const data = {
+    const requestData = {
       data: {
         currPage: page,
         type: 'CARGO_LIST_COMMEN',
@@ -137,15 +137,15 @@ class Cargo extends Component {
       timestamp: '',
       signatures: '',
     };
-    console.log('values', data);
-    request.post(url.login)
+    console.log('values', requestData);
+    request.post(url.webapp)
     .withCredentials()
-    .send(data)
+    .send(requestData)
     .then((res) => {
       if (res.sucess) {
         Toast.success(res.msg);
-        currPage = res.data.currPage;
-        totalPage = res.data.totalPage;
+        this.currPage = res.data.currPage;
+        this.totalPage = res.data.totalPage;
         console.log(res.result);
       } else {
         Toast.fail(res.msg);
@@ -153,6 +153,5 @@ class Cargo extends Component {
     });
   }
 }
-
 
 export default Cargo;
