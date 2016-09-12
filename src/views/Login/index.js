@@ -24,7 +24,7 @@ class Login extends Component {
         return;
       }
       console.log('values', values);
-      console.log('username', this.getFieldProps('username'));
+      console.log('username', form.getFieldProps('username'));
       values.openId = '12345';
       const data = {
         data: values,

@@ -55,6 +55,7 @@ class Weight extends Component {
     .send(data)
     .then((res) => {
       if (res.sucess) {
+        // to-do 更新个人中心司机姓名
         Toast.success(res.msg);
       } else {
         Toast.fail(res.msg);

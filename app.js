@@ -1,39 +1,23 @@
 const express = require('express');
-const path = require('path');
-// const favicon = require('serve-favicon');
-const logger = require('morgan');
-const cookieParser = require('cookie-parser');
-// const session = require('express-session');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const app = express();
 const cors = require('./middleware/cors');
 const request = require('superagent-bluebird-promise');
 
-// const request = require('superagent-bluebird-promise');
-
-const app = express();
-
-// view engine setup
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'jade');
-
-// uncomment after placing your favicon in /public
-// app.use(favicon(__dirname + '/public/favicon.ico'));
-app.use(logger('dev'));
+app.use(cookieParser());
+app.use(bodyParser.raw());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-console.log('bug');
 app.use(cors);
 
-
 app.post('/wechat/webapp.htm', (req, res) => {
-  Console.log(req.body);
+  console.log(req.body);
   request.post('http://106.75.13.249:8078/wechat/webapp.htm')
   .withCredentials()
   .send(req.body)
-  .then((res) => {
-      res.send(res);
+  .then((data) => {
+    res.send(data);
   });
 
 
@@ -57,11 +41,11 @@ app.use((err, req, res) => {
   });
 });
 
-app.listen(8090, (err) => {
+app.listen(7011, (err) => {
   if (err) {
-    console.log('Error: ', err);
+    console.log(err);
+    return null;
   }
-  console.log('port 8089 in opened');
-});
 
-// module.exports = app;
+  return console.log('7011 port starting');
+});

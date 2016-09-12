@@ -3,9 +3,9 @@ import { Icon, List, Toast, ImagePicker } from 'antd-mobile';
 import Weight from './Weight';
 import Name from './Name';
 import Fu from './Fu';
-import './_person';
-import url from '../../utils/url';
 import request from 'superagent-bluebird-promise';
+import url from '../../utils/url';
+import './_person';
 
 class Person extends Component {
   constructor(props) {

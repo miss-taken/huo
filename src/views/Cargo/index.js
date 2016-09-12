@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { ListView, Toast } from 'antd-mobile';
-import './_cargo';
-import a from './a.png';
-import url from '../../utils/url';
 import request from 'superagent-bluebird-promise';
+import url from '../../utils/url';
+import './_cargo';
 
-const data = [
+const _data = [
   {
     title: '相约酒店',
     des: '',
@@ -19,7 +18,7 @@ const data = [
     des: '不是所有的兼职汪都需要风吹日晒',
   },
 ];
-let index = data.length - 1;
+let index = _data.length - 1;
 const NUM_ROWS = 20;
 let pageIndex = 0;
 
@@ -70,7 +69,7 @@ class Cargo extends Component {
     );
     const row = (rowData, sectionID, rowID) => {
       if (index < 0) {
-        index = data.length - 1;
+        index = _data.length - 1;
       }
       // const obj = data[index--];
       return (
@@ -80,14 +79,15 @@ class Cargo extends Component {
           }}
         >
         <div className="panel">
-            <img
-              style={{ height: 64 * (window.viewportScale || 1), marginRight: 8 }}
-              src={a} />
-            <div style={{ display: 'inline-block' }}>
-              <p>汽车配件  28吨/110立方</p>
-              <p>平板车 8.5米</p>
+            <div className="panel-info">
+              <div>8月24日</div>
+              <div>绵阳→广州</div>
             </div>
-            <div className="cargo-tip">等待订车</div>
+            <div style={{ display: 'inline-block' }}>
+              <p>汽车配件 <span className="span-divider"></span> 28吨/110立方</p>
+              <p>平板车 <span className="span-divider"></span> 8.5米</p>
+            </div>
+            <div className="trapezoid">等待订车</div>
           </div>
         </div>
       );
@@ -109,6 +109,7 @@ class Cargo extends Component {
         onEndReached={this.onEndReached}
         onEndReachedThreshold={10}
       />
+      <div className="help">联系客服</div>
     </div>);
   }
 
