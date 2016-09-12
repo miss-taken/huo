@@ -78,7 +78,7 @@ class Person extends Component {
   componentDidMount() {
     this.prepareData();
   }
-  // 修改吨位放量
+  // 获取司机信息
   prepareData() {
     const uuid = sessionStorage.getItem('uuid');
     if (uuid === undefined) {
@@ -99,7 +99,7 @@ class Person extends Component {
     .withCredentials()
     .send(data)
     .then((res) => {
-      if (res.sucess) {
+      if (res.success) {
         Toast.success(res.msg);
       } else {
         Toast.fail(res.msg);

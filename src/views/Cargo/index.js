@@ -129,7 +129,7 @@ class Cargo extends Component {
     }
     const requestData = {
       data: {
-        currPage: page,
+        currPage: page.toString(),
         type: 'CARGO_LIST_COMMEN',
       },
       service: 'SERVICE_CARGO',
@@ -137,12 +137,11 @@ class Cargo extends Component {
       timestamp: '',
       signatures: '',
     };
-    console.log('values', requestData);
     request.post(url.webapp)
     .withCredentials()
     .send(requestData)
     .then((res) => {
-      if (res.sucess) {
+      if (res.success) {
         Toast.success(res.msg);
         this.currPage = res.data.currPage;
         this.totalPage = res.data.totalPage;

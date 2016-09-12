@@ -1,6 +1,8 @@
 import React from 'react';
-import { WingBlank, Table, Button, Modal } from 'antd-mobile';
+import { WingBlank, Table, Toast, Button, Modal } from 'antd-mobile';
 import './_cargoDetail';
+import request from 'superagent-bluebird-promise';
+import url from '../../utils/url';
 
 const columns = [
   { title: '标题', dataIndex: 'title', key: 'title' },
@@ -98,6 +100,35 @@ class CargoDetail extends React.Component {
         <Button className="apply-for" onClick={this.handleMessageOpen}>申请</Button>
       </div>
     );
+  }
+
+  componentDidMount(){
+    this.prepareData();
+  }
+
+  // 获取货源信息
+  prepareData() {
+    const data = {
+      data: {
+        cargoId: this.props.params.id,
+        type: 'CARGO_SIMPLE',
+      },
+      service: 'SERVICE_CARGO',
+      uuid:'',
+      timestamp: '',
+      signatures: '',
+    };
+    request.post(url.webapp)
+    .withCredentials()
+    .send(data)
+    .then((res) => {
+      console.log(res.msg);
+      if (res.success) {
+        Toast.success(res.msg);
+      } else {
+        Toast.fail(res.msg);
+      }
+    });
   }
 }
 

@@ -22,11 +22,11 @@ module.exports = {
         loaders: ['react-hot', 'babel'],
         include: path.join(__dirname, 'src'),
       },
-      {
-        test: /\.jsx?$/,
-        loader: 'eslint',
-        exclude: /node_modules/,
-      },
+      // {
+      //   test: /\.jsx?$/,
+      //   loader: 'eslint',
+      //   exclude: /node_modules/,
+      // },
       {
         test: /\.css$/,
         loaders: ['style', 'css'],

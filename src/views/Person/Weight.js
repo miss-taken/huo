@@ -55,8 +55,8 @@ class Weight extends Component {
     }
     const data = {
       data: {
-        cubic,
-        weight,
+        cubic: cubic.toString(),
+        weight: weight.toString(),
         type: 'DRIVER_CAR_WEIGHT',
       },
       service: 'SERVICE_DRIVER',
@@ -64,12 +64,11 @@ class Weight extends Component {
       timestamp: '',
       signatures: '',
     };
-    console.log('values', data);
     request.post(url.webapp)
     .withCredentials()
     .send(data)
     .then((res) => {
-      if (res.sucess) {
+      if (res.success) {
         // to-do 更新个人中心吨位放量
         Toast.success(res.msg);
       } else {

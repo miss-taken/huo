@@ -23,22 +23,24 @@ class Login extends Component {
         console.log('Errors in form!!!');
         return;
       }
-      console.log('values', values);
-      console.log('username', form.getFieldProps('username'));
-      values.openId = '12345';
       const data = {
-        data: values,
+        data: {
+          mobile: values.username.toString(),
+          passWord: values.password.toString(),
+          openId: '123456'
+        },
         service: 'SERVICE_LOGIN',
         uuid: '',
         timestamp: '',
         signatures: '',
       };
+      console.log('data::'+ data);
       request.post(url.webapp)
       .withCredentials()
       .send(data)
       .then((res) => {
-        if (res.sucess) {
-          sessionStorage.setItem('uuid', res.result);
+        if (res.success) {
+          sessionStorage.setItem('uuid', res.result.uuid);
           Toast.success(res.msg);
         } else {
           Toast.fail(res.msg);
@@ -71,7 +73,8 @@ class Login extends Component {
                 className="form-mobile"
                 placeholder="请输入手机号"
                 labelNumber={2}
-                type="phone"
+                type="number"
+                maxLength={11}
                 clear
               >
                 <Icon type="mobile"/>
