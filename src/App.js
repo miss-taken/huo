@@ -1,5 +1,5 @@
 import React from 'react';
-import './style/antd-mobile';
+// import './style/antd-mobile';
 import './style/app';
 // import Home from './views/Home';
 
