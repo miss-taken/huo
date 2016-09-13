@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { ListView, Toast } from 'antd-mobile';
+import { Link } from 'react-router';
 import request from 'superagent-bluebird-promise';
 import url from '../../utils/url';
 import './_cargo';
@@ -73,23 +74,25 @@ class Cargo extends Component {
       }
       // const obj = data[index--];
       return (
-        <div key={rowID}
-          style={{
-            backgroundColor: 'white',
-          }}
-        >
-        <div className="panel">
-            <div className="panel-info">
-              <div>8月24日</div>
-              <div>绵阳→广州</div>
+        <Link to="/cargo/123">
+          <div key={rowID}
+            style={{
+              backgroundColor: 'white',
+            }}
+          >
+          <div className="panel">
+              <div className="panel-info">
+                <div>8月24日</div>
+                <div>绵阳→广州</div>
+              </div>
+              <div style={{ display: 'inline-block' }}>
+                <p>汽车配件 <span className="span-divider"></span> 28吨/110立方</p>
+                <p>平板车 <span className="span-divider"></span> 8.5米</p>
+              </div>
+              <div className="trapezoid">等待订车</div>
             </div>
-            <div style={{ display: 'inline-block' }}>
-              <p>汽车配件 <span className="span-divider"></span> 28吨/110立方</p>
-              <p>平板车 <span className="span-divider"></span> 8.5米</p>
-            </div>
-            <div className="trapezoid">等待订车</div>
           </div>
-        </div>
+        </Link>
       );
     };
     return (<div className="cargo">
