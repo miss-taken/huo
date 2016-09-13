@@ -55,14 +55,18 @@ class Person extends Component {
                 extra="林丹"
               >姓名</List.Item>
             </Link>
-            <List.Item
-              arrow="horizontal"
-              extra="浙A111111"
-            >车牌号</List.Item>
-            <List.Item
-              arrow="horizontal"
-              extra="半箱式/9.6米"
-            >车型车长</List.Item>
+            <Link to="/person/car-number">
+              <List.Item
+                arrow="horizontal"
+                extra="浙A111111"
+              >车牌号</List.Item>
+            </Link>
+            <Link to="/person/car-info">
+              <List.Item
+                arrow="horizontal"
+                extra="半箱式/9.6米"
+              >车型车长</List.Item>
+            </Link>
             <List.Item
               arrow="horizontal"
               extra="2.6吨/30方"

@@ -104,7 +104,7 @@
     }
   }
 
-  .name-input {
+  .name-input, .number-input {
     margin-top: 15px;
     border-top: 1px solid #d5d4d0;
     border-bottom: 1px solid #d5d3d0;
@@ -113,6 +113,15 @@
     input {
       color: #a0a0a0;
     }
+  }
+  .label {
+    line-height: 60px;
+    height: 60px;
+    margin-top: 15px;
+    border-top: 1px solid #d5d4d0;
+    border-bottom: 1px solid #d5d3d0;
+    padding-left: 15px;
+    background: #fff;
   }
   .submit-btn {
     margin-top: 50px;
