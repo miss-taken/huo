@@ -67,10 +67,12 @@ class Person extends Component {
                 extra="半箱式/9.6米"
               >车型车长</List.Item>
             </Link>
-            <List.Item
-              arrow="horizontal"
-              extra="2.6吨/30方"
-            >方位吨量</List.Item>
+            <Link to="/person/car-weight">
+              <List.Item
+                arrow="horizontal"
+                extra="2.6吨/30方"
+              >方位吨量</List.Item>
+            </Link>
             <List.Item
             arrow="horizontal"
             extra="绳索"
