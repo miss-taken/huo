@@ -72,3 +72,60 @@
     line-height: 44px;
   }
 }
+.cargo-upload-modal {
+  padding: 8px 25px;
+}
+.cargo-upload {
+  position: relative;
+  padding: 8px 36px;
+  .text {
+    text-align: left;
+    color: #5b5b5b;
+    line-height: 22px;
+    font-size: 16px;
+    &+.text {
+      margin-bottom: 30px;
+    }
+  }
+  .upload-demo {
+    width: 100%;
+  }
+  .upload-btn {
+    width: 90px;
+    height: 30px;
+    line-height: 30px;
+    color: #ffaa26;
+    font-size: 16px;
+    padding: 0;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    &:after {
+      border: 1px solid #ffaa26;
+      border-radius: 36px;
+    }
+  }
+}
+.dropzone {
+  width: 100%;
+  height: 100px;
+}
+.upload-img-wrapper {
+  width: 100%;
+}
+.upload-img {
+  width: 100%;
+  height: 100px;
+}
+.submit-btn {
+  color: #ffaa26;
+  width: 100%;
+  font-size: 20px;
+  line-height: 50px;
+  height: 50px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  &:after {
+    border: 2px solid #ffaa26;
+    border-radius: 50px;
+  }
+}

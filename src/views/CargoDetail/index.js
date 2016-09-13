@@ -1,5 +1,6 @@
 import React from 'react';
 import { WingBlank, Table, Button, Modal } from 'antd-mobile';
+import Upload from './Upload';
 import './_cargoDetail';
 
 const columns = [
@@ -41,7 +42,7 @@ class CargoDetail extends React.Component {
       // 详情
       infoVisible: false,
       // 上传
-      uploadVisible: false,
+      uploadVisible: true,
     };
 
     this.handleMessageOpen = this.handleMessageOpen.bind(this);
@@ -49,6 +50,9 @@ class CargoDetail extends React.Component {
 
     this.handleLoginOpen = this.handleLoginOpen.bind(this);
     this.handleJumpLogin = this.handleJumpLogin.bind(this);
+
+    this.handleUploadOpen = this.handleUploadOpen.bind(this);
+    this.handleUploadClose = this.handleUploadClose.bind(this);
   }
 
   handleMessageOpen() {
@@ -57,6 +61,7 @@ class CargoDetail extends React.Component {
     });
   }
 
+  // 成功弹出层
   handleMessageClose() {
     this.setState({
       messageVisible: false,
@@ -69,6 +74,7 @@ class CargoDetail extends React.Component {
     });
   }
 
+  // 注册提示弹出层
   handleLoginOpen() {
     setTimeout(() => (location.href = '/#/login'), 5000);
     this.setState({
@@ -80,8 +86,21 @@ class CargoDetail extends React.Component {
     location.href = '/#/login';
   }
 
+  // 上传弹出层
+  handleUploadOpen() {
+    this.setState({ uploadVisible: true });
+  }
+
+  handleUploadClose() {
+    this.setState({ uploadVisible: false });
+  }
+
   render() {
-    const { messageVisible, loginVisible } = this.state;
+    const {
+      messageVisible,
+      loginVisible,
+      uploadVisible,
+    } = this.state;
     return (
       <div className="cargo-detail">
         <div className="info">
@@ -126,8 +145,12 @@ class CargoDetail extends React.Component {
             }}
             footer={[{ text: '确认', onPress: this.handleJumpLogin }]}
             >
-            <div>您还未注册，请到注册页面注册</div>
+            <div>您还没注册，需要先注册哦</div>
           </Modal>
+          <Upload
+            visible={uploadVisible}
+            onClose={this.handleUploadClose}
+          />
         </WingBlank>
         <Button className="apply-for" onClick={this.handleMessageOpen}>申请</Button>
       </div>
