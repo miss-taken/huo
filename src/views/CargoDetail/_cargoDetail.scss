@@ -129,3 +129,94 @@
     border-radius: 50px;
   }
 }
+
+.cargo-offer-modal {
+  padding: 8px 25px;
+}
+.cargo-offer {
+  margin-top: 15px;
+  padding: 18px 20px;
+  .divider {
+    display: inline-block;
+    width: 10px;
+  }
+  .text {
+    color: #8a8a8a;
+    line-height: 24px;
+    text-align: left;
+  }
+  .offer {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #979797;
+  }
+  .am-list-item {
+    padding-left: 0;
+    min-height: 0;
+  }
+  .form-item {
+    line-height: 42px;
+    padding-left: 10px;
+    padding-right: 10px;
+    &.first {
+      border-bottom:1px solid #979797;
+    }
+  }
+  .am-input-label {
+    min-width: 60px;
+  }
+  .am-input-control {
+    & > input {
+      border: none;
+      text-align: right;
+    }
+  }
+  .price-wrapper {
+    position: relative;
+  }
+  .price1 {
+    .am-input-control {
+      & > input {
+        width: 50px;
+      }
+    }
+  }
+  .price2 {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    .am-input-control {
+      & > input {
+        width: 50px;
+      }
+    }
+  }
+  .cancel-btn {
+    width: 90px;
+    height: 40px;
+    line-height: 40px;
+    color: #aaa8a5;
+    font-size: 16px;
+    padding: 0;
+    margin-bottom: 16px;
+    &:after {
+      border: 1px solid #aaa8a5;
+      border-radius: 36px;
+    }
+    margin-right: 50px;
+  }
+
+  .confirm-btn {
+    width: 90px;
+    height: 40px;
+    line-height: 40px;
+    color: #ffaa26;
+    font-size: 16px;
+    padding: 0;
+    margin-bottom: 16px;
+    &:after {
+      border: 1px solid #ffaa26;
+      border-radius: 36px;
+    }
+  }
+}

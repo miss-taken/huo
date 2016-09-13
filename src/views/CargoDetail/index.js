@@ -1,5 +1,6 @@
 import React from 'react';
 import { WingBlank, Table, Button, Modal } from 'antd-mobile';
+import Offer from './Offer';
 import Upload from './Upload';
 import './_cargoDetail';
 
@@ -40,14 +41,16 @@ class CargoDetail extends React.Component {
       // 跳转登录
       loginVisible: false,
       // 详情
-      infoVisible: false,
+      offerVisible: true,
       // 上传
-      uploadVisible: true,
+      uploadVisible: false,
     };
 
     this.handleMessageOpen = this.handleMessageOpen.bind(this);
     this.handleMessageClose = this.handleMessageClose.bind(this);
 
+    this.handleOfferOpen = this.handleOfferOpen.bind(this);
+    this.handleOfferClose = this.handleOfferClose.bind(this);
     this.handleLoginOpen = this.handleLoginOpen.bind(this);
     this.handleJumpLogin = this.handleJumpLogin.bind(this);
 
@@ -58,6 +61,19 @@ class CargoDetail extends React.Component {
   handleMessageOpen() {
     this.setState({
       messageVisible: true,
+    });
+  }
+
+  // 报价弹出层
+  handleOfferOpen() {
+    this.setState({
+      offerVisible: true,
+    });
+  }
+
+  handleOfferClose() {
+    this.setState({
+      offerVisible: false,
     });
   }
 
@@ -99,6 +115,7 @@ class CargoDetail extends React.Component {
     const {
       messageVisible,
       loginVisible,
+      offerVisible,
       uploadVisible,
     } = this.state;
     return (
@@ -147,6 +164,10 @@ class CargoDetail extends React.Component {
             >
             <div>您还没注册，需要先注册哦</div>
           </Modal>
+          <Offer
+            visible={offerVisible}
+            onClose={this.handleOfferClose}
+          />
           <Upload
             visible={uploadVisible}
             onClose={this.handleUploadClose}
