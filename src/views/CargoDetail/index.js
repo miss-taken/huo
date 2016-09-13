@@ -36,6 +36,8 @@ class CargoDetail extends React.Component {
     this.state = {
       // 提示信息
       messageVisible: false,
+      // 跳转登录
+      loginVisible: false,
       // 详情
       infoVisible: false,
       // 上传
@@ -44,6 +46,9 @@ class CargoDetail extends React.Component {
 
     this.handleMessageOpen = this.handleMessageOpen.bind(this);
     this.handleMessageClose = this.handleMessageClose.bind(this);
+
+    this.handleLoginOpen = this.handleLoginOpen.bind(this);
+    this.handleJumpLogin = this.handleJumpLogin.bind(this);
   }
 
   handleMessageOpen() {
@@ -58,8 +63,25 @@ class CargoDetail extends React.Component {
     });
   }
 
+  handleLoginOpen() {
+    this.setState({
+      messageVisible: false,
+    });
+  }
+
+  handleLoginOpen() {
+    setTimeout(() => (location.href = '/#/login'), 5000);
+    this.setState({
+      loginVisible: true,
+    });
+  }
+
+  handleJumpLogin() {
+    location.href = '/#/login';
+  }
+
   render() {
-    const { messageVisible } = this.state;
+    const { messageVisible, loginVisible } = this.state;
     return (
       <div className="cargo-detail">
         <div className="info">
@@ -93,6 +115,18 @@ class CargoDetail extends React.Component {
             footer={[{ text: '返回', onPress: this.handleMessageClose }]}
           >
             <div>提交成功，等待客服联系您...</div>
+          </Modal>
+          <Modal
+            transparent
+            visible={loginVisible}
+            className="login-modal"
+            style={{
+              width: 'auto',
+              height: 'auto',
+            }}
+            footer={[{ text: '确认', onPress: this.handleJumpLogin }]}
+            >
+            <div>您还未注册，请到注册页面注册</div>
           </Modal>
         </WingBlank>
         <Button className="apply-for" onClick={this.handleMessageOpen}>申请</Button>
