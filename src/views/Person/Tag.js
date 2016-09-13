@@ -3,20 +3,31 @@ import { InputItem, Tag, WingBlank, Button } from 'antd-mobile';
 import { createForm } from 'rc-form';
 // import url from '../../utils/url';
 
-class Fu extends Component {
+class CarTag extends Component {
+  constructor(props) {
+    super(props);
+
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleSubmit() {
+    location.href = '/#/person';
+  }
+
   render() {
     const { getFieldProps } = this.props.form;
     return (
-      <div>
+      <div className="page">
         <InputItem
           {...getFieldProps('weight', {
             initialValue: '',
           })}
           clear
-          placeholder="请输入吨位方量"
+          // placeholder="请输入吨位方量"
         />
         <div className="tag-container">
-          <Tag selected>自带工具</Tag>
+          <Tag>车内无杂物</Tag>
+          <Tag>自带工具</Tag>
           <Tag>篷布</Tag>
           <Tag>绳索</Tag>
           <Tag>枕木</Tag>
@@ -25,7 +36,7 @@ class Fu extends Component {
         </div>
         <WingBlank>
           <Button
-            className="login-submit"
+            className="submit-btn"
             type="warning"
             onClick={this.handleSubmit}>
             确定
@@ -35,5 +46,5 @@ class Fu extends Component {
     );
   }
 }
-const _Fu = createForm()(Fu);
-export default _Fu;
+const _CarTag = createForm()(CarTag);
+export default _CarTag;

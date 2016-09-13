@@ -73,10 +73,12 @@ class Person extends Component {
                 extra="2.6吨/30方"
               >方位吨量</List.Item>
             </Link>
-            <List.Item
-            arrow="horizontal"
-            extra="绳索"
-            >附属物</List.Item>
+            <Link to="/person/car-tag">
+              <List.Item
+              arrow="horizontal"
+              extra="绳索"
+              >附属物</List.Item>
+            </Link>
           </List.Body>
         </List>
         <ReactCSSTransitionGroup transitionName="pageSlider"
