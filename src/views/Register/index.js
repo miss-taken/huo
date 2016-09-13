@@ -51,10 +51,10 @@ class Login extends Component {
     console.log(carProp);
     const data = {
       data: {
-        mobile: this.props.form.getFieldProps('username').value,
-        verify: this.props.form.getFieldProps('verify').value,
-        carLength: carProp[0],
-        carType: carProp[1],
+        mobile: this.props.form.getFieldProps('username').value.toString(),
+        code: this.props.form.getFieldProps('verify').value.toString(),
+        carLength: carProp[0].toString(),
+        carType: carProp[1].toString(),
         type: 'DRIVER_REGISTER',
         openId: '固定值',
       },
@@ -68,11 +68,11 @@ class Login extends Component {
     .withCredentials()
     .send(data)
     .then((res) => {
-      if (res.sucess) {
-        sessionStorage.setItem('uuid', res.data);
-        Toast.success(res.msg);
+      if (res.success) {
+        sessionStorage.setItem('uuid', res.result.uuid);
+        Toast.success(res.msg.toString());
       } else {
-        Toast.fail(res.msg);
+        Toast.fail(res.msg.toString());
       }
     });
   }
@@ -95,7 +95,7 @@ class Login extends Component {
       signatures: '',
     };
     console.log('values', data);
-    request.post(url.login)
+    request.post(url.webapp)
     .withCredentials()
     .send(data)
     .then((res) => {
