@@ -103,4 +103,45 @@
       color: #ffa032;
     }
   }
+
+  .name-input {
+    margin-top: 15px;
+    border-top: 1px solid #d5d4d0;
+    border-bottom: 1px solid #d5d3d0;
+    padding-left: 15px;
+
+    input {
+      color: #a0a0a0;
+    }
+  }
+  .submit-btn {
+    margin-top: 50px;
+  }
+}
+.pageSlider-leave {
+  transform: translate3d(0, 0, 0);
+}
+
+.pageSlider-leave.pageSlider-leave-active {
+  transform: translate3d(100%, 0, 0);
+  transition: all 600ms;
+}
+
+.pageSlider-enter {
+  transform: translate3d(100%, 0, 0);
+}
+
+.pageSlider-enter.pageSlider-enter-active {
+  transform: translate3d(0, 0, 0);
+  transition: all 600ms;
+}
+
+.page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000px;
+  background: #f9f8f4;
 }

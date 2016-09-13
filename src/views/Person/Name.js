@@ -4,21 +4,28 @@ import { createForm } from 'rc-form';
 import url from '../../utils/url';
 import request from 'superagent-bluebird-promise';
 
-class Weight extends Component {
+class Name extends Component {
+  constructor(props) {
+    super(props);
+
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
   render() {
     const { getFieldProps } = this.props.form;
     return (
-      <div>
+      <div className="page edit-name">
         <InputItem
           {...getFieldProps('name', {
             initialValue: '林丹',
           })}
           clear
           placeholder="请输入姓名"
+          className="name-input"
         />
         <WingBlank>
           <Button
-            className="login-submit"
+            className="submit-btn"
             type="warning"
             onClick={this.handleSubmit}>
             确定
@@ -29,6 +36,7 @@ class Weight extends Component {
   }
 
   handleSubmit() {
+    location.href = '/#/person';
     const uuid = sessionStorage.getItem('uuid');
     const name = this.props.form.getFieldProps('name').value;
     if (name === undefined) {
@@ -63,5 +71,5 @@ class Weight extends Component {
     });
   }
 }
-const _Weight = createForm()(Weight);
-export default _Weight;
+const _Name = createForm()(Name);
+export default _Name;

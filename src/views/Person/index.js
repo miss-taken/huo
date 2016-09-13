@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { Icon, List, Toast, ImagePicker } from 'antd-mobile';
-import Weight from './Weight';
-import Name from './Name';
-import Fu from './Fu';
-import request from 'superagent-bluebird-promise';
-import url from '../../utils/url';
+import { Icon, List, Toast } from 'antd-mobile';
+import { Link } from 'react-router';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+// import Weight from './Weight';
+// import Name from './Name';
+// import Fu from './Fu';
+// import request from 'superagent-bluebird-promise';
+// import url from '../../utils/url';
 import './_person';
 
 class Person extends Component {
@@ -17,13 +19,17 @@ class Person extends Component {
       ],
     };
 
-    this.imageChange = this.imageChange.bind(this);
+    this.cloneChildren = this.cloneChildren.bind(this);
   }
 
-  imageChange(files, type, index) {
-    console.log('iamge', files, type, index);
-    this.setState({ files });
+  cloneChildren() {
+    const path = this.props.location.pathname;
+    if (this.props.children) {
+      return React.cloneElement(this.props.children, { key: path });
+    }
+    return null;
   }
+
   render() {
     return (
       <div className="person">
@@ -43,14 +49,12 @@ class Person extends Component {
         </div>
         <List>
           <List.Body>
-            <List.Item
-              arrow="horizontal"
-              extra="林丹"
-            >姓名</List.Item>
-            <ImagePicker
-              onChange={this.imageChange}
-              files={this.state.files}
-            />
+            <Link to="/person/name">
+              <List.Item
+                arrow="horizontal"
+                extra="林丹"
+              >姓名</List.Item>
+            </Link>
             <List.Item
               arrow="horizontal"
               extra="浙A111111"
@@ -69,9 +73,10 @@ class Person extends Component {
             >附属物</List.Item>
           </List.Body>
         </List>
-        <Weight/>
-        <Name/>
-        <Fu/>
+        <ReactCSSTransitionGroup transitionName="pageSlider"
+          transitionEnterTimeout={600} transitionLeaveTimeout={600}>
+          {this.cloneChildren()}
+        </ReactCSSTransitionGroup>
       </div>
     );
   }
@@ -95,16 +100,16 @@ class Person extends Component {
       signatures: '',
     };
     console.log('values', data);
-    request.post(url.webapp)
-    .withCredentials()
-    .send(data)
-    .then((res) => {
-      if (res.sucess) {
-        Toast.success(res.msg);
-      } else {
-        Toast.fail(res.msg);
-      }
-    });
+    // request.post(url.webapp)
+    // .withCredentials()
+    // .send(data)
+    // .then((res) => {
+    //   if (res.sucess) {
+    //     Toast.success(res.msg);
+    //   } else {
+    //     Toast.fail(res.msg);
+    //   }
+    // });
   }
 
 }
