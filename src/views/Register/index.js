@@ -47,7 +47,11 @@ class Login extends Component {
   }
 
   handleSubmit() {
+    console.log(this);
     const carProp = this.props.form.getFieldProps('car').value;
+    const re = new RegExp("[&,?]code=([^//&]*)", "i");
+    const weChatCode = re.exec(location.href)[1];
+    
     console.log(carProp);
     const data = {
       data: {
@@ -56,7 +60,7 @@ class Login extends Component {
         carLength: carProp[0].toString(),
         carType: carProp[1].toString(),
         type: 'DRIVER_REGISTER',
-        weChatCode: '固定值',
+        weChatCode,
       },
       service: 'SERVICE_REGISTER',
       uuid: '',

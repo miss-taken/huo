@@ -10,14 +10,16 @@ import './_login';
 class Login extends Component {
   constructor(props) {
     super(props);
-
+    
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-
  // 登陆请求
   handleSubmit() {
+    console.log(this);
     const { form } = this.props;
+    const re = new RegExp("[&,?]code=([^//&]*)", "i");
+    const weChatCode = re.exec(location.href)[1];
     form.validateFields((errors, values) => {
       if (!!errors) {
         console.log('Errors in form!!!');
@@ -27,7 +29,7 @@ class Login extends Component {
         data: {
           mobile: values.username.toString(),
           passWord: values.password.toString(),
-          weChatCode: '123456',
+          weChatCode,
         },
         service: 'SERVICE_LOGIN',
         uuid: '',
@@ -51,6 +53,7 @@ class Login extends Component {
   }
 
   render() {
+
     const { getFieldProps } = this.props.form;
     return (
       <div className="login">
