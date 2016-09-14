@@ -27,7 +27,7 @@ class Login extends Component {
         data: {
           mobile: values.username.toString(),
           passWord: values.password.toString(),
-          openId: '123456',
+          weChatCode: '123456',
         },
         service: 'SERVICE_LOGIN',
         uuid: '',

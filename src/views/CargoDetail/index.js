@@ -33,14 +33,7 @@ const data = [{
   key: '5',
 }];
 
-
-
 class CargoDetail extends React.Component {
-  getInitialState(){
-    return{
-      cargoInfo :  null,
-    }
-  }
 
   constructor(props) {
     super(props);
@@ -54,6 +47,9 @@ class CargoDetail extends React.Component {
       offerVisible: true,
       // 上传
       uploadVisible: false,
+      cargoInfo: {},
+      projectInfo: {},
+
     };
 
     this.handleMessageOpen = this.handleMessageOpen.bind(this);
@@ -128,17 +124,19 @@ class CargoDetail extends React.Component {
       offerVisible,
       uploadVisible,
     } = this.state;
+    const { cargoInfo } = this.state;
+    const { projectInfo } = this.state;
     return (
       <div className="cargo-detail">
         <div className="info">
-          <div className="info-place">{this.state.cargoInfo.cargo.startCityStr} → {this.state.cargoInfo.cargo.arrivalCityStr} <span className="span-divider"></span>{this.state.cargoInfo.cargo.sendTimeStr}</div>
+          <div className="info-place">{cargoInfo.startCityStr} → {cargoInfo.arrivalCityStr} <span className="span-divider"></span>{cargoInfo.sendTimeStr}</div>
           <div>
-            <div className="info-item">货物名称：  {this.state.cargoInfo.cargo.cargoName}</div>
-            <div className="info-item">吨位方量：  {this.state.cargoInfo.cargo.weight}吨/{this.state.cargoInfo.cargo.cubic}平方</div>
-            <div className="info-item">车辆需求：  {this.state.cargoInfo.cargo.carTypeStr} <span className="span-divider"></span>{this.state.cargoInfo.cargo.carLengthStr}</div>
+            <div className="info-item">货物名称：  {cargoInfo.cargoName}</div>
+            <div className="info-item">吨位方量：  {cargoInfo.weight}吨/{cargoInfo.cubic}平方</div>
+            <div className="info-item">车辆需求：  {cargoInfo.carTypeStr} <span className="span-divider"></span>{cargoInfo.carLengthStr}</div>
             <div className="info-item">总里程数：  暂未计算</div>
           </div>
-          <div className="trapezoid">{this.state.cargoInfo.cargo.statusStr}</div>
+          <div className="trapezoid">{cargoInfo.statusStr}</div>
         </div>
         <div>
           <h4 className="title">项目信息</h4>
@@ -205,53 +203,21 @@ class CargoDetail extends React.Component {
       signatures: '',
     };
 
-
-    
-
-    console.log(this.state.cargoInfo);
     request.post(url.webapp)
     .withCredentials()
     .send(_data)
     .then((res) => {
-      console.log(res.msg);
-      console.log(res.success);
-      if (res.success) {
-        Toast.success(res.msg);
+      const resultData = JSON.parse(res.text);
+      if (resultData.success) {
+        Toast.success(resultData.msg);
         this.setState({
-          cargoInfo:res.result,
+          cargoInfo: resultData.result,
+          projectInfo: resultData.result.projectInfo
         });
       } else {
-        Toast.fail(res.msg);
+        Toast.fail(resultData.msg);
       }
     });
-
-    const result =  {
-        "cargo": {
-            "arrivalCityStr": "测试内容872j",
-            "carLengthStr": "测试内容e3r1",
-            "carTypeStr": "测试内容vm33",
-            "cargoName": "测试内容vuj3",
-            "cubic": 17665,
-            "id": "测试内容37nj",
-            "sendTimeStr": "测试内容3t15",
-            "startCityStr": "测试内容2p73",
-            "status": 55107,
-            "statusStr": "测试内容33qu",
-            "weight": "测试内容4gw6"
-        },
-        "projectInfo": {
-            "allocRqmt": "测试内容h9zz",
-            "driverNum": "测试内容oxdq",
-            "envRqmt": "测试内容4ww2",
-            "loadRqmt": "测试内容9yrl",
-            "protect": "测试内容y699"
-        }
-    };
-    this.setState({
-          cargoInfo:result,
-    });
-
-
   }
 }
 

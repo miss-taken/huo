@@ -56,7 +56,7 @@ class Login extends Component {
         carLength: carProp[0].toString(),
         carType: carProp[1].toString(),
         type: 'DRIVER_REGISTER',
-        openId: '固定值',
+        weChatCode: '固定值',
       },
       service: 'SERVICE_REGISTER',
       uuid: '',

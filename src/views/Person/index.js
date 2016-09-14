@@ -4,18 +4,12 @@ import { Link } from 'react-router';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Weight from './Weight';
 import Name from './Name';
-import Fu from './Fu';
+import Fu from './Tag';
 import request from 'superagent-bluebird-promise';
 import url from '../../utils/url';
 import './_person';
 
 class Person extends Component {
-
-  getInitialState(){
-    return {
-      driverInfo:null,
-    }
-  }
 
   constructor(props) {
     super(props);
@@ -24,6 +18,7 @@ class Person extends Component {
       files: [
         // { url: 'https://cloud.githubusercontent.com/assets/1698185/18039916/f025c090-6dd9-11e6-9d86-a4d48a1bf049.png', id: '111' },
       ],
+      driverInfo:{},
     };
 
     this.cloneChildren = this.cloneChildren.bind(this);
@@ -38,9 +33,9 @@ class Person extends Component {
   }
 
   render() {
-    
-    const carDesc = this.state.driverInfo.carTypeStr+'/'+this.state.driverInfo.carLengthStr;
-    const weightDesc = this.state.driverInfo.weight+'吨/'+this.state.driverInfo.cubic+'方';
+    const { driverInfo } = this.state;
+    const carDesc = driverInfo.carTypeStr+'/' + driverInfo.carLengthStr;
+    const weightDesc = driverInfo.weight+'吨/' + driverInfo.cubic+'方';
     return (
       <div className="person">
         <div className="panel">
@@ -49,11 +44,11 @@ class Person extends Component {
           </div>
           <div className="panel-text">
             <h4 className="panel-text-title">
-              <span>{this.state.driverInfo.name}</span>
+              <span>{driverInfo.name}</span>
               <Icon type="mobile"/>
-              <span>{this.state.driverInfo.mobile}</span>
+              <span>{driverInfo.mobile}</span>
             </h4>
-            <p className="panel-text-desc">{this.state.driverInfo.driverStatusStr}</p>
+            <p className="panel-text-desc">{driverInfo.driverStatusStr}</p>
             <div></div>
           </div>
         </div>
@@ -61,15 +56,11 @@ class Person extends Component {
           <List.Body>
             <List.Item
               arrow="horizontal"
-              extra={this.state.driverInfo.name}
+              extra={driverInfo.name}
             >姓名</List.Item>
-            <ImagePicker
-              onChange={this.imageChange}
-              files={this.state.files}
-            />
             <List.Item
               arrow="horizontal"
-              extra={this.state.driverInfo.carNum}
+              extra={driverInfo.carNum}
             >车牌号</List.Item>
             <List.Item
               arrow="horizontal"
@@ -81,7 +72,7 @@ class Person extends Component {
             >方位吨量</List.Item>
             <List.Item
             arrow="horizontal"
-            extra={this.state.driverInfo.carTools}
+            extra={driverInfo.carTools}
             >附属物</List.Item>
           </List.Body>
         </List>
@@ -111,7 +102,6 @@ class Person extends Component {
       timestamp: '',
       signatures: '',
     };
-    console.log('values', data);
     request.post(url.webapp)
     .withCredentials()
     .send(data)
@@ -119,30 +109,13 @@ class Person extends Component {
       const resultData = JSON.parse(res.text);
       if (resultData.success) {
         Toast.success(resultData.msg);
+        this.setState({
+          driverInfo:resultData.result,
+        });
       } else {
         Toast.fail(resultData.msg);
       }
     });
-
- const xxx = {
-        "carLengthStr": "测试内容d73h",
-        "carNum": "测试内容21jk",
-        "carTools": "测试内容c3v6",
-        "carTypeStr": "测试内容8si9",
-        "certifyStatus": 52117,
-        "certifyStatusStr": "测试内容wycn",
-        "cubic": 58304,
-        "driverStatusStr": "测试内容riqr",
-        "imageName": "测试内容3x13",
-        "luckyBean": 70437,
-        "mobile": "测试内容9t48",
-        "name": "测试内容2j9j",
-        "weight": 42212
-    };
-    this.setState({
-      driverInfo:xxx,
-    });
-    console.log(this.state.driverInfo);
   }
 }
 

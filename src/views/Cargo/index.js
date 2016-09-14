@@ -7,13 +7,6 @@ import './_cargo';
 
 
 class Cargo extends Component {
-   getInitialState(){
-    return {
-      currPage: 1,
-      totalPage: 2,
-      cargoList: null,
-    }
-  }
 
   constructor(props) {
     super(props);
@@ -27,10 +20,14 @@ class Cargo extends Component {
       for (let i = 0; i < this.state.cargoList.length; i++) {
         const ii = ((pIndex - 1) * 20) + i;
         dataBlob[`${ii}`] = this.state.cargoList[ii];
+        console.log(dataBlob);
       }
       return dataBlob;
     };
     this.state = {
+      currPage: 1,
+      totalPage: 2,
+      cargoList: [],
       dataSource: dataSource,
       isLoading: false,
     };
@@ -41,7 +38,7 @@ class Cargo extends Component {
     console.log('reach end', event);
     this.setState({ isLoading: true });
     setTimeout(() => {
-      this.rData = { ...this.rData, ...this.genData(++currPage)};
+      this.rData = { ...this.rData, ...this.genData(++currPage) };
       this.setState({
         dataSource: this.state.dataSource.cloneWithRows(this.rData),
         isLoading: false,
@@ -141,74 +138,15 @@ class Cargo extends Component {
         this.state = {
           currPage: resultData.result.currPage,
           totalPage: resultData.result.totalPage,
-          cargoList: resultData.result,
+          cargoList: resultData.result.objectArray,
           dataSource: this.state.dataSource.cloneWithRows(this.genData(this.state.currPage)),
           isLoading: false,
-        };     
+        };    
+        console.log(this.state.cargoList); 
         } else {
           Toast.fail(resultData.msg);
         }
     });
-    // this.state.cargoList = [
-    //         {
-    //             "arrivalCityStr": "北京",
-    //             "carLengthStr": "9.6米",
-    //             "carTypeStr": "平板车",
-    //             "cargoName": "汽车配件",
-    //             "cubic": 12,
-    //             "id": "123",
-    //             "sendTimeStr": "9月13日",
-    //             "startCityStr": "成都",
-    //             "status": "1",
-    //             "statusStr": "待定车",
-    //             "weight": "10"
-    //         },
-    //         {
-    //             "arrivalCityStr": "北京",
-    //             "carLengthStr": "9.6米",
-    //             "carTypeStr": "平板车",
-    //             "cargoName": "汽车配件",
-    //             "cubic": 12,
-    //             "id": "123",
-    //             "sendTimeStr": "9月13日",
-    //             "startCityStr": "成都",
-    //             "status": "1",
-    //             "statusStr": "待定车",
-    //             "weight": "10"
-    //         },
-    //         {
-    //             "arrivalCityStr": "北京",
-    //             "carLengthStr": "9.6米",
-    //             "carTypeStr": "平板车",
-    //             "cargoName": "汽车配件",
-    //             "cubic": 12,
-    //             "id": "123",
-    //             "sendTimeStr": "9月13日",
-    //             "startCityStr": "成都",
-    //             "status": "1",
-    //             "statusStr": "待定车",
-    //             "weight": "10"
-    //         },
-    //         {
-    //             "arrivalCityStr": "北京",
-    //             "carLengthStr": "9.6米",
-    //             "carTypeStr": "平板车",
-    //             "cargoName": "汽车配件",
-    //             "cubic": 12,
-    //             "id": "123",
-    //             "sendTimeStr": "9月13日",
-    //             "startCityStr": "成都",
-    //             "status": "1",
-    //             "statusStr": "待定车",
-    //             "weight": "10"
-    //         },
-    //     ];
-    // this.setState({
-    //   dataSource: this.state.dataSource.cloneWithRows(this.genData(this.state.currPage)),
-    //   isLoading: false,
-    //   });
-
-
   }
 }
 
