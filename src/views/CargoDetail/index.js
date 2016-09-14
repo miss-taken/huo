@@ -33,7 +33,15 @@ const data = [{
   key: '5',
 }];
 
+
+
 class CargoDetail extends React.Component {
+  getInitialState(){
+    return{
+      cargoInfo :  null,
+    }
+  }
+
   constructor(props) {
     super(props);
 
@@ -123,14 +131,14 @@ class CargoDetail extends React.Component {
     return (
       <div className="cargo-detail">
         <div className="info">
-          <div className="info-place">绵阳 → 广州 <span className="span-divider"></span>8月24日</div>
+          <div className="info-place">{this.state.cargoInfo.cargo.startCityStr} → {this.state.cargoInfo.cargo.arrivalCityStr} <span className="span-divider"></span>{this.state.cargoInfo.cargo.sendTimeStr}</div>
           <div>
-            <div className="info-item">货物名称：  汽车配件</div>
-            <div className="info-item">吨位方量：  28吨/110平方</div>
-            <div className="info-item">车辆需求：  平板车 <span className="span-divider"></span>8.5米</div>
-            <div className="info-item">总里程数：  333公里</div>
+            <div className="info-item">货物名称：  {this.state.cargoInfo.cargo.cargoName}</div>
+            <div className="info-item">吨位方量：  {this.state.cargoInfo.cargo.weight}吨/{this.state.cargoInfo.cargo.cubic}平方</div>
+            <div className="info-item">车辆需求：  {this.state.cargoInfo.cargo.carTypeStr} <span className="span-divider"></span>{this.state.cargoInfo.cargo.carLengthStr}</div>
+            <div className="info-item">总里程数：  暂未计算</div>
           </div>
-          <div className="trapezoid">等待订车</div>
+          <div className="trapezoid">{this.state.cargoInfo.cargo.statusStr}</div>
         </div>
         <div>
           <h4 className="title">项目信息</h4>
@@ -196,17 +204,54 @@ class CargoDetail extends React.Component {
       timestamp: '',
       signatures: '',
     };
+
+
+    
+
+    console.log(this.state.cargoInfo);
     request.post(url.webapp)
     .withCredentials()
     .send(_data)
     .then((res) => {
       console.log(res.msg);
+      console.log(res.success);
       if (res.success) {
         Toast.success(res.msg);
+        this.setState({
+          cargoInfo:res.result,
+        });
       } else {
         Toast.fail(res.msg);
       }
     });
+
+    const result =  {
+        "cargo": {
+            "arrivalCityStr": "测试内容872j",
+            "carLengthStr": "测试内容e3r1",
+            "carTypeStr": "测试内容vm33",
+            "cargoName": "测试内容vuj3",
+            "cubic": 17665,
+            "id": "测试内容37nj",
+            "sendTimeStr": "测试内容3t15",
+            "startCityStr": "测试内容2p73",
+            "status": 55107,
+            "statusStr": "测试内容33qu",
+            "weight": "测试内容4gw6"
+        },
+        "projectInfo": {
+            "allocRqmt": "测试内容h9zz",
+            "driverNum": "测试内容oxdq",
+            "envRqmt": "测试内容4ww2",
+            "loadRqmt": "测试内容9yrl",
+            "protect": "测试内容y699"
+        }
+    };
+    this.setState({
+          cargoInfo:result,
+    });
+
+
   }
 }
 

@@ -68,11 +68,12 @@ class Login extends Component {
     .withCredentials()
     .send(data)
     .then((res) => {
-      if (res.success) {
-        sessionStorage.setItem('uuid', res.result.uuid);
-        Toast.success(res.msg.toString());
+      const resultData = JSON.parse(res.text);
+      if (resultData.success) {
+        sessionStorage.setItem('uuid', resultData.result.uuid);
+        Toast.success(resultData.msg.toString());
       } else {
-        Toast.fail(res.msg.toString());
+        Toast.fail(resultData.msg.toString());
       }
     });
   }
@@ -99,10 +100,11 @@ class Login extends Component {
     .withCredentials()
     .send(data)
     .then((res) => {
-      if (res.sucess) {
-        Toast.success(res.msg);
+      const resultData = JSON.parse(res.text);
+      if (resultData.sucess) {
+        Toast.success(resultData.msg);
       } else {
-        Toast.fail(res.msg);
+        Toast.fail(resultData.msg);
       }
     });
   }

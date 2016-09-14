@@ -5,43 +5,33 @@ import request from 'superagent-bluebird-promise';
 import url from '../../utils/url';
 import './_cargo';
 
-const _data = [
-  {
-    title: '相约酒店',
-    des: '',
-  },
-  {
-    title: '麦当劳邀您过周末',
-    des: '不是所有的兼职汪都需要风吹日晒',
-  },
-  {
-    title: '食惠周',
-    des: '不是所有的兼职汪都需要风吹日晒',
-  },
-];
-let index = _data.length - 1;
-const NUM_ROWS = 20;
-let pageIndex = 0;
 
 class Cargo extends Component {
+   getInitialState(){
+    return {
+      currPage: 1,
+      totalPage: 2,
+      cargoList: null,
+    }
+  }
+
   constructor(props) {
     super(props);
+    this.rData = {};
+
     const dataSource = new ListView.DataSource({
       rowHasChanged: (row1, row2) => row1 !== row2,
     });
-    this.currPage = 1;
-    this.totalPage = 2;
-    this.genData = (pIndex = 0) => {
+    this.genData = (pIndex = 1) => {
       const dataBlob = {};
-      for (let i = 0; i < NUM_ROWS; i++) {
-        const ii = (pIndex * NUM_ROWS) + i;
-        dataBlob[`${ii}`] = `row - ${ii}`;
+      for (let i = 0; i < this.state.cargoList.length; i++) {
+        const ii = ((pIndex - 1) * 20) + i;
+        dataBlob[`${ii}`] = this.state.cargoList[ii];
       }
       return dataBlob;
     };
-    this.rData = {};
     this.state = {
-      dataSource: dataSource.cloneWithRows(this.genData()),
+      dataSource: dataSource,
       isLoading: false,
     };
   }
@@ -51,7 +41,7 @@ class Cargo extends Component {
     console.log('reach end', event);
     this.setState({ isLoading: true });
     setTimeout(() => {
-      this.rData = { ...this.rData, ...this.genData(++pageIndex) };
+      this.rData = { ...this.rData, ...this.genData(++currPage)};
       this.setState({
         dataSource: this.state.dataSource.cloneWithRows(this.rData),
         isLoading: false,
@@ -69,28 +59,28 @@ class Cargo extends Component {
       }} />
     );
     const row = (rowData, sectionID, rowID) => {
-      if (index < 0) {
-        index = _data.length - 1;
-      }
+      // if (index < 0) {
+      //   index = this.state.cargoList.length - 1;
+      // }
       // const obj = data[index--];
       return (
-        <Link to="/cargo/123">
+        <Link to="/cargo/778">
+          
           <div key={rowID}
             style={{
               backgroundColor: 'white',
             }}
-          >
+          />
           <div className="panel">
               <div className="panel-info">
-                <div>8月24日</div>
-                <div>绵阳→广州</div>
+                <div>{rowData.sendTimeStr}</div>
+                <div>{rowData.startCityStr}→{rowData.arrivalCityStr}</div>
               </div>
               <div style={{ display: 'inline-block' }}>
-                <p>汽车配件 <span className="span-divider"></span> 28吨/110立方</p>
-                <p>平板车 <span className="span-divider"></span> 8.5米</p>
+                <p>{rowData.cargoName} <span className="span-divider"></span> {rowData.weight}吨/{rowData.cubic}立方</p>
+                <p>{rowData.carTypeStr} <span className="span-divider"></span> {rowData.carLengthStr}</p>
               </div>
-              <div className="trapezoid">等待订车</div>
-            </div>
+              <div className="trapezoid">{rowData.statusStr}</div>
           </div>
         </Link>
       );
@@ -117,12 +107,12 @@ class Cargo extends Component {
   }
 
   componentDidMount() {
-    this.requestForCargo(this.currPage = 1);
+    this.requestForCargo(this.state.currPage = 1);
   }
 
   requestForCargo(page) {
     let uuid = sessionStorage.getItem('uuid');
-    if (page >= this.totalPage) {
+    if (page >= this.state.totalPage) {
       Toast.fail('没有下一页了');
       return;
     }
@@ -144,15 +134,81 @@ class Cargo extends Component {
     .withCredentials()
     .send(requestData)
     .then((res) => {
-      if (res.success) {
-        Toast.success(res.msg);
-        this.currPage = res.data.currPage;
-        this.totalPage = res.data.totalPage;
-        console.log(res.result);
-      } else {
-        Toast.fail(res.msg);
-      }
+      const resultData = JSON.parse(res.text); 
+      console.log(this);
+      if (resultData.success) {
+        Toast.success(resultData.msg);
+        this.state = {
+          currPage: resultData.result.currPage,
+          totalPage: resultData.result.totalPage,
+          cargoList: resultData.result,
+          dataSource: this.state.dataSource.cloneWithRows(this.genData(this.state.currPage)),
+          isLoading: false,
+        };     
+        } else {
+          Toast.fail(resultData.msg);
+        }
     });
+    // this.state.cargoList = [
+    //         {
+    //             "arrivalCityStr": "北京",
+    //             "carLengthStr": "9.6米",
+    //             "carTypeStr": "平板车",
+    //             "cargoName": "汽车配件",
+    //             "cubic": 12,
+    //             "id": "123",
+    //             "sendTimeStr": "9月13日",
+    //             "startCityStr": "成都",
+    //             "status": "1",
+    //             "statusStr": "待定车",
+    //             "weight": "10"
+    //         },
+    //         {
+    //             "arrivalCityStr": "北京",
+    //             "carLengthStr": "9.6米",
+    //             "carTypeStr": "平板车",
+    //             "cargoName": "汽车配件",
+    //             "cubic": 12,
+    //             "id": "123",
+    //             "sendTimeStr": "9月13日",
+    //             "startCityStr": "成都",
+    //             "status": "1",
+    //             "statusStr": "待定车",
+    //             "weight": "10"
+    //         },
+    //         {
+    //             "arrivalCityStr": "北京",
+    //             "carLengthStr": "9.6米",
+    //             "carTypeStr": "平板车",
+    //             "cargoName": "汽车配件",
+    //             "cubic": 12,
+    //             "id": "123",
+    //             "sendTimeStr": "9月13日",
+    //             "startCityStr": "成都",
+    //             "status": "1",
+    //             "statusStr": "待定车",
+    //             "weight": "10"
+    //         },
+    //         {
+    //             "arrivalCityStr": "北京",
+    //             "carLengthStr": "9.6米",
+    //             "carTypeStr": "平板车",
+    //             "cargoName": "汽车配件",
+    //             "cubic": 12,
+    //             "id": "123",
+    //             "sendTimeStr": "9月13日",
+    //             "startCityStr": "成都",
+    //             "status": "1",
+    //             "statusStr": "待定车",
+    //             "weight": "10"
+    //         },
+    //     ];
+    // this.setState({
+    //   dataSource: this.state.dataSource.cloneWithRows(this.genData(this.state.currPage)),
+    //   isLoading: false,
+    //   });
+
+
   }
 }
 
