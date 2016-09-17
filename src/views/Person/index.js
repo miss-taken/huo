@@ -98,6 +98,13 @@ class Person extends Component {
                 extra={driverInfo.name}
               >姓名</List.Item>
             </Link>
+            <Link to="/person/car-img">
+              <div className="car-img">
+                  <p>已上传证件</p>
+                  <img src={driverInfo.imageName}/>
+                  <p className="small">行驶证与驾驶证合照</p>
+              </div>
+            </Link>
             <Link to="/person/car-number">
               <List.Item
                 arrow="horizontal"
