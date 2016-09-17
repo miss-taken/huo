@@ -72,7 +72,7 @@ class CarInfo extends Component {
   }
 
   handleSubmit() {
-    location.href = '/#/person';
+    // location.href = '/#/person';
     const uuid = sessionStorage.getItem('uuid');
     const car = this.props.form.getFieldProps('car').value;
     if (car === undefined) {
