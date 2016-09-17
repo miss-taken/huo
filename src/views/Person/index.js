@@ -27,8 +27,9 @@ class Person extends Component {
 
   cloneChildren() {
     const path = this.props.location.pathname;
+    const { driverInfo } = this.state;
     if (this.props.children) {
-      return React.cloneElement(this.props.children, { key: path });
+      return React.cloneElement(this.props.children, { key: path, driverInfo });
     }
     return null;
   }
@@ -72,7 +73,7 @@ class Person extends Component {
   render() {
     const { driverInfo } = this.state;
     const carDesc = `${driverInfo.carTypeStr}/${driverInfo.carLengthStr}`;
-    const weightDesc = `${driverInfo.weight}吨/${driverInfo.cubic}方}`;
+    const weightDesc = `${driverInfo.weight}吨/${driverInfo.cubic}方`;
     return (
       <div className="person">
         <div className="panel">

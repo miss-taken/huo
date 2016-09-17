@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { InputItem, WingBlank, Toast, Button } from 'antd-mobile';
 import { createForm } from 'rc-form';
 import url from '../../utils/url';
+import { handleRes } from '../../utils/web';
 import request from 'superagent-bluebird-promise';
 
 class Name extends Component {
@@ -12,12 +13,13 @@ class Name extends Component {
   }
 
   render() {
+    const { name } = this.props.driverInfo;
     const { getFieldProps } = this.props.form;
     return (
       <div className="page edit-name">
         <InputItem
           {...getFieldProps('name', {
-            initialValue: '林丹',
+            initialValue: name,
           })}
           clear
           placeholder="请输入姓名"
@@ -36,7 +38,6 @@ class Name extends Component {
   }
 
   handleSubmit() {
-    location.href = '/#/person';
     const uuid = sessionStorage.getItem('uuid');
     const name = this.props.form.getFieldProps('name').value;
     if (name === undefined) {
@@ -57,19 +58,25 @@ class Name extends Component {
       timestamp: '',
       signatures: '',
     };
-    console.log('values', data);
     request.post(url.webapp)
     .withCredentials()
     .send(data)
     .then((res) => {
-      if (res.success) {
+      const _res = handleRes(res);
+      if (_res.success) {
         // to-do 更新个人中心司机姓名
-        Toast.success(res.msg);
+        Toast.success(_res.msg);
       } else {
-        Toast.fail(res.msg);
+        Toast.fail(_res.msg);
       }
+      this.context.router.push('/person');
     });
   }
 }
+
+Name.contextTypes = {
+  router: React.PropTypes.object,
+};
+
 const _Name = createForm()(Name);
 export default _Name;
