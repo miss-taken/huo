@@ -1,6 +1,11 @@
 .cargo-detail {
+  background: #f9f8f4;
   padding-bottom: 40px;
   margin-bottom: 40px;
+  .block {
+    background: #fff;
+    padding-bottom: 15px;
+  }
   .order {
     background: #dad7d0;
     color: #000;
@@ -28,6 +33,7 @@
   }
   .title {
     margin-left: 30px;
+    padding-top: 14px;
     padding-bottom: 14px;
     border-bottom: 1px solid #cfcfcf;
   }
@@ -70,6 +76,40 @@
     font-size: 18px;
   }
 
+  .people-info {
+    padding-left: 30px;
+    position: relative;
+    .people-info-item {
+      color: #5b5b5b;
+    }
+    .people-contact {
+      display: block;
+      width: 70px;
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+      color: #fff;
+      background: #27e6a0;
+      border-radius: 30px;
+      padding-left: 10px;
+      padding-right: 10px;
+      padding-top: 0;
+      padding-bottom: 0;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      font-size: 13px;
+    }
+    .map-icon {
+      position: absolute;
+      right: 20px;
+      top: 0;
+      & > img {
+        width: 50px;
+        height: 50px;
+      }
+    }
+  }
+  // 支付成功
   .offer-success {
     .mycargo-offer {
       background: #fff;

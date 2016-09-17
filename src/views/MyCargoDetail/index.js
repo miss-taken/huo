@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 import Offer from './Offer';
 import Upload from './Upload';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
@@ -6,6 +7,7 @@ import { WingBlank, Table, Toast, Button, Modal } from 'antd-mobile';
 import './_mycargoDetail';
 import request from 'superagent-bluebird-promise';
 import url from '../../utils/url';
+import mapIcon from './map-icon.png';
 
 const columns = [
   { title: '标题', dataIndex: 'title', key: 'title' },
@@ -216,49 +218,65 @@ class CargoDetail extends React.Component {
           </div>
           <div className="trapezoid">{cargoInfo.statusStr}</div>
         </div>
-        <div>
+        <div className="block">
           <h4 className="title">项目信息</h4>
+            <WingBlank>
+              <Table
+                direction="horizon"
+                columns={columns}
+                dataSource={data}
+              />
+              <Modal
+                transparent
+                onClose={this.handleMessageClose}
+                visible={messageVisible}
+                className="message-modal"
+                style={{
+                  width: 'auto',
+                  height: 'auto',
+                }}
+                footer={[{ text: '返回', onPress: this.handleMessageClose }]}
+              >
+                <div>提交成功，等待客服联系您...</div>
+              </Modal>
+              <Modal
+                transparent
+                visible={loginVisible}
+                className="login-modal"
+                style={{
+                  width: 'auto',
+                  height: 'auto',
+                }}
+                footer={[{ text: '确认', onPress: this.handleJumpLogin }]}
+                >
+                <div>您还没注册，需要先注册哦</div>
+              </Modal>
+              <Offer
+                visible={offerVisible}
+                onClose={this.handleOfferClose}
+              />
+              <Upload
+                visible={uploadVisible}
+                onClose={this.handleUploadClose}
+              />
+            </WingBlank>
         </div>
-        <WingBlank>
-          <Table
-            direction="horizon"
-            columns={columns}
-            dataSource={data}
-          />
-          <Modal
-            transparent
-            onClose={this.handleMessageClose}
-            visible={messageVisible}
-            className="message-modal"
-            style={{
-              width: 'auto',
-              height: 'auto',
-            }}
-            footer={[{ text: '返回', onPress: this.handleMessageClose }]}
-          >
-            <div>提交成功，等待客服联系您...</div>
-          </Modal>
-          <Modal
-            transparent
-            visible={loginVisible}
-            className="login-modal"
-            style={{
-              width: 'auto',
-              height: 'auto',
-            }}
-            footer={[{ text: '确认', onPress: this.handleJumpLogin }]}
-            >
-            <div>您还没注册，需要先注册哦</div>
-          </Modal>
-          <Offer
-            visible={offerVisible}
-            onClose={this.handleOfferClose}
-          />
-          <Upload
-            visible={uploadVisible}
-            onClose={this.handleUploadClose}
-          />
-        </WingBlank>
+        <div className="block">
+          <h4 className="title">装卸货信息</h4>
+          <div className="people-info">
+            <div className="people-info-item">
+              <div>装货地址: {3412312312312}</div>
+              <a href="tel: 13111111111" className="people-contact">联系人电话</a>
+            </div>
+            <div className="people-info-item">
+              <div>卸货地址: {1212121231231}</div>
+              <a href="tel: 13222222222" className="people-contact">联系人电话</a>
+            </div>
+            <Link className="map-icon" to="/my-cargo/778/map">
+              <img src={mapIcon}/>
+            </Link>
+          </div>
+        </div>
         <Button className="apply-for" onClick={this.handleMessageOpen}>支付</Button>
         <ReactCSSTransitionGroup transitionName="pageSlider"
           transitionEnterTimeout={600} transitionLeaveTimeout={600}>
