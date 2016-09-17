@@ -1,39 +1,78 @@
 import React, { Component } from 'react';
-import { InputItem, Tag, Toast, WingBlank, Button } from 'antd-mobile';
+import { Tag, Toast, WingBlank, Button } from 'antd-mobile';
 import { createForm } from 'rc-form';
 import url from '../../utils/url';
+import { handleRes } from '../../utils/web';
 import request from 'superagent-bluebird-promise';
+
+const initTags = [
+  { name: '车内无杂物' },
+  { name: '自带工具' },
+  { name: '篷布' },
+  { name: '绳索' },
+  { name: '枕木' },
+  { name: '棉被' },
+  { name: '架高杆' },
+];
 
 class CarTag extends Component {
   constructor(props) {
     super(props);
 
+    const { carTools } = this.props.driverInfo;
+    let tags;
+    if (carTools) {
+      tags = carTools.split(',');
+      tags = initTags.map(tag => {
+        if (tags.includes(tag.name)) {
+          tag.selected = true;
+        }
+        return tag;
+      });
+    }
+    this.state = {
+      tags: tags || initTags,
+    };
+    this.handleSelectTag = this.handleSelectTag.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleSubmit() {
-    location.href = '/#/person';
+  handleSelectTag(_tag) {
+    console.log('tag click');
+    const { tags } = this.state;
+    tags.find(tag => tag.name === _tag.name).selected = !_tag.selected;
+    console.log('tags', tags);
+    this.setState({ tags });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { carTools } = nextProps.driverInfo;
+    let tags;
+    if (carTools) {
+      tags = carTools.split(',');
+      tags = initTags.map(tag => {
+        if (tags.includes(tag.name)) {
+          tag.selected = true;
+        }
+        return tag;
+      });
+    }
+    this.setState({ tags });
   }
 
   render() {
-    const { getFieldProps } = this.props.form;
+    const { tags } = this.state;
     return (
       <div className="page">
-        <InputItem
-          {...getFieldProps('weight', {
-            initialValue: '',
-          })}
-          clear
-          // placeholder="请输入吨位方量"
-        />
         <div className="tag-container">
-          <Tag>车内无杂物</Tag>
-          <Tag>自带工具</Tag>
-          <Tag>篷布</Tag>
-          <Tag>绳索</Tag>
-          <Tag>枕木</Tag>
-          <Tag>棉被</Tag>
-          <Tag>架高杆</Tag>
+          {tags.filter(tag => tag.selected).map((tag, index) =>
+            <Tag className="selected" disabled key={index} selected>{tag.name}</Tag>)}
+        </div>
+        <div className="tag-container">
+          {tags.map((tag, index) => <Tag
+            key={index}
+            selected={tag.selected}
+            onChange={this.handleSelectTag.bind(this, tag)}>{tag.name}</Tag>)}
         </div>
         <WingBlank>
           <Button
@@ -50,13 +89,16 @@ class CarTag extends Component {
   // 修改车辆附属物
   handleSubmit() {
     const uuid = sessionStorage.getItem('uuid');
-    const carTools = this.props.form.getFieldProps('carTools').value;
+    const { tags } = this.state;
+    const carTools = tags
+    .filter(tag => tag.selected)
+    .map(tag => tag.name).join(',') || '';
 
     if (uuid === undefined) {
       Toast.fail('请登陆');
       return;
     }
-    if (name === undefined) {
+    if (carTools === undefined) {
       Toast.fail('请选择附属物');
       return;
     }
@@ -75,11 +117,13 @@ class CarTag extends Component {
     .withCredentials()
     .send(data)
     .then((res) => {
-      if (res.success) {
+      const _res = handleRes(res);
+      if (_res.success) {
         // to-do 更新个人中心司机姓名
-        Toast.success(res.msg);
+        location.href = '/#/person';
+        Toast.success(_res.msg);
       } else {
-        Toast.fail(res.msg);
+        Toast.fail(_res.msg);
       }
     });
   }
