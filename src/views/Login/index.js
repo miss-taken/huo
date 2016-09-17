@@ -16,10 +16,10 @@ class Login extends Component {
 
  // 登陆请求
   handleSubmit() {
-    console.log(this);
     const { form } = this.props;
     const re = new RegExp('[&,?]code=([^//&]*)', 'i');
     const weChatCode = re.exec(location.href)[1];
+    // const weChatCode = '123456';
     form.validateFields((errors, values) => {
       if (!!errors) {
         console.log('Errors in form!!!');
@@ -45,6 +45,7 @@ class Login extends Component {
         if (resultData.success) {
           sessionStorage.setItem('uuid', resultData.result.uuid);
           Toast.success(resultData.msg);
+          this.context.router.push('/person');
         } else {
           Toast.fail(resultData.msg);
         }
@@ -112,6 +113,10 @@ class Login extends Component {
     );
   }
 }
+
+Login.contextTypes = {
+  router: React.PropTypes.object,
+};
 
 const _Login = createForm()(Login);
 export default _Login;

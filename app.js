@@ -11,17 +11,18 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors);
 
-app.post('/wechat/webapp.htm', (req, res) => {
-  console.log(req.body);
+app.post('/', (req, res) => {
   request.post('http://106.75.13.249:8078/wechat/webapp.htm')
   .withCredentials()
   .send(req.body)
   .then((data) => {
-    res.send(data);
+    console.log('data', data.text);
+    res.send(data.text);
   });
+});
 
-
-  res.send('ok');
+app.options('*', (req, res) => {
+  res.send({});
 });
 
 // catch 404 and forward to error handler
