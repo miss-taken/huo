@@ -134,6 +134,70 @@
   .submit-btn {
     margin-top: 50px;
   }
+
+  // 编辑车牌
+  .edit-number {
+    .car-number-tag-wrapper {
+      position: absolute;
+      top: 29px;
+      left: 18px;
+      z-index: 10;
+    }
+    .car-number-tag {
+      position: relative;
+      border: 1px solid #ffa032;
+      color: #ffa032;
+      width: 44px;
+      text-align: center;
+      height: 30px;
+      line-height: 30px;
+      & > .caret {
+        position: absolute;
+        right: 6px;
+        top: 12px;
+        width: 0;
+        height: 0;
+        border-left: 3px solid transparent;
+        border-top: 6px solid #ffa032;
+        border-right: 3px solid transparent;
+      }
+    }
+    .am-input-item {
+      padding-left: 70px;
+    }
+  }
+}
+.edit-tag {
+  position: relative;
+  background: #ccd0d3;
+  padding-top: 10px;
+  padding-left: 6px;
+  padding-right: 6px;
+  padding-bottom: 60px;
+  .am-button {
+    width: 28px;
+    height: 36px;
+    line-height: 36px;
+    margin-right: 5px;
+    margin-bottom: 17px;
+    font-size: 14px;
+    border-radius: 6px;
+    &:after {
+      border-radius: 0;
+    }
+    &.active {
+      border-color: #ffa032;
+      color: #ffa032;
+    }
+  }
+  .select-tag {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 75px;
+    height: 38px;
+    border: none;
+  }
 }
 .pageSlider-leave {
   transform: translate3d(0, 0, 0);

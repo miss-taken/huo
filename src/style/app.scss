@@ -103,6 +103,19 @@
     margin-left: 12px;
   }
 }
+// Flex
+.flex-container {
+  background: #f5f5f9;
+}
+.flex-button-container button {
+   margin-right: 0.18rem;
+   margin-bottom: 0.18rem;
+   width: 1.1rem;
+}
+.flex-button-container button:last-child {
+  margin-right: 0;
+}
+
 .trapezoid {
   position: absolute;
   bottom: -1px;

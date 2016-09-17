@@ -1,23 +1,110 @@
 import React, { Component } from 'react';
-import { InputItem, WingBlank, Toast, Button } from 'antd-mobile';
+import { InputItem, WingBlank, Toast, Button, Popup, Flex } from 'antd-mobile';
 import { createForm } from 'rc-form';
 import url from '../../utils/url';
+import { handleRes } from '../../utils/web';
 import request from 'superagent-bluebird-promise';
 
 class CarNumber extends Component {
   constructor(props) {
     super(props);
-
+    const { carNum } = this.props.driverInfo;
+    this.state = {
+      tag: carNum ? carNum.slice(0, 1) : '',
+      tags: [
+        { name: '京' },
+        { name: '津' },
+        { name: '浙' },
+        { name: '川' },
+        { name: 'x' },
+        { name: 'a' },
+        { name: 'b' },
+        { name: 'd' },
+        { name: 'e' },
+        { name: 'r' },
+        { name: 'p' },
+        { name: 'o' },
+        { name: 'i' },
+        { name: 'u' },
+        { name: 'y' },
+        { name: 'h' },
+        { name: 'j' },
+        { name: 'k' },
+        { name: 'l' },
+        { name: ';' },
+      ],
+    };
+    this.showTags = this.showTags.bind(this);
+    this.handleToggle = this.handleToggle.bind(this);
+    this.handleSelectTag = this.handleSelectTag.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  handleToggle(selectTag, index) {
+    if (selectTag.active) return null;
+    const { tags } = this.state;
+    const _tags = tags.map(tag => {
+      tag.active = null;
+      return tag;
+    })
+    .map(tag => {
+      if (tag.name === selectTag.name) {
+        tag.active = 'active';
+      }
+      return tag;
+    });
+    const $buttons = document.querySelectorAll('.flex-button-container button');
+    $buttons.forEach((button) => {
+      button.classList.remove('active');
+    });
+    $buttons[index].classList.add('active');
+    this.setState({ tags: _tags });
+    return null;
+  }
+
+  handleSelectTag() {
+    const { tags } = this.state;
+    const _tag = tags.find((tag) => tag.active);
+    this.setState({ tag: _tag.name });
+    Popup.hide();
+  }
+
+  showTags() {
+    const { tags } = this.state;
+    Popup.show(
+      <div className="edit-tag">
+        <Flex wrap="wrap" className="flex-button-container">
+          {tags.map((tag, index) => <Button
+            className={tag.active || ''}
+            onClick={this.handleToggle.bind(this, tag, index)} key={index}>{tag.name}
+          </Button>)}
+        </Flex>
+        <Button
+          className="select-tag"
+          onClick={this.handleSelectTag}>完成</Button>
+      </div>
+    , { animationType: 'slide-up' });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ tag: nextProps.driverInfo.carNum.slice(0, 1) });
+  }
+
   render() {
+    const { tag } = this.state;
+    const { carNum } = this.props.driverInfo;
+    const initCarNum = carNum ? carNum.slice(1) : '';
     const { getFieldProps } = this.props.form;
     return (
       <div className="page edit-number">
+        <div className="car-number-tag-wrapper">
+            <div className="car-number-tag" onClick={this.showTags}>
+              {tag}<span className="caret"></span>
+            </div>
+        </div>
         <InputItem
-          {...getFieldProps('name', {
-            initialValue: '浙A111111',
+          {...getFieldProps('carNum', {
+            initialValue: initCarNum,
           })}
           clear
           placeholder="请输入车牌号"
@@ -38,9 +125,11 @@ class CarNumber extends Component {
   handleSubmit() {
     location.href = '/#/person';
     const uuid = sessionStorage.getItem('uuid');
-    const name = this.props.form.getFieldProps('name').value;
-    if (name === undefined) {
-      Toast.fail('请填写姓名');
+    const carNum = this.props.form.getFieldProps('carNum').value;
+    const { tag } = this.state;
+    const _carNum = `${tag}${carNum}`;
+    if (carNum === undefined) {
+      Toast.fail('请填写车牌号');
       return;
     }
     if (uuid === undefined) {
@@ -49,24 +138,24 @@ class CarNumber extends Component {
     }
     const data = {
       data: {
-        name,
-        type: 'DRIVER_NAME',
+        carNum: _carNum,
+        type: '	DRIVER_CAR_NUM',
       },
       service: 'SERVICE_DRIVER',
       uuid,
       timestamp: '',
       signatures: '',
     };
-    console.log('values', data);
     request.post(url.webapp)
     .withCredentials()
     .send(data)
     .then((res) => {
-      if (res.sucess) {
+      const _res = handleRes(res);
+      if (_res.sucess) {
         // to-do 更新个人中心司机姓名
-        Toast.success(res.msg);
+        Toast.success(_res.msg);
       } else {
-        Toast.fail(res.msg);
+        Toast.fail(_res.msg);
       }
     });
   }
