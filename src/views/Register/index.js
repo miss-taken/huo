@@ -49,9 +49,9 @@ class Login extends Component {
   handleSubmit() {
     console.log(this);
     const carProp = this.props.form.getFieldProps('car').value;
-    const re = new RegExp("[&,?]code=([^//&]*)", "i");
+    const re = new RegExp('[&,?]code=([^//&]*)', 'i');
     const weChatCode = re.exec(location.href)[1];
-    
+
     console.log(carProp);
     const data = {
       data: {

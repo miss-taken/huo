@@ -28,7 +28,7 @@ class Cargo extends Component {
       currPage: 1,
       totalPage: 2,
       cargoList: [],
-      dataSource: dataSource,
+      dataSource,
       isLoading: false,
     };
   }
@@ -36,6 +36,7 @@ class Cargo extends Component {
   onEndReached(event) {
     // load new data
     console.log('reach end', event);
+    let { currPage } = this.state;
     this.setState({ isLoading: true });
     setTimeout(() => {
       this.rData = { ...this.rData, ...this.genData(++currPage) };
@@ -55,14 +56,8 @@ class Cargo extends Component {
         borderBottom: '1px solid #ECECED',
       }} />
     );
-    const row = (rowData, sectionID, rowID) => {
-      // if (index < 0) {
-      //   index = this.state.cargoList.length - 1;
-      // }
-      // const obj = data[index--];
-      return (
+    const row = (rowData, sectionID, rowID) => (
         <Link to="/cargo/778">
-          
           <div key={rowID}
             style={{
               backgroundColor: 'white',
@@ -74,14 +69,21 @@ class Cargo extends Component {
                 <div>{rowData.startCityStr}→{rowData.arrivalCityStr}</div>
               </div>
               <div style={{ display: 'inline-block' }}>
-                <p>{rowData.cargoName} <span className="span-divider"></span> {rowData.weight}吨/{rowData.cubic}立方</p>
-                <p>{rowData.carTypeStr} <span className="span-divider"></span> {rowData.carLengthStr}</p>
+                <p>
+                  {rowData.cargoName}
+                  <span className="span-divider"></span>
+                  {rowData.weight}吨/{rowData.cubic}立方
+                </p>
+                <p>
+                  {rowData.carTypeStr}
+                  <span className="span-divider"></span>
+                  {rowData.carLengthStr}
+                </p>
               </div>
               <div className="trapezoid">{rowData.statusStr}</div>
           </div>
         </Link>
-      );
-    };
+    );
     return (<div className="cargo">
       <ListView
         dataSource={this.state.dataSource}
@@ -131,7 +133,7 @@ class Cargo extends Component {
     .withCredentials()
     .send(requestData)
     .then((res) => {
-      const resultData = JSON.parse(res.text); 
+      const resultData = JSON.parse(res.text);
       console.log(this);
       if (resultData.success) {
         Toast.success(resultData.msg);
@@ -141,11 +143,11 @@ class Cargo extends Component {
           cargoList: resultData.result.objectArray,
           dataSource: this.state.dataSource.cloneWithRows(this.genData(this.state.currPage)),
           isLoading: false,
-        };    
-        console.log(this.state.cargoList); 
-        } else {
-          Toast.fail(resultData.msg);
-        }
+        };
+        console.log(this.state.cargoList);
+      } else {
+        Toast.fail(resultData.msg);
+      }
     });
   }
 }

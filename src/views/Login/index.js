@@ -10,7 +10,7 @@ import './_login';
 class Login extends Component {
   constructor(props) {
     super(props);
-    
+
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -18,7 +18,7 @@ class Login extends Component {
   handleSubmit() {
     console.log(this);
     const { form } = this.props;
-    const re = new RegExp("[&,?]code=([^//&]*)", "i");
+    const re = new RegExp('[&,?]code=([^//&]*)', 'i');
     const weChatCode = re.exec(location.href)[1];
     form.validateFields((errors, values) => {
       if (!!errors) {
@@ -41,7 +41,7 @@ class Login extends Component {
       .withCredentials()
       .send(data)
       .then((res) => {
-        const resultData = JSON.parse(res.text); 
+        const resultData = JSON.parse(res.text);
         if (resultData.success) {
           sessionStorage.setItem('uuid', resultData.result.uuid);
           Toast.success(resultData.msg);
@@ -53,7 +53,6 @@ class Login extends Component {
   }
 
   render() {
-
     const { getFieldProps } = this.props.form;
     return (
       <div className="login">

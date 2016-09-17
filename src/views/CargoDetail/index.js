@@ -125,15 +125,27 @@ class CargoDetail extends React.Component {
       uploadVisible,
     } = this.state;
     const { cargoInfo } = this.state;
-    const { projectInfo } = this.state;
+    // const { projectInfo } = this.state;
     return (
       <div className="cargo-detail">
         <div className="info">
-          <div className="info-place">{cargoInfo.startCityStr} → {cargoInfo.arrivalCityStr} <span className="span-divider"></span>{cargoInfo.sendTimeStr}</div>
+          <div className="info-place">
+            {cargoInfo.startCityStr} → {cargoInfo.arrivalCityStr}
+            <span className="span-divider"></span>
+            {cargoInfo.sendTimeStr}
+          </div>
           <div>
-            <div className="info-item">货物名称：  {cargoInfo.cargoName}</div>
-            <div className="info-item">吨位方量：  {cargoInfo.weight}吨/{cargoInfo.cubic}平方</div>
-            <div className="info-item">车辆需求：  {cargoInfo.carTypeStr} <span className="span-divider"></span>{cargoInfo.carLengthStr}</div>
+            <div className="info-item">
+              货物名称： {cargoInfo.cargoName}
+            </div>
+            <div className="info-item">
+              吨位方量： {cargoInfo.weight}吨/{cargoInfo.cubic}平方
+            </div>
+            <div className="info-item">
+              车辆需求： {cargoInfo.carTypeStr}
+              <span className="span-divider"></span>
+              {cargoInfo.carLengthStr}
+            </div>
             <div className="info-item">总里程数：  暂未计算</div>
           </div>
           <div className="trapezoid">{cargoInfo.statusStr}</div>
@@ -212,7 +224,7 @@ class CargoDetail extends React.Component {
         Toast.success(resultData.msg);
         this.setState({
           cargoInfo: resultData.result,
-          projectInfo: resultData.result.projectInfo
+          projectInfo: resultData.result.projectInfo,
         });
       } else {
         Toast.fail(resultData.msg);
