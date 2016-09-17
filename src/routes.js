@@ -35,7 +35,7 @@ class Routes extends React.Component {
       <Router history={hashHistory}>
         <Route path="login" component={Login} onEnter={redirectToDashboad}/>
         <Route path="/" component={App} onEnter={redirectToLogin}>
-          <IndexRoute component={Login}/>
+          <IndexRoute component={Person}/>
           <Route path="register" component={Register}/>
           <Route path="person" component={Person}>
             <Route path="name" component={EditName}/>
