@@ -12,6 +12,18 @@ import EditTag from './views/Person/Tag';
 import Cargo from './views/Cargo';
 import CargoDetail from './views/CargoDetail';
 
+function redirectToDashboad(nextState, replace) {
+  if (sessionStorage.getItem('uuid')) {
+    replace('/');
+  }
+}
+
+function redirectToLogin(nextState, replace) {
+  if (!sessionStorage.getItem('uuid')) {
+    replace('/login');
+  }
+}
+
 class Routes extends React.Component {
   constructor(props) {
     super(props);
@@ -21,9 +33,9 @@ class Routes extends React.Component {
   render() {
     return (
       <Router history={hashHistory}>
-        <Route path="/" component={App}>
+        <Route path="login" component={Login} onEnter={redirectToDashboad}/>
+        <Route path="/" component={App} onEnter={redirectToLogin}>
           <IndexRoute component={Login}/>
-          <Route path="login" component={Login}/>
           <Route path="register" component={Register}/>
           <Route path="person" component={Person}>
             <Route path="name" component={EditName}/>
