@@ -1,0 +1,12 @@
+import React from 'react';
+
+class Img extends React.Component {
+  render() {
+    return (
+      <div className="page edit-img">
+      </div>
+    );
+  }
+}
+
+export default Img;

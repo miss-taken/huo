@@ -5,6 +5,7 @@ import Login from './views/Login';
 import Register from './views/Register';
 import Person from './views/Person';
 import EditName from './views/Person/Name';
+import EditImg from './views/Person/Img';
 import EditNumber from './views/Person/CarNumber';
 import EditInfo from './views/Person/CarInfo';
 import EditWeight from './views/Person/Weight';
@@ -43,6 +44,7 @@ class Routes extends React.Component {
             <Route path="car-info" component={EditInfo}/>
             <Route path="car-weight" component={EditWeight}/>
             <Route path="car-tag" component={EditTag}/>
+            <Route path="car-img" component={EditImg}/>
           </Route>
           <Route path="cargo" component={Cargo}/>
           <Route path="cargo/:id" component={CargoDetail}/>
