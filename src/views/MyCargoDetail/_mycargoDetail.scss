@@ -1,0 +1,240 @@
+.cargo-detail {
+  padding-bottom: 40px;
+  margin-bottom: 40px;
+  .order {
+    background: #dad7d0;
+    color: #000;
+    line-height: 30px;
+    padding-left: 15px;
+  }
+  .info {
+    position: relative;
+    background: #75aade;
+    height: 150px;
+    color: #fff;
+    padding: 20px 16px;
+
+    .info-place {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+    .info-item {
+      font-size: 16px;
+      line-height: 24px;
+    }
+    .trapezoid {
+      bottom: 0;
+    }
+  }
+  .title {
+    margin-left: 30px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #cfcfcf;
+  }
+  .am-table {
+    border: 1px solid #cfcfcf;
+    border-bottom: none;
+  }
+  .am-table-body {
+
+  }
+  .am-table .am-table-horizonTitle {
+    background: #fff;
+    color: #8b8b8b;
+    border-right: 1px solid #cfcfcf;
+    font-size: 14px;
+    text-align: center;
+    font-weight: normal;
+    line-height: 40px;
+    padding: 0;
+    text-indent: 0;
+  }
+  .am-table td {
+    padding: 0;
+    font-size: 14px;
+    text-align: left;
+    line-height: 40px;
+    text-indent: 12px;
+  }
+
+  .apply-for {
+    position: fixed;
+    bottom: 0;
+    border-radius: 0;
+    color: #fff;
+    text-align: center;
+    background: #ff9307;
+    line-height: 50px;
+    height: 50px;
+    letter-spacing: 5px;
+    font-size: 18px;
+  }
+
+  .offer-success {
+    .mycargo-offer {
+      background: #fff;
+    }
+    .confirm-btn {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+}
+.global {
+  .am-modal-body {
+    font-size: 14px;
+  }
+  .am-modal-button-group-v .am-modal-button {
+    font-size: 14px;
+    height: 44px;
+    line-height: 44px;
+  }
+}
+.cargo-upload-modal {
+  padding: 8px 25px;
+}
+.cargo-upload {
+  position: relative;
+  padding: 8px 36px;
+  .text {
+    text-align: left;
+    color: #5b5b5b;
+    line-height: 22px;
+    font-size: 16px;
+    &+.text {
+      margin-bottom: 30px;
+    }
+  }
+  .upload-demo {
+    width: 100%;
+  }
+  .upload-btn {
+    width: 90px;
+    height: 30px;
+    line-height: 30px;
+    color: #ffaa26;
+    font-size: 16px;
+    padding: 0;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    &:after {
+      border: 1px solid #ffaa26;
+      border-radius: 36px;
+    }
+  }
+}
+.dropzone {
+  width: 100%;
+  height: 100px;
+}
+.upload-img-wrapper {
+  width: 100%;
+}
+.upload-img {
+  width: 100%;
+  height: 100px;
+}
+.submit-btn {
+  color: #ffaa26;
+  width: 100%;
+  font-size: 20px;
+  line-height: 50px;
+  height: 50px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  &:after {
+    border: 2px solid #ffaa26;
+    border-radius: 50px;
+  }
+}
+
+.mycargo-offer-modal {
+  padding: 8px 25px;
+  h3 {
+    background: #75aade;
+    color: #fff;
+    text-align: center;
+    font-size: 20px;
+    line-height: 44px;
+    margin-bottom: 0;
+  }
+}
+.mycargo-offer {
+  padding: 18px 20px;
+  .price {
+    color: #fd6a12;
+    font-weight: bold;
+  }
+  .divider {
+    display: inline-block;
+    width: 10px;
+  }
+  .text {
+    color: #8a8a8a;
+    line-height: 24px;
+    text-align: left;
+  }
+  .offer {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #979797;
+  }
+  .am-list-item {
+    padding-left: 0;
+    min-height: 0;
+  }
+  .form-item {
+    line-height: 42px;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: left;
+    &.first {
+      border-bottom:1px solid #979797;
+    }
+  }
+  .am-input-label {
+    min-width: 60px;
+  }
+  .am-input-control {
+    & > input {
+      border: none;
+      text-align: right;
+    }
+  }
+  .price-wrapper {
+    position: relative;
+  }
+  .price1 {
+    .am-input-control {
+      & > input {
+        width: 50px;
+      }
+    }
+  }
+  .price2 {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    .am-input-control {
+      & > input {
+        width: 50px;
+      }
+    }
+  }
+
+  .confirm-btn {
+    width: 90px;
+    height: 40px;
+    line-height: 40px;
+    color: #ffaa26;
+    font-size: 16px;
+    padding: 0;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    &:after {
+      border: 1px solid #ffaa26;
+      border-radius: 36px;
+    }
+  }
+}

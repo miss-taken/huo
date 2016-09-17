@@ -12,18 +12,21 @@ import EditWeight from './views/Person/Weight';
 import EditTag from './views/Person/Tag';
 import Cargo from './views/Cargo';
 import CargoDetail from './views/CargoDetail';
+import MyCargo from './views/MyCargo';
+import MyCargoDetail from './views/MyCargoDetail';
+import MyCargoSuccess from './views/MyCargoDetail/OfferSuccess';
 
-function redirectToDashboad(nextState, replace) {
-  if (sessionStorage.getItem('uuid')) {
-    replace('/');
-  }
-}
-
-function redirectToLogin(nextState, replace) {
-  if (!sessionStorage.getItem('uuid')) {
-    replace('/login');
-  }
-}
+// function redirectToDashboad(nextState, replace) {
+//   if (sessionStorage.getItem('uuid')) {
+//     replace('/');
+//   }
+// }
+//
+// function redirectToLogin(nextState, replace) {
+//   if (!sessionStorage.getItem('uuid')) {
+//     replace('/login');
+//   }
+// }
 
 class Routes extends React.Component {
   constructor(props) {
@@ -34,10 +37,10 @@ class Routes extends React.Component {
   render() {
     return (
       <Router history={hashHistory}>
-        <Route path="login" component={Login} onEnter={redirectToDashboad}/>
-        <Route path="/" component={App} onEnter={redirectToLogin}>
+        <Route path="login" component={Login}/>
+        <Route path="register" component={Register}/>
+        <Route path="/" component={App}>
           <IndexRoute component={Person}/>
-          <Route path="register" component={Register}/>
           <Route path="person" component={Person}>
             <Route path="name" component={EditName}/>
             <Route path="car-number" component={EditNumber}/>
@@ -48,6 +51,10 @@ class Routes extends React.Component {
           </Route>
           <Route path="cargo" component={Cargo}/>
           <Route path="cargo/:id" component={CargoDetail}/>
+          <Route path="my-cargo" component={MyCargo}/>
+          <Route path="my-cargo/:id" component={MyCargoDetail}>
+            <Route path="success" component={MyCargoSuccess}/>
+          </Route>
         </Route>
       </Router>
     );
