@@ -92,7 +92,7 @@ class CarTag extends Component {
     const { tags } = this.state;
     const carTools = tags
     .filter(tag => tag.selected)
-    .map(tag => tag.name).join(',') || '';
+    .map(tag => tag.name).join(';') || '';
 
     if (uuid === undefined) {
       Toast.fail('请登陆');
@@ -103,6 +103,7 @@ class CarTag extends Component {
       return;
     }
 
+    console.log(carTools);
     const data = {
       data: {
         carTools,
@@ -131,5 +132,8 @@ class CarTag extends Component {
     });
   }
 }
+
+
+
 const _CarTag = createForm()(CarTag);
 export default _CarTag;
