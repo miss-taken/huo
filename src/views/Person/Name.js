@@ -62,14 +62,15 @@ class Name extends Component {
     .withCredentials()
     .send(data)
     .then((res) => {
-      const _res = handleRes(res);
-      if (_res.success) {
-        // to-do 更新个人中心司机姓名
-        Toast.success(_res.msg);
+      const resultData = handleRes(res);
+      if (resultData.success) {
+        Toast.success(resultData.msg);
+        var driverInfo = sessionStorage.getItem('driverInfo');
+        driverInfo.name = name;
+        this.context.router.push('/person');
       } else {
-        Toast.fail(_res.msg);
+        Toast.fail(resultData.msg);
       }
-      this.context.router.push('/person');
     });
   }
 }

@@ -57,13 +57,26 @@ class Person extends Component {
       const resultData = JSON.parse(res.text);
       if (resultData.success) {
         Toast.success(resultData.msg);
+        sessionStorage.setItem('driverInfo',resultData.result);
         this.setState({
           driverInfo: resultData.result,
         });
+        this.context.router.push('/person');
+
       } else {
         Toast.fail(resultData.msg);
       }
     });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log('reload', nextProps);
+    const {driverInfo} = this.state;
+    const _driverInfo = sessionStorage.getItem('driverInfo');
+    this.setState({
+      driverInfo:Object.assign(driverInfo,_driverInfo),
+    });
+    console.log(_driverInfo);
   }
 
   componentDidMount() {

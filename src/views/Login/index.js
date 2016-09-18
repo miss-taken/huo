@@ -18,6 +18,7 @@ class Login extends Component {
   handleSubmit() {
     const { form } = this.props;
     const re = new RegExp('[&,?]code=([^//&]*)', 'i');
+    console.log(location.href);
     const weChatCode = re.exec(location.href)[1];
     // const weChatCode = '123456';
     form.validateFields((errors, values) => {

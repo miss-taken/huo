@@ -13,15 +13,15 @@ import Cargo from './views/Cargo';
 import CargoDetail from './views/CargoDetail';
 
 function redirectToDashboad(nextState, replace) {
-  if (sessionStorage.getItem('uuid')) {
-    replace('/');
-  }
+  // if (sessionStorage.getItem('uuid')) {
+  //   replace('/');
+  // }
 }
 
 function redirectToLogin(nextState, replace) {
-  if (!sessionStorage.getItem('uuid')) {
-    replace('/login');
-  }
+  // if (!sessionStorage.getItem('uuid')) {
+  //   replace('/login');
+  // }
 }
 
 class Routes extends React.Component {

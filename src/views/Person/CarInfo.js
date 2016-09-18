@@ -72,11 +72,11 @@ class CarInfo extends Component {
   }
 
   handleSubmit() {
-    // location.href = '/#/person';
+    location.href = '/#/person';
     const uuid = sessionStorage.getItem('uuid');
     const car = this.props.form.getFieldProps('car').value;
     if (car === undefined) {
-      Toast.fail('请填写姓名');
+      Toast.fail('请选择车长车型');
       return;
     }
     if (uuid === undefined) {
@@ -85,27 +85,39 @@ class CarInfo extends Component {
     }
     const data = {
       data: {
-        car,
-        type: 'DRIVER_NAME',
+        carType:car[1],
+        carLength:car[0],
+        type: 'DRIVER_CAR',
       },
       service: 'SERVICE_DRIVER',
       uuid,
       timestamp: '',
       signatures: '',
     };
-    console.log('values', data);
     request.post(url.webapp)
     .withCredentials()
     .send(data)
     .then((res) => {
-      if (res.sucess) {
-        // to-do 更新个人中心司机姓名
-        Toast.success(res.msg);
+      const resultData = JSON.parse(res.text);
+      if (resultData.success) {
+        var driverInfo = sessionStorage.getItem('driverInfo');
+        driverInfo.carLength = car[0];
+        driverInfo.carType = car[1];
+        Toast.success(resultData.msg);
+        console.log(this.context);
+        this.context.router.push('/person');
+
       } else {
-        Toast.fail(res.msg);
+        Toast.fail(resultData.msg);
       }
     });
   }
 }
+
+CarInfo.contextTypes = {
+  router: React.PropTypes.object,
+};
+
+
 const _CarInfo = createForm()(CarInfo);
 export default _CarInfo;
