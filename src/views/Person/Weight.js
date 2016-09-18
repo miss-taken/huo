@@ -80,8 +80,12 @@ class Weight extends Component {
     .send(data)
     .then((res) => {
       if (res.success) {
-        // to-do 更新个人中心吨位放量
+        var driverInfo = sessionStorage.getItem('driverInfo');
+        driverInfo.weight = weight.toString();
+        driverInfo.cubic = cubic.toString();
         Toast.success(res.msg);
+        this.context.router.push('/person');
+
       } else {
         Toast.fail(res.msg);
       }

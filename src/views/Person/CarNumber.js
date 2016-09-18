@@ -128,7 +128,7 @@ class CarNumber extends Component {
     const carNum = this.props.form.getFieldProps('carNum').value;
     const { tag } = this.state;
     const _carNum = `${tag}${carNum}`;
-    if (carNum === undefined) {
+    if (_carNum === undefined) {
       Toast.fail('请填写车牌号');
       return;
     }
@@ -151,9 +151,12 @@ class CarNumber extends Component {
     .send(data)
     .then((res) => {
       const _res = handleRes(res);
-      if (_res.sucess) {
-        // to-do 更新个人中心司机姓名
+      if (_res.success) {
+        var driverInfo = sessionStorage.getItem('driverInfo');
+        driverInfo.carNum = _carNum;
         Toast.success(_res.msg);
+        this.context.router.push('/person');
+
       } else {
         Toast.fail(_res.msg);
       }

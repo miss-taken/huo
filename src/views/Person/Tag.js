@@ -119,9 +119,12 @@ class CarTag extends Component {
     .then((res) => {
       const _res = handleRes(res);
       if (_res.success) {
-        // to-do 更新个人中心司机姓名
         location.href = '/#/person';
         Toast.success(_res.msg);
+        var driverInfo = sessionStorage.getItem('driverInfo');
+        driverInfo.carTools = carTools;
+        this.context.router.push('/person');
+
       } else {
         Toast.fail(_res.msg);
       }
