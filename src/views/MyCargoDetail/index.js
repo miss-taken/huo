@@ -31,7 +31,8 @@ class CargoDetail extends React.Component {
       uploadVisible: false,
       cargoInfo: {},
       projectInfo: {},
-
+      loadAddressInfo:{},
+      unloadAddressInfo:{},
     };
 
     this.cloneChildren = this.cloneChildren.bind(this);
@@ -109,6 +110,44 @@ class CargoDetail extends React.Component {
     this.setState({ uploadVisible: false });
   }
 
+  componentDidMount() {
+    this.prepareData();
+  }
+
+
+  // 获取货源信息
+  prepareData() {
+    const uuid = sessionStorage.getItem('uuid');
+    const _data = {
+      data: {
+        orderId: this.props.params.id.toString(),
+        type: 'ORDER_DETAIL',
+      },
+      service: 'SERVICE_ORDER',
+      uuid,
+      timestamp: '',
+      signatures: '',
+    };
+
+    request.post(url.webapp)
+    .withCredentials()
+    .send(_data)
+    .then((res) => {
+      const resultData = JSON.parse(res.text);
+      if (resultData.success) {
+        Toast.success(resultData.msg);
+        this.setState({
+          cargoInfo: resultData.result,
+          projectInfo: resultData.result.projectInfo,
+          loadAddressInfo: resultData.result.loadAddressInfo,
+          unloadAddressInfo: resultData.result.unloadAddressInfo,
+        });
+      } else {
+        Toast.fail(resultData.msg);
+      }
+    });
+  }
+
   render() {
     const {
       messageVisible,
@@ -116,7 +155,7 @@ class CargoDetail extends React.Component {
       offerVisible,
       uploadVisible,
     } = this.state;
-    const { cargoInfo, projectInfo } = this.state;
+    const { cargoInfo, projectInfo, loadAddressInfo, unloadAddressInfo} = this.state;
     const data1 = [{
       title: '司机人数',
       name: projectInfo.driverNum || '',
@@ -186,16 +225,20 @@ class CargoDetail extends React.Component {
 
     let data;
     // 伪造数据
-    cargoInfo.status = 99;
-    if (cargoInfo.status === 99) {
-      data = data1;
-    } else {
-      data = data2;
-    }
+    // cargoInfo.status = 99;
+    // if (cargoInfo.status === 99) {
+    //   data = data1;
+    // } else {
+    //   data = data2;
+    // }
     // const { projectInfo } = this.state;
+    const loadLinkMobile = `tel: + ${loadAddressInfo.linkMobile}`;
+    const unloadLinkMobile = `tel: + ${unloadAddressInfo.linkMobile}`;
+    const linkTo = `/my-cargo/${this.props.params.id}/map`;
+
     return (
       <div className="cargo-detail">
-        <div className="order">订单编号：{12312312312}</div>
+        <div className="order">订单编号：{cargoInfo.orderNum}</div>
         <div className="info">
           <div className="info-place">
             {cargoInfo.startCityStr} → {cargoInfo.arrivalCityStr}
@@ -265,14 +308,14 @@ class CargoDetail extends React.Component {
           <h4 className="title">装卸货信息</h4>
           <div className="people-info">
             <div className="people-info-item">
-              <div>装货地址: {3412312312312}</div>
-              <a href="tel: 13111111111" className="people-contact">联系人电话</a>
+              <div>装货地址: {loadAddressInfo.address}</div>
+              <a href="{loadLinkMobile}" className="people-contact">联系人电话</a>
             </div>
             <div className="people-info-item">
-              <div>卸货地址: {1212121231231}</div>
-              <a href="tel: 13222222222" className="people-contact">联系人电话</a>
+              <div>卸货地址: {unloadAddressInfo.address}</div>
+              <a href="unloadLinkMobile" className="people-contact">联系人电话</a>
             </div>
-            <Link className="map-icon" to="/my-cargo/778/map">
+            <Link className="map-icon" to="{linkTo}">
               <img src={mapIcon}/>
             </Link>
           </div>
@@ -284,40 +327,6 @@ class CargoDetail extends React.Component {
         </ReactCSSTransitionGroup>
       </div>
     );
-  }
-
-  componentDidMount() {
-    this.prepareData();
-  }
-
-  // 获取货源信息
-  prepareData() {
-    const _data = {
-      data: {
-        cargoId: this.props.params.id,
-        type: 'CARGO_SIMPLE',
-      },
-      service: 'SERVICE_CARGO',
-      uuid: '',
-      timestamp: '',
-      signatures: '',
-    };
-
-    request.post(url.webapp)
-    .withCredentials()
-    .send(_data)
-    .then((res) => {
-      const resultData = JSON.parse(res.text);
-      if (resultData.success) {
-        Toast.success(resultData.msg);
-        this.setState({
-          cargoInfo: resultData.result,
-          projectInfo: resultData.result.projectInfo,
-        });
-      } else {
-        Toast.fail(resultData.msg);
-      }
-    });
   }
 }
 

@@ -67,7 +67,6 @@ class Login extends Component {
       timestamp: '',
       signatures: '',
     };
-    console.log('values', data);
     request.post(url.webapp)
     .withCredentials()
     .send(data)
