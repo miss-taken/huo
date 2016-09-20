@@ -1,4 +1,11 @@
+body {
+  // overflow: hidden;
+}
 .cargo {
+  .am-list {
+    height: 600px;
+    overflow: auto;
+  }
   .am-list-header {
     display: none;
   }

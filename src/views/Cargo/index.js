@@ -5,41 +5,45 @@ import request from 'superagent-bluebird-promise';
 import url from '../../utils/url';
 import './_cargo';
 
-
+const NUM_ROWS = 20;
+let pageIndex = 0;
 class Cargo extends Component {
 
   constructor(props) {
     super(props);
-    this.rData = {};
 
-    const dataSource = new ListView.DataSource({
+    const ds = new ListView.DataSource({
       rowHasChanged: (row1, row2) => row1 !== row2,
     });
-    this.genData = (pIndex = 1) => {
+
+    this.genData = (pIndex = 0) => {
       const dataBlob = {};
-      for (let i = 0; i < this.state.cargoList.length; i++) {
-        const ii = ((pIndex - 1) * 20) + i;
-        dataBlob[`${ii}`] = this.state.cargoList[ii];
-        console.log(dataBlob);
+      for (let i = 0; i < NUM_ROWS; i++) {
+        const ii = (pIndex * NUM_ROWS) + i;
+        dataBlob[`${ii}`] = `row - ${ii}`;
       }
       return dataBlob;
     };
+
+    this.rData = {};
     this.state = {
-      currPage: 1,
+      currPage: 0,
       totalPage: 2,
       cargoList: [],
-      dataSource,
+      dataSource: ds.cloneWithRows(this.genData()),
       isLoading: false,
     };
+
+    this.requestForCargo = this.requestForCargo.bind(this);
+    this.onEndReached = this.onEndReached.bind(this);
   }
 
   onEndReached(event) {
     // load new data
     console.log('reach end', event);
-    let { currPage } = this.state;
     this.setState({ isLoading: true });
     setTimeout(() => {
-      this.rData = { ...this.rData, ...this.genData(++currPage) };
+      this.rData = { ...this.rData, ...this.genData(++pageIndex) };
       this.setState({
         dataSource: this.state.dataSource.cloneWithRows(this.rData),
         isLoading: false,
@@ -47,78 +51,21 @@ class Cargo extends Component {
     }, 1000);
   }
 
-  render() {
-    const separator = (sectionID, rowID) => (
-      <div key={`${sectionID}-${rowID}`} style={{
-        backgroundColor: '#F5F5F9',
-        height: 8,
-        borderTop: '1px solid #ECECED',
-        borderBottom: '1px solid #ECECED',
-      }} />
-    );
-    const row = (rowData, sectionID, rowID) => (
-        <Link to="/cargo/778">
-          <div key={rowID}
-            style={{
-              backgroundColor: 'white',
-            }}
-          />
-          <div className="panel">
-              <div className="panel-info">
-                <div>{rowData.sendTimeStr}</div>
-                <div>{rowData.startCityStr}→{rowData.arrivalCityStr}</div>
-              </div>
-              <div style={{ display: 'inline-block' }}>
-                <p>
-                  {rowData.cargoName}
-                  <span className="span-divider"></span>
-                  {rowData.weight}吨/{rowData.cubic}立方
-                </p>
-                <p>
-                  {rowData.carTypeStr}
-                  <span className="span-divider"></span>
-                  {rowData.carLengthStr}
-                </p>
-              </div>
-              <div className="trapezoid">{rowData.statusStr}</div>
-          </div>
-        </Link>
-    );
-    return (<div className="cargo">
-      <ListView
-        dataSource={this.state.dataSource}
-        renderHeader={() => <span>header</span>}
-        renderFooter={() => <div style={{ padding: 30, textAlign: 'center' }}>
-          {this.state.isLoading ? '加载中...' : '加载完毕'}
-        </div>}
-        renderRow={row}
-        renderSeparator={separator}
-        pageSize={4}
-        scrollRenderAheadDistance={500}
-        scrollEventThrottle={20}
-        onScroll={() => { console.log('scroll'); }}
-        useBodyScroll
-        onEndReached={this.onEndReached}
-        onEndReachedThreshold={10}
-      />
-      <div className="help">联系客服</div>
-    </div>);
-  }
-
   componentDidMount() {
     this.requestForCargo(this.state.currPage = 1);
   }
 
   requestForCargo(page) {
-    let uuid = sessionStorage.getItem('uuid');
+    const uuid = sessionStorage.getItem('uuid');
     if (page >= this.state.totalPage) {
       Toast.fail('没有下一页了');
       return;
     }
     if (uuid === undefined) {
-      uuid = '';
+      Toast.fail('请登陆');
       return;
     }
+
     const requestData = {
       data: {
         currPage: page.toString(),
@@ -136,19 +83,94 @@ class Cargo extends Component {
       const resultData = JSON.parse(res.text);
       if (resultData.success) {
         Toast.success(resultData.msg);
-        this.state = {
+        this.rData = { ...this.rData, ...this.genData(++pageIndex) };
+        this.setState({
           currPage: resultData.result.currPage,
           totalPage: resultData.result.totalPage,
           cargoList: resultData.result.objectArray,
-          dataSource: this.state.dataSource.cloneWithRows(this.genData(this.state.currPage)),
+          dataSource: this.state.dataSource.cloneWithRows(this.rData),
           isLoading: false,
-        };
-        console.log(this.state.cargoList);
+        });
       } else {
         Toast.fail(resultData.msg);
       }
     });
   }
+
+  render() {
+    const { cargoList } = this.state;
+    console.log('dmc', cargoList);
+    let index = cargoList.length - 1;
+    // let index;
+    const separator = (sectionID, rowID) => (
+      <div key={`${sectionID}-${rowID}`} style={{
+        backgroundColor: '#F5F5F9',
+        height: 8,
+        borderTop: '1px solid #ECECED',
+        borderBottom: '1px solid #ECECED',
+      }} />
+    );
+    let row;
+    if (index <= 0) {
+      row = () => <div></div>;
+    } else {
+      row = (rowData, sectionID, rowID) => {
+        if (index < 0) {
+          index = cargoList.length - 1;
+        }
+        const obj = cargoList[index--];
+        return (
+          <Link to={`/cargo/${obj.id}`}>
+            <div key={rowID}
+              style={{
+                backgroundColor: 'white',
+              }}
+            />
+            <div className="panel">
+                <div className="panel-info">
+                  <div>{obj.sendTimeStr}</div>
+                  <div>{obj.startCityStr}→{obj.arrivalCityStr}</div>
+                </div>
+                <div style={{ display: 'inline-block' }}>
+                  <p>
+                    {obj.cargoName}
+                    <span className="span-divider"></span>
+                    {obj.weight}吨/{obj.cubic}立方
+                  </p>
+                  <p>
+                    {obj.carTypeStr}
+                    <span className="span-divider"></span>
+                    {obj.carLengthStr}
+                  </p>
+                </div>
+                <div className="trapezoid">{obj.statusStr}</div>
+            </div>
+          </Link>
+        );
+      };
+    }
+
+    return (<div className="cargo">
+      <ListView
+        dataSource={this.state.dataSource}
+        renderHeader={() => <span>header</span>}
+        renderFooter={() => <div style={{ padding: 30, textAlign: 'center' }}>
+          {this.state.isLoading ? '加载中...' : '加载完毕'}
+        </div>}
+        renderRow={row}
+        renderSeparator={separator}
+        pageSize={4}
+        scrollRenderAheadDistance={500}
+        scrollEventThrottle={20}
+        useBodyScroll
+        onEndReached={this.onEndReached}
+        onEndReachedThreshold={10}
+      />
+      <div className="help">联系客服</div>
+    </div>);
+  }
+
+
 }
 
 export default Cargo;
