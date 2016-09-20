@@ -29,7 +29,31 @@ const carType = [
   { label: '高栏车(高栏可拆)', value: 12, children: carLength },
 ];
 
+const tags = [
+  { name: '京' },
+  { name: '津' },
+  { name: '浙' },
+  { name: '川' },
+  { name: 'x' },
+  { name: 'a' },
+  { name: 'b' },
+  { name: 'd' },
+  { name: 'e' },
+  { name: 'r' },
+  { name: 'p' },
+  { name: 'o' },
+  { name: 'i' },
+  { name: 'u' },
+  { name: 'y' },
+  { name: 'h' },
+  { name: 'j' },
+  { name: 'k' },
+  { name: 'l' },
+  { name: ';' },
+];
+
 export default {
   carLength,
   carType,
+  tags,
 };

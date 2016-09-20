@@ -3,6 +3,7 @@ import { WingBlank, Toast, Button, Picker, List } from 'antd-mobile';
 import { createForm } from 'rc-form';
 import url from '../../utils/url';
 import params from '../../utils/params';
+import { handleRes } from '../../utils/web'
 import request from 'superagent-bluebird-promise';
 
 const _carType = params.carType;
@@ -86,7 +87,7 @@ class CarInfo extends Component {
     .withCredentials()
     .send(data)
     .then((res) => {
-      const resultData = JSON.parse(res.text);
+      const resultData = handleRes(res);
       if (resultData.success) {
         const driverInfo = JSON.parse(sessionStorage.getItem('driverInfo'));
         driverInfo.carLeng = cLength;
@@ -98,6 +99,7 @@ class CarInfo extends Component {
         this.context.router.push('/person');
       } else {
         Toast.fail(resultData.msg);
+        this.context.router.push('/person');
       }
     });
   }

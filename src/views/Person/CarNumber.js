@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { InputItem, WingBlank, Toast, Button, Popup, Flex } from 'antd-mobile';
 import { createForm } from 'rc-form';
 import url from '../../utils/url';
+import params from '../../utils/params';
 import { handleRes } from '../../utils/web';
 import request from 'superagent-bluebird-promise';
 
@@ -11,28 +12,7 @@ class CarNumber extends Component {
     const { carNum } = this.props.driverInfo;
     this.state = {
       tag: carNum ? carNum.slice(0, 1) : '',
-      tags: [
-        { name: '京' },
-        { name: '津' },
-        { name: '浙' },
-        { name: '川' },
-        { name: 'x' },
-        { name: 'a' },
-        { name: 'b' },
-        { name: 'd' },
-        { name: 'e' },
-        { name: 'r' },
-        { name: 'p' },
-        { name: 'o' },
-        { name: 'i' },
-        { name: 'u' },
-        { name: 'y' },
-        { name: 'h' },
-        { name: 'j' },
-        { name: 'k' },
-        { name: 'l' },
-        { name: ';' },
-      ],
+      tags: params.tags,
     };
     this.showTags = this.showTags.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
@@ -153,12 +133,14 @@ class CarNumber extends Component {
     .then((res) => {
       const _res = handleRes(res);
       if (_res.success) {
-        const driverInfo = sessionStorage.getItem('driverInfo');
+        const driverInfo = JSON.parse(sessionStorage.getItem('driverInfo'));
         driverInfo.carNum = _carNum;
+        sessionStorage.setItem('driverInfo', JSON.stringify(driverInfo));
         Toast.success(_res.msg);
         this.context.router.push('/person');
       } else {
         Toast.fail(_res.msg);
+        this.context.router.push('/person');
       }
     });
   }

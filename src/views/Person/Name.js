@@ -64,9 +64,10 @@ class Name extends Component {
     .then((res) => {
       const resultData = handleRes(res);
       if (resultData.success) {
-        Toast.success(resultData.msg);
-        const driverInfo = sessionStorage.getItem('driverInfo');
+        const driverInfo = JSON.parse(sessionStorage.getItem('driverInfo'));
         driverInfo.name = name;
+        sessionStorage.setItem('driverInfo', JSON.stringify(driverInfo));
+        Toast.success(resultData.msg);
         this.context.router.push('/person');
       } else {
         Toast.fail(resultData.msg);
