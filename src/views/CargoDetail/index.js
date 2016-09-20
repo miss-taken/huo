@@ -11,28 +11,6 @@ const columns = [
   { title: '名字', dataIndex: 'name', key: 'name' },
 ];
 
-const data = [{
-  title: '司机人数',
-  name: '1人',
-  key: '1',
-}, {
-  title: '防护环境',
-  name: '无',
-  key: '2',
-}, {
-  title: '车辆环境',
-  name: '无要求',
-  key: '3',
-}, {
-  title: '装卸要求',
-  name: '厂家负责装卸',
-  key: '4',
-}, {
-  title: '配载要求',
-  name: '不可配载',
-  key: '5',
-}];
-
 class CargoDetail extends React.Component {
 
   constructor(props) {
@@ -124,8 +102,30 @@ class CargoDetail extends React.Component {
       offerVisible,
       uploadVisible,
     } = this.state;
-    const { cargoInfo } = this.state;
+    const { cargoInfo, projectInfo } = this.state;
     // const { projectInfo } = this.state;
+    const data = [{
+      title: '司机人数',
+      name: projectInfo.driverNum || 1,
+      key: '1',
+    }, {
+      title: '防护环境',
+      name: projectInfo.protect || '无',
+      key: '2',
+    }, {
+      title: '车辆环境',
+      name: projectInfo.envRqmt || '无要求',
+      key: '3',
+    }, {
+      title: '装卸要求',
+      name: projectInfo.loadRqmt || '厂家负责卸货',
+      key: '4',
+    }, {
+      title: '配载要求',
+      name: projectInfo.allocRqmt || '不可配载',
+      key: '5',
+    }];
+
     return (
       <div className="cargo-detail">
         <div className="info">
