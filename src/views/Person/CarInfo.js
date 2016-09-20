@@ -3,7 +3,7 @@ import { WingBlank, Toast, Button, Picker, List } from 'antd-mobile';
 import { createForm } from 'rc-form';
 import url from '../../utils/url';
 import params from '../../utils/params';
-import { handleRes } from '../../utils/web'
+import { handleRes } from '../../utils/web';
 import request from 'superagent-bluebird-promise';
 
 const _carType = params.carType;
