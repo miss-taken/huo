@@ -21,8 +21,10 @@ class Person extends Component {
       driverInfo: {},
     };
 
-    this.prepareData = this.prepareData.bind(this);
     this.cloneChildren = this.cloneChildren.bind(this);
+    this.prepareData = this.prepareData.bind(this);
+    this.getImage = this.getImage.bind(this);
+    this.renderPaper = this.renderPaper.bind(this);
   }
 
   cloneChildren() {
@@ -56,6 +58,9 @@ class Person extends Component {
     .then((res) => {
       const resultData = JSON.parse(res.text);
       if (resultData.success) {
+        if (resultData.imageName) {
+          this.getImage(resultData.imageName);
+        }
         Toast.success(resultData.msg);
         this.setState({
           driverInfo: resultData.result,
@@ -66,18 +71,59 @@ class Person extends Component {
     });
   }
 
+  getImage(path) {
+    const uuid = sessionStorage.getItem('uuid');
+    const data = {
+      data: {
+        path,
+        type: 'IMG_DOWN',
+      },
+      service: 'SEVICE_IMG',
+      uuid,
+      timestamp: '',
+      signatures: '',
+    };
+
+    request.post(url.webapp)
+    .withCredentials()
+    .send(data)
+    .then((res) => {
+      const resultData = JSON.parse(res.text);
+      console.log('hellow', resultData);
+    });
+  }
   componentWillReceiveProps() {
     const { driverInfo } = this.state;
     const _driverInfo = JSON.parse(sessionStorage.getItem('driverInfo'));
     this.setState({
       driverInfo: Object.assign(driverInfo, _driverInfo),
     });
-    console.log(_driverInfo);
   }
 
   componentDidMount() {
     this.prepareData();
     sessionStorage.setItem('driverInfo', JSON.stringify({}));
+  }
+
+  renderPaper() {
+    const { driverInfo } = this.state;
+    driverInfo.certifyStatus = 1;
+    if (driverInfo.certifyStatus === 0) {
+      return (
+        <div className="car-img">
+          <p>未上传证件</p>
+        </div>
+      );
+    } else if (driverInfo.certifyStatus === 1) {
+      return (
+        <div className="car-img">
+          <p>已上传证件</p>
+          <img src={driverInfo.imageName}/>
+          <p className="small">行驶证与驾驶证合照</p>
+        </div>
+      );
+    }
+    return null;
   }
 
   render() {
@@ -109,11 +155,9 @@ class Person extends Component {
               >姓名</List.Item>
             </Link>
             <Link to="/person/car-img">
-              <div className="car-img">
-                  <p>已上传证件</p>
-                  <img src={driverInfo.imageName}/>
-                  <p className="small">行驶证与驾驶证合照</p>
-              </div>
+              {
+                this.renderPaper()
+              }
             </Link>
             <Link to="/person/car-number">
               <List.Item
