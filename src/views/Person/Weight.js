@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { InputItem, Toast, WingBlank, Button } from 'antd-mobile';
 import { createForm } from 'rc-form';
 import url from '../../utils/url';
+import { handleRes } from '../../utils/web';
 import request from 'superagent-bluebird-promise';
 
 class Weight extends Component {
@@ -12,12 +13,13 @@ class Weight extends Component {
   }
 
   render() {
+    const { weight, cubic } = this.props.driverInfo;
     const { getFieldProps } = this.props.form;
     return (
       <div className="page">
         <InputItem
           {...getFieldProps('weight', {
-            initialValue: '',
+            initialValue: weight,
           })}
           clear
           placeholder="请输入吨位"
@@ -26,7 +28,7 @@ class Weight extends Component {
         />
         <InputItem
           {...getFieldProps('cubic', {
-            initialValue: '',
+            initialValue: cubic,
           })}
           clear
           placeholder="请输入方量"
@@ -79,18 +81,24 @@ class Weight extends Component {
     .withCredentials()
     .send(data)
     .then((res) => {
-      if (res.success) {
-        var driverInfo = sessionStorage.getItem('driverInfo');
+      const resultData = handleRes(res);
+      if (resultData.success) {
+        const driverInfo = JSON.parse(sessionStorage.getItem('driverInfo'));
         driverInfo.weight = weight.toString();
         driverInfo.cubic = cubic.toString();
-        Toast.success(res.msg);
+        sessionStorage.setItem('driverInfo', JSON.stringify(driverInfo));
+        Toast.success(resultData.msg);
         this.context.router.push('/person');
-
       } else {
-        Toast.fail(res.msg);
+        Toast.fail(resultData.msg);
       }
     });
   }
 }
+
+Weight.contextTypes = {
+  router: React.PropTypes.object,
+};
+
 const _Weight = createForm()(Weight);
 export default _Weight;
