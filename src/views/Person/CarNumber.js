@@ -109,6 +109,7 @@ class CarNumber extends Component {
           clear
           placeholder="请输入车牌号"
           className="number-input"
+          maxLength={6}
         />
         <WingBlank>
           <Button
@@ -152,11 +153,10 @@ class CarNumber extends Component {
     .then((res) => {
       const _res = handleRes(res);
       if (_res.success) {
-        var driverInfo = sessionStorage.getItem('driverInfo');
+        const driverInfo = sessionStorage.getItem('driverInfo');
         driverInfo.carNum = _carNum;
         Toast.success(_res.msg);
         this.context.router.push('/person');
-
       } else {
         Toast.fail(_res.msg);
       }

@@ -65,11 +65,12 @@ class Name extends Component {
       const resultData = handleRes(res);
       if (resultData.success) {
         Toast.success(resultData.msg);
-        var driverInfo = sessionStorage.getItem('driverInfo');
+        const driverInfo = sessionStorage.getItem('driverInfo');
         driverInfo.name = name;
         this.context.router.push('/person');
       } else {
         Toast.fail(resultData.msg);
+        this.context.router.push('/person');
       }
     });
   }

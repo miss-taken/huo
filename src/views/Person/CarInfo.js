@@ -85,8 +85,8 @@ class CarInfo extends Component {
     }
     const data = {
       data: {
-        carType:car[1],
-        carLength:car[0],
+        carType: car[1],
+        carLength: car[0],
         type: 'DRIVER_CAR',
       },
       service: 'SERVICE_DRIVER',
@@ -100,13 +100,12 @@ class CarInfo extends Component {
     .then((res) => {
       const resultData = JSON.parse(res.text);
       if (resultData.success) {
-        var driverInfo = sessionStorage.getItem('driverInfo');
+        const driverInfo = sessionStorage.getItem('driverInfo');
         driverInfo.carLength = car[0];
         driverInfo.carType = car[1];
         Toast.success(resultData.msg);
         console.log(this.context);
         this.context.router.push('/person');
-
       } else {
         Toast.fail(resultData.msg);
       }

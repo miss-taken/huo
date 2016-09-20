@@ -57,30 +57,28 @@ class Person extends Component {
       const resultData = JSON.parse(res.text);
       if (resultData.success) {
         Toast.success(resultData.msg);
-        sessionStorage.setItem('driverInfo',resultData.result);
+        sessionStorage.setItem('driverInfo', resultData.result);
         this.setState({
           driverInfo: resultData.result,
         });
-        this.context.router.push('/person');
-
       } else {
         Toast.fail(resultData.msg);
       }
     });
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log('reload', nextProps);
-    const {driverInfo} = this.state;
+  componentWillReceiveProps() {
+    const { driverInfo } = this.state;
     const _driverInfo = sessionStorage.getItem('driverInfo');
     this.setState({
-      driverInfo:Object.assign(driverInfo,_driverInfo),
+      driverInfo: Object.assign(driverInfo, _driverInfo),
     });
     console.log(_driverInfo);
   }
 
   componentDidMount() {
     this.prepareData();
+    sessionStorage.setItem('driverInfo', {});
   }
 
   render() {
@@ -124,19 +122,19 @@ class Person extends Component {
                 extra={driverInfo.carNum}
               >车牌号</List.Item>
             </Link>
-            <Link to="person/car-info">
+            <Link to="/person/car-info">
               <List.Item
                 arrow="horizontal"
                 extra= {carDesc}
               >车型车长</List.Item>
             </Link>
-            <Link to="person/car-weight">
+            <Link to="/person/car-weight">
               <List.Item
               arrow="horizontal"
               extra={weightDesc}
             >方位吨量</List.Item>
             </Link>
-            <Link to="person/car-tag">
+            <Link to="/person/car-tag">
               <List.Item
               arrow="horizontal"
               extra={driverInfo.carTools}

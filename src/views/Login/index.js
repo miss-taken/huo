@@ -17,10 +17,10 @@ class Login extends Component {
  // 登陆请求
   handleSubmit() {
     const { form } = this.props;
-    const re = new RegExp('[&,?]code=([^//&]*)', 'i');
-    console.log(location.href);
-    const weChatCode = re.exec(location.href)[1];
-    // const weChatCode = '123456';
+    // const re = new RegExp('[&,?]code=([^//&]*)', 'i');
+    // console.log(location.href);
+    // const weChatCode = re.exec(location.href)[1];
+    const weChatCode = '123456';
     form.validateFields((errors, values) => {
       if (!!errors) {
         console.log('Errors in form!!!');
@@ -28,8 +28,8 @@ class Login extends Component {
       }
       const data = {
         data: {
-          mobile: values.username.toString(),
-          passWord: values.password.toString(),
+          mobile: values.username,
+          passWord: values.password,
           weChatCode,
         },
         service: 'SERVICE_LOGIN',
@@ -37,7 +37,6 @@ class Login extends Component {
         timestamp: '',
         signatures: '',
       };
-      console.log('data', data);
       request.post(url.webapp)
       .withCredentials()
       .send(data)
