@@ -22,7 +22,7 @@ class CarTag extends Component {
     const { carTools } = this.props.driverInfo;
     let tags;
     if (carTools) {
-      tags = carTools.split(',');
+      tags = carTools.split(';');
       tags = initTags.map(tag => {
         if (tags.includes(tag.name)) {
           tag.selected = true;
@@ -122,18 +122,21 @@ class CarTag extends Component {
       if (_res.success) {
         location.href = '/#/person';
         Toast.success(_res.msg);
-        var driverInfo = sessionStorage.getItem('driverInfo');
+        const driverInfo = JSON.parse(sessionStorage.getItem('driverInfo'));
         driverInfo.carTools = carTools;
+        sessionStorage.setItem('driverInfo', JSON.stringify(driverInfo));
         this.context.router.push('/person');
-
       } else {
         Toast.fail(_res.msg);
+        this.context.router.push('/person');
       }
     });
   }
 }
 
-
+CarTag.contextTypes = {
+  router: React.PropTypes.object,
+};
 
 const _CarTag = createForm()(CarTag);
 export default _CarTag;
