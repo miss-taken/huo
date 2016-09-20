@@ -57,7 +57,6 @@ class Person extends Component {
       const resultData = JSON.parse(res.text);
       if (resultData.success) {
         Toast.success(resultData.msg);
-        sessionStorage.setItem('driverInfo', resultData.result);
         this.setState({
           driverInfo: resultData.result,
         });
@@ -69,7 +68,7 @@ class Person extends Component {
 
   componentWillReceiveProps() {
     const { driverInfo } = this.state;
-    const _driverInfo = sessionStorage.getItem('driverInfo');
+    const _driverInfo = JSON.parse(sessionStorage.getItem('driverInfo'));
     this.setState({
       driverInfo: Object.assign(driverInfo, _driverInfo),
     });
@@ -78,7 +77,7 @@ class Person extends Component {
 
   componentDidMount() {
     this.prepareData();
-    sessionStorage.setItem('driverInfo', {});
+    sessionStorage.setItem('driverInfo', JSON.stringify({}));
   }
 
   render() {

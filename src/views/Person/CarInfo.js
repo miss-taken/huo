@@ -2,52 +2,32 @@ import React, { Component } from 'react';
 import { WingBlank, Toast, Button, Picker, List } from 'antd-mobile';
 import { createForm } from 'rc-form';
 import url from '../../utils/url';
+import params from '../../utils/params';
 import request from 'superagent-bluebird-promise';
 
-const carLength = [
-  { label: '11米', value: 8 },
-  { label: '13米', value: 2 },
-  { label: '15米', value: 9 },
-  { label: '17.5米', value: 3 },
-  { label: '22米', value: 10 },
-  { label: '4.2米', value: 4 },
-  { label: '5.2米', value: 5 },
-  { label: '6.8米', value: 6 },
-  { label: '7.6米', value: 7 },
-  { label: '9.6米', value: 1 },
-  { label: '其他', value: 0 },
-];
-
-const carType = [
-  { label: '低栏车', value: 10, children: carLength },
-  { label: '其他', value: 0, children: carLength },
-  { label: '冷藏车', value: 8, children: carLength },
-  { label: '半箱式', value: 6, children: carLength },
-  { label: '平板车', value: 1, children: carLength },
-  { label: '特型车', value: 9, children: carLength },
-  { label: '箱式车', value: 7, children: carLength },
-  { label: '高栏车(无要求)', value: 11, children: carLength },
-  { label: '高栏车(立柱可拆)', value: 13, children: carLength },
-  { label: '高栏车(高栏/立柱可拆)', value: 14, children: carLength },
-  { label: '高栏车(高栏可拆)', value: 12, children: carLength },
-];
+const _carType = params.carType;
+const _carLength = params.carLength;
 
 class CarInfo extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: carType,
+      data: _carType,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   render() {
+    const { carLeng, carType } = this.props.driverInfo;
+    const carInfo = [carType, carLeng];
     const { getFieldProps } = this.props.form;
     return (
       <div className="page edit-info">
         <List>
           <Picker
-            {...getFieldProps('car')}
+            {...getFieldProps('car', {
+              initialValue: carInfo,
+            })}
             className="info-picker"
             labelNumber={2}
             cols={2}
@@ -72,10 +52,13 @@ class CarInfo extends Component {
   }
 
   handleSubmit() {
-    location.href = '/#/person';
     const uuid = sessionStorage.getItem('uuid');
     const car = this.props.form.getFieldProps('car').value;
-    if (car === undefined) {
+    let cType = car[0];
+    const cLength = car[1];
+    const isOther = cType === 100;
+
+    if (car === undefined || car.length === 0) {
       Toast.fail('请选择车长车型');
       return;
     }
@@ -83,10 +66,15 @@ class CarInfo extends Component {
       Toast.fail('请登陆');
       return;
     }
+
+    if (cType === 100) {
+      cType = 0;
+    }
+
     const data = {
       data: {
-        carType: car[1],
-        carLength: car[0],
+        carType: `${cType}`,
+        carLength: `${cLength}`,
         type: 'DRIVER_CAR',
       },
       service: 'SERVICE_DRIVER',
@@ -100,11 +88,13 @@ class CarInfo extends Component {
     .then((res) => {
       const resultData = JSON.parse(res.text);
       if (resultData.success) {
-        const driverInfo = sessionStorage.getItem('driverInfo');
-        driverInfo.carLength = car[0];
-        driverInfo.carType = car[1];
+        const driverInfo = JSON.parse(sessionStorage.getItem('driverInfo'));
+        driverInfo.carLeng = cLength;
+        driverInfo.carLengthStr = _carLength.find(c => c.value === cLength).label;
+        driverInfo.carType = isOther ? 100 : cType;
+        driverInfo.carTypeStr = _carType.find(c => c.value === (isOther ? 100 : cType)).label;
+        sessionStorage.setItem('driverInfo', JSON.stringify(driverInfo));
         Toast.success(resultData.msg);
-        console.log(this.context);
         this.context.router.push('/person');
       } else {
         Toast.fail(resultData.msg);
