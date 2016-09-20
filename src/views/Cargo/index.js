@@ -134,7 +134,6 @@ class Cargo extends Component {
     .send(requestData)
     .then((res) => {
       const resultData = JSON.parse(res.text);
-      console.log(this);
       if (resultData.success) {
         Toast.success(resultData.msg);
         this.state = {

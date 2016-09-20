@@ -17,9 +17,9 @@ class MyCargo extends Component {
     });
     this.genData = (pIndex = 1) => {
       const dataBlob = {};
-      for (let i = 0; i < this.state.cargoList.length; i++) {
+      for (let i = 0; i < this.state.orderList.length; i++) {
         const ii = ((pIndex - 1) * 20) + i;
-        dataBlob[`${ii}`] = this.state.cargoList[ii];
+        dataBlob[`${ii}`] = this.state.orderList[ii];
         console.log(dataBlob);
       }
       return dataBlob;
@@ -27,7 +27,7 @@ class MyCargo extends Component {
     this.state = {
       currPage: 1,
       totalPage: 2,
-      cargoList: [],
+      orderList: [],
       dataSource,
       isLoading: false,
     };
@@ -116,13 +116,12 @@ class MyCargo extends Component {
       return;
     }
     if (uuid === undefined) {
-      uuid = '';
       return;
     }
     const requestData = {
       data: {
         currPage: page.toString(),
-        type: 'CARGO_LIST_DRIVER',
+        type: 'ORDER_LIST_DRIVER',
       },
       service: 'SERVICE_ORDER',
       uuid,
@@ -140,11 +139,11 @@ class MyCargo extends Component {
         this.state = {
           currPage: resultData.result.currPage,
           totalPage: resultData.result.totalPage,
-          cargoList: resultData.result.objectArray,
+          orderList: resultData.result.objectArray,
           dataSource: this.state.dataSource.cloneWithRows(this.genData(this.state.currPage)),
           isLoading: false,
         };
-        console.log(this.state.cargoList);
+        console.log(this.state.orderList);
       } else {
         Toast.fail(resultData.msg);
       }
