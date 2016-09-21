@@ -31,8 +31,8 @@ class Img extends React.Component {
   handleUpload() {
     const uuid = sessionStorage.getItem('uuid');
     const { files } = this.state;
+    console.log('files', files);
     const data = {
-      file: files[0],
       data: {
         type: 'IMG_UP',
       },
@@ -45,7 +45,9 @@ class Img extends React.Component {
     Toast.success('上传');
     request.post(url.webapp)
     .withCredentials()
-    .send(data)
+    .field('json', JSON.stringify(data))
+    .attach('image', files[0])
+    // .send(data)
     .then(res => console.log('res', res));
     // setTimeout(() => onClose(), 2000);
   }
