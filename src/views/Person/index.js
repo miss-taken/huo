@@ -19,7 +19,7 @@ class Person extends Component {
         // { url: 'https://cloud.githubusercontent.com/assets/1698185/18039916/f025c090-6dd9-11e6-9d86-a4d48a1bf049.png', id: '111' },
       ],
       driverInfo: {},
-      certifyImg:'',
+      certifyImg: '',
     };
 
     this.cloneChildren = this.cloneChildren.bind(this);
@@ -76,7 +76,7 @@ class Person extends Component {
     const uuid = sessionStorage.getItem('uuid');
     const data = {
       data: {
-        path: path,
+        path,
         type: 'IMG_DOWN',
       },
       service: 'SERVICE_IMG',
@@ -86,9 +86,7 @@ class Person extends Component {
     };
     request.post(url.webapp)
     .withCredentials()
-    .on('request',function() {
-      this.xhr.responseType='blob';
-    })
+    .on('request', () => (this.xhr.responseType = 'blob'))
     .send(data)
     .then((res) => {
       // const resultData = JSON.parse(res.text);
@@ -97,7 +95,6 @@ class Person extends Component {
       this.setState({
         certifyImg: img,
       });
-      
     });
   }
 
@@ -164,6 +161,10 @@ class Person extends Component {
                 extra={driverInfo.name}
               >姓名</List.Item>
             </Link>
+            <List.Item
+              arrow="horizontal"
+              extra={driverInfo.luckyBean}
+            >幸运豆</List.Item>
             <Link to="/person/car-img">
               {
                 this.renderPaper()
