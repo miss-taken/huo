@@ -46,18 +46,16 @@ class CargoDetail extends React.Component {
 
   handleApply() {
     const uuid = sessionStorage.getItem('uuid');
-    // const uuid = sessionStorage.getItem('uuid');
-    const status = 99;
     // 未登录
     if (uuid === undefined || uuid === null) {
       return this.setState({ loginVisible: true });
     }
-    // 前往登陆页面
-    return null;
+    // 已登录未上传证件
+    return this.setState({ offerVisible: true });
   }
 
   handleSubmit() {
-
+    console.log('hello');
   }
   handleMessageOpen() {
     this.setState({

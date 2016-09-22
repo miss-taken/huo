@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Button, InputItem } from 'antd-mobile';
+import { Modal, Button, InputItem, Toast } from 'antd-mobile';
 import { createForm } from 'rc-form';
 import request from 'superagent-bluebird-promise';
 import url from '../../utils/url';
@@ -7,31 +7,36 @@ import url from '../../utils/url';
 class Offer extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      type: 1,
+    };
 
     this.handleClose = this.handleClose.bind(this);
     this.handleOffer = this.handleOffer.bind(this);
-    this.handleTypeChange = this.handleTypeChange.bind(this);
-    
+    this.handleTypeToggle = this.handleTypeToggle.bind(this);
   }
 
-  handleTypeChange(){
-    
+  handleTypeToggle() {
+    const { unitType } = this.state;
+    this.setState({ unitType: (unitType === 1 ? 2 : 1) });
   }
 
   handleClose() {
     const { onClose } = this.props;
     onClose();
   }
-  handleOffer(){
+
+  handleOffer() {
+    const { unitType } = this.state;
     const { cargoInfo, form } = this.props;
-    console.log(form);
-    
+    const values = form.getFieldsValue();
+
     const data = {
       data: {
         cargoId: cargoInfo.id,
-        quantity: form.quantity,
-        unitPrice: form.unitPrice,
-        unitType: form.unitType,
+        quantity: values.quantity,
+        unitPrice: values.unitPrice,
+        unitType,
         type: 'CARGO_APPLY',
       },
       service: 'SERVICE_CARGO',
@@ -47,18 +52,21 @@ class Offer extends React.Component {
       const resultData = JSON.parse(res.text);
       if (resultData.success) {
         Toast.success(resultData.msg);
-        this.setState({
-          cargoInfo: resultData.result,
-          projectInfo: resultData.result.projectInfo,
-        });
+        // const { unitType } = ;
+        // this.setState({
+          // cargoInfo: resultData.result,
+          // projectInfo: resultData.result.projectInfo,
+          // unitType,
+        // });
       } else {
         Toast.fail(resultData.msg);
       }
     });
-
   }
 
   render() {
+    const { unitType } = this.state;
+    const unitTypeStr = unitType === 1 ? '吨' : '方';
     const { visible, cargoInfo } = this.props;
     const { getFieldProps } = this.props.form;
     return (
@@ -71,8 +79,13 @@ class Offer extends React.Component {
         }}
         >
         <div className="cargo-offer">
-          <div className="text">货物数量: {cargoInfo.weight}吨,<span className="divider"></span>  {cargoInfo.cubic}立方</div>
-          <div className="text">货主报价: {cargoInfo.unitPrice}元/{cargoInfo.unitType===1?'吨':'方'} <span className="divider"></span>整车{cargoInfo.totalPrice}元</div>
+          <div className="text">
+            货物数量: {cargoInfo.weight}吨,<span className="divider"></span> {cargoInfo.cubic}立方
+          </div>
+          <div className="text">
+            货主报价: {cargoInfo.unitPrice}元/{cargoInfo.unitType === 1 ? '吨' : '方'}
+            <span className="divider"></span>整车{cargoInfo.totalPrice}元
+          </div>
           <div className="offer">
               <div className="form-item first">
                 <InputItem
@@ -80,13 +93,9 @@ class Offer extends React.Component {
                     initialValue: '',
                   })}
                   type="number"
-                  extra="吨"
+                  extra={unitTypeStr}
                   >装载数量</InputItem>
-                <Button 
-                  {...getFieldProps('unitType',{
-                    initialValue:'1'
-                  })}
-                  inline className="confirm-btn" onClick={this.handleTypeChange}>更改</Button>
+                <span className="unit-toggle" onClick={this.handleTypeToggle}></span>
               </div>
               <div className="form-item price-wrapper">
                 <InputItem
@@ -94,7 +103,7 @@ class Offer extends React.Component {
                     initialValue: '',
                   })}
                   type="number"
-                  extra="元/吨"
+                  extra={`元/${unitTypeStr}`}
                   className="price1"
                   >我的报价</InputItem>
                 <InputItem

@@ -16,17 +16,17 @@ import MyCargo from './views/MyCargo';
 import MyCargoDetail from './views/MyCargoDetail';
 import MyCargoSuccess from './views/MyCargoDetail/OfferSuccess';
 
-function redirectToDashboad(nextState, replace) {
-  if (sessionStorage.getItem('uuid')) {
-    replace('/');
-  }
-}
-
-function redirectToLogin(nextState, replace) {
-  if (!sessionStorage.getItem('uuid')) {
-    replace('/login');
-  }
-}
+// function redirectToDashboad(nextState, replace) {
+//   if (sessionStorage.getItem('uuid')) {
+//     replace('/');
+//   }
+// }
+//
+// function redirectToLogin(nextState, replace) {
+//   if (!sessionStorage.getItem('uuid')) {
+//     replace('/login');
+//   }
+// }
 
 class Routes extends React.Component {
   constructor(props) {
