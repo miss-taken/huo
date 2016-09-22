@@ -2,8 +2,8 @@ import React from 'react';
 // import './style/antd-mobile';
 import './style/app';
 // import Home from './views/Home';
-// import url from './utils/url';
-// import request from 'superagent-bluebird-promise';
+import url from './utils/url';
+import request from 'superagent-bluebird-promise';
 
 class App extends React.Component {
   constructor(props) {
@@ -13,10 +13,9 @@ class App extends React.Component {
     let weChatCode;
     if (weChatCodeArray !== null) {
       weChatCode = weChatCodeArray[1];
+      sessionStorage.setItem(weChatCode);
     }
-    this.state = {
-      weChatCode,
-    };
+    console.log(this);
   }
 
   componentWillMount() {
@@ -32,33 +31,33 @@ class App extends React.Component {
   }
 
   // 进入app时尝试静默登陆
-  // doLogin() {
-  //   if (this.state.weChatCode === null) {
-  //     return;
-  //   }
-  //   const data = {
-  //     data: {
-  //       mobile: '',
-  //       passWord: '',
-  //       weChatCode: this.state.weChatCode,
-  //     },
-  //     method: 'app',
-  //     service: 'SERVICE_LOGIN',
-  //     uuid: '',
-  //     timestamp: '',
-  //     signatures: '',
-  //   };
-  //   console.log('data', data);
-  //   request.post(url.webapp)
-  //   .withCredentials()
-  //   .send(data)
-  //   .then((res) => {
-  //     const resultData = JSON.parse(res.text);
-  //     if (resultData.success) {
-  //       sessionStorage.setItem('uuid', resultData.result.uuid);
-  //     }
-  //   });
-  // }
+  doLogin() {
+    if (this.state.weChatCode === null) {
+      return;
+    }
+    const data = {
+      data: {
+        mobile: '',
+        passWord: '',
+        weChatCode: this.state.weChatCode,
+      },
+      method: 'app',
+      service: 'SERVICE_LOGIN',
+      uuid: '',
+      timestamp: '',
+      signatures: '',
+    };
+    console.log('data', data);
+    request.post(url.webapp)
+    .withCredentials()
+    .send(data)
+    .then((res) => {
+      const resultData = JSON.parse(res.text);
+      if (resultData.success) {
+        sessionStorage.setItem('uuid', resultData.result.uuid);
+      }
+    });
+  }
 }
 
 App.contextTypes = {

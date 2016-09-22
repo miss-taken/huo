@@ -86,7 +86,9 @@ class Person extends Component {
     };
     request.post(url.webapp)
     .withCredentials()
-    .on('request', () => (this.xhr.responseType = 'blob'))
+    .on('request',function () {
+        this.xhr.responseType = 'blob';
+      })
     .send(data)
     .then((res) => {
       // const resultData = JSON.parse(res.text);

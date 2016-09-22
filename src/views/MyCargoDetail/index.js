@@ -156,28 +156,8 @@ class CargoDetail extends React.Component {
       uploadVisible,
     } = this.state;
     const { cargoInfo, projectInfo, loadAddressInfo, unloadAddressInfo} = this.state;
-    const data1 = [{
-      title: '司机人数',
-      name: projectInfo.driverNum || '',
-      key: '1',
-    }, {
-      title: '防护环境',
-      name: projectInfo.protect || '',
-      key: '2',
-    }, {
-      title: '车辆环境',
-      name: projectInfo.envRqmt || '',
-      key: '3',
-    }, {
-      title: '装卸要求',
-      name: projectInfo.envRqmt || '',
-      key: '4',
-    }, {
-      title: '配载要求',
-      name: projectInfo.allocRqmt || '',
-      key: '5',
-    }];
-    const data2 = [{
+
+    const data = [{
       title: '司机人数',
       name: projectInfo.driverNum || '',
       key: '1',
@@ -223,7 +203,6 @@ class CargoDetail extends React.Component {
       key: '11',
     }];
 
-    let data;
     // 伪造数据
     // cargoInfo.status = 99;
     // if (cargoInfo.status === 99) {
