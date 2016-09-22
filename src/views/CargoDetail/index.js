@@ -27,6 +27,7 @@ class CargoDetail extends React.Component {
       uploadVisible: false,
       cargoInfo: {},
       projectInfo: {},
+      submited: false,
 
     };
 
@@ -44,6 +45,13 @@ class CargoDetail extends React.Component {
     this.handleUploadClose = this.handleUploadClose.bind(this);
 
     this.renderOffer = this.renderOffer.bind(this);
+    this.renderBtn = this.renderBtn.bind(this);
+
+    this.handleHiddenBtn = this.handleHiddenBtn.bind(this);
+  }
+
+  handleHiddenBtn() {
+    this.setState({ submited: true });
   }
 
   handleApply() {
@@ -112,10 +120,15 @@ class CargoDetail extends React.Component {
     this.setState({ uploadVisible: false });
   }
 
+  handleOfferClose() {
+    this.setState({ offerVisible: false });
+  }
+
   renderOffer() {
     const { offerVisible, cargoInfo } = this.state;
     return (
       <Offer
+        onHidden={this.handleHiddenBtn}
         visible={offerVisible}
         onClose={this.handleOfferClose}
         cargoInfo={cargoInfo}
@@ -123,12 +136,16 @@ class CargoDetail extends React.Component {
     );
   }
 
+  renderBtn() {
+    return <Button className="apply-for" onClick={this.handleApply}>申请</Button>;
+  }
   render() {
     const {
       messageVisible,
       loginVisible,
       offerVisible,
       uploadVisible,
+      submited,
     } = this.state;
     const { cargoInfo, projectInfo } = this.state;
     // const { projectInfo } = this.state;
@@ -220,7 +237,7 @@ class CargoDetail extends React.Component {
             onClose={this.handleUploadClose}
           />
         </WingBlank>
-        <Button className="apply-for" onClick={this.handleApply}>申请</Button>
+        { submited === false ? this.renderBtn() : null }
       </div>
     );
   }

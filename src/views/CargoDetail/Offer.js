@@ -59,21 +59,14 @@ class Offer extends React.Component {
       const resultData = JSON.parse(res.text);
       if (resultData.success) {
         Toast.success(resultData.msg);
-        // const { unitType } = ;
-        // this.setState({
-          // cargoInfo: resultData.result,
-          // projectInfo: resultData.result.projectInfo,
-          // unitType,
-        // });
+        this.props.onClose();
+        this.props.onHidden();
       } else {
         Toast.fail(resultData.msg);
       }
     });
   }
-  componentDidMount() {
-    const { cargoInfo } = this.props;
-    console.log('drver', cargoInfo);
-  }
+
   render() {
     const { unitType } = this.state;
     const unitTypeStr = unitType === 1 ? '吨' : '方';
