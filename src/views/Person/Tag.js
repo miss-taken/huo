@@ -93,7 +93,7 @@ class CarTag extends Component {
     const carTools = tags
     .filter(tag => tag.selected)
     .map(tag => tag.name).join(';') || '';
-
+    
     if (uuid === undefined) {
       Toast.fail('请登陆');
       return;

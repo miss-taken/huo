@@ -28,10 +28,8 @@ class Upload extends React.Component {
   }
 
   handleUpload() {
-    const { onClose } = this.props;
     const uuid = sessionStorage.getItem('uuid');
     const { files } = this.state;
-    Toast.success('上传');
     const data = {
       data: {
         type: 'IMG_UP',
@@ -41,16 +39,23 @@ class Upload extends React.Component {
       timestamp: '',
       signatures: '',
     };
+    Toast.success('上传');
     request.post(url.webapp)
     .withCredentials()
+    .field('file', files[0])
     .field('json', JSON.stringify(data))
-    .attach('image', files[0])
     // .send(data)
-    .then(res => console.log('res', res))
-    .then(() => onClose())
-    .catch(onClose);
-    // setTimeout(() => onClose(), 2000);
+    .then(res => {
+        const returnData = JSON.parse(res.text);
+        if (returnData.success){
+           this.updateDriverCerityfy(returnData.result);
+        }else{
+          Toast.fail(returnData.msg);
+        }
+    });
   }
+
+
 
   renderImg() {
     const { files } = this.state;

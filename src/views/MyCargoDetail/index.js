@@ -18,8 +18,8 @@ const columns = [
 class CargoDetail extends React.Component {
 
   constructor(props) {
-    super(props);
-
+    super(props); 
+    
     this.state = {
       // 提示信息
       messageVisible: false,

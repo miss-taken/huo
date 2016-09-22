@@ -45,23 +45,14 @@ class CargoDetail extends React.Component {
   }
 
   handleApply() {
-    const uuid = 'xx';
+    const uuid = sessionStorage.getItem('uuid');
     // const uuid = sessionStorage.getItem('uuid');
     const status = 99;
     // 未登录
     if (uuid === undefined || uuid === null) {
       return this.setState({ loginVisible: true });
     }
-
-    // 已登录未上传证件
-    if (uuid && status < 99) {
-      return this.setState({ uploadVisible: true });
-    }
-
-    // 已登录&已上传文件 {
-    if (uuid && status === 99) {
-      return this.setState({ offerVisible: true });
-    }
+    // 前往登陆页面
     return null;
   }
 
@@ -213,6 +204,7 @@ class CargoDetail extends React.Component {
           <Offer
             visible={offerVisible}
             onClose={this.handleOfferClose}
+            cargoInfo={cargoInfo}
           />
           <Upload
             visible={uploadVisible}

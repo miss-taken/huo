@@ -8,7 +8,6 @@ import './style/app';
 class App extends React.Component {
   constructor(props) {
     super(props);
-
     const re = new RegExp('[&,?]code=([^//&]*)', 'i');
     const weChatCodeArray = re.exec(location.href);
     let weChatCode;

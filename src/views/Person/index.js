@@ -19,6 +19,7 @@ class Person extends Component {
         // { url: 'https://cloud.githubusercontent.com/assets/1698185/18039916/f025c090-6dd9-11e6-9d86-a4d48a1bf049.png', id: '111' },
       ],
       driverInfo: {},
+      certifyImg:'',
     };
 
     this.cloneChildren = this.cloneChildren.bind(this);
@@ -58,8 +59,8 @@ class Person extends Component {
     .then((res) => {
       const resultData = JSON.parse(res.text);
       if (resultData.success) {
-        if (resultData.imageName) {
-          this.getImage(resultData.imageName);
+        if (resultData.result.imageName) {
+          this.getImage(resultData.result.imageName);
         }
         Toast.success(resultData.msg);
         this.setState({
@@ -75,21 +76,28 @@ class Person extends Component {
     const uuid = sessionStorage.getItem('uuid');
     const data = {
       data: {
-        path,
+        path: path,
         type: 'IMG_DOWN',
       },
-      service: 'SEVICE_IMG',
+      service: 'SERVICE_IMG',
       uuid,
       timestamp: '',
       signatures: '',
     };
-
     request.post(url.webapp)
     .withCredentials()
     .send(data)
     .then((res) => {
-      const resultData = JSON.parse(res.text);
-      console.log('hellow', resultData);
+      // const resultData = JSON.parse(res.text);
+      console.log(res);      
+      var binaryData = [];
+      binaryData.push(res.xhr.response);
+      const img = window.URL.createObjectURL(new Blob(binaryData, {type: "application/jpg"}));
+      console.log(img);
+      this.setState({
+        certifyImg: img,
+      });
+      
     });
   }
   componentWillReceiveProps() {
@@ -106,7 +114,8 @@ class Person extends Component {
   }
 
   renderPaper() {
-    const { driverInfo } = this.state;
+    const { driverInfo, certifyImg } = this.state;
+    console.log(certifyImg);
     driverInfo.certifyStatus = 1;
     if (driverInfo.certifyStatus === 0) {
       return (
@@ -118,7 +127,7 @@ class Person extends Component {
       return (
         <div className="car-img">
           <p>已上传证件</p>
-          <img src={driverInfo.imageName}/>
+          <img src={certifyImg}/>
           <p className="small">行驶证与驾驶证合照</p>
         </div>
       );

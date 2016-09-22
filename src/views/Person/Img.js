@@ -31,7 +31,6 @@ class Img extends React.Component {
   handleUpload() {
     const uuid = sessionStorage.getItem('uuid');
     const { files } = this.state;
-    console.log('files', files);
     const data = {
       data: {
         type: 'IMG_UP',
@@ -45,11 +44,45 @@ class Img extends React.Component {
     Toast.success('上传');
     request.post(url.webapp)
     .withCredentials()
+    .field('file', files[0])
     .field('json', JSON.stringify(data))
-    .attach('image', files[0])
     // .send(data)
-    .then(res => console.log('res', res));
-    // setTimeout(() => onClose(), 2000);
+    .then(res => {
+        const returnData = JSON.parse(res.text);
+        if (returnData.success){
+           this.updateDriverCerityfy(returnData.result);
+        }else{
+          Toast.fail(returnData.msg);
+        }
+
+    });
+  }
+
+
+  updateDriverCerityfy(imagePath) {
+    const uuid = sessionStorage.getItem('uuid');
+    const data = {
+      data: {
+        path: imagePath,
+        type: 'DRIVER_CERTIFY',
+      },
+      service: 'SERVICE_DRIVER',
+      uuid,
+      timestamp: '',
+      signatures: '',
+    };
+
+    request.post(url.webapp)
+    .withCredentials()
+    .send(data)
+    .then(res => {
+      const returnData = JSON.parse(res.text);
+      Toast.fail(returnData.msg);
+      console.log(res.text)  
+      if (returnData.success){
+
+      }
+    });
   }
 
   renderImg() {
