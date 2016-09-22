@@ -42,6 +42,8 @@ class CargoDetail extends React.Component {
 
     this.handleUploadOpen = this.handleUploadOpen.bind(this);
     this.handleUploadClose = this.handleUploadClose.bind(this);
+
+    this.renderOffer = this.renderOffer.bind(this);
   }
 
   handleApply() {
@@ -108,6 +110,17 @@ class CargoDetail extends React.Component {
 
   handleUploadClose() {
     this.setState({ uploadVisible: false });
+  }
+
+  renderOffer() {
+    const { offerVisible, cargoInfo } = this.state;
+    return (
+      <Offer
+        visible={offerVisible}
+        onClose={this.handleOfferClose}
+        cargoInfo={cargoInfo}
+      />
+    );
   }
 
   render() {
@@ -199,11 +212,9 @@ class CargoDetail extends React.Component {
             >
             <div>您还没注册，需要先注册哦</div>
           </Modal>
-          <Offer
-            visible={offerVisible}
-            onClose={this.handleOfferClose}
-            cargoInfo={cargoInfo}
-          />
+          {
+            offerVisible === true ? this.renderOffer() : null
+          }
           <Upload
             visible={uploadVisible}
             onClose={this.handleUploadClose}

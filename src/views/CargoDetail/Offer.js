@@ -7,8 +7,10 @@ import url from '../../utils/url';
 class Offer extends React.Component {
   constructor(props) {
     super(props);
+
+    const { cargoInfo } = this.props;
     this.state = {
-      type: 1,
+      unitType: cargoInfo.unitType,
     };
 
     this.handleClose = this.handleClose.bind(this);
@@ -27,20 +29,25 @@ class Offer extends React.Component {
   }
 
   handleOffer() {
+    const uuid = sessionStorage.getItem('uuid');
+    if (uuid === undefined) {
+      Toast.fail('请登陆');
+      return;
+    }
     const { unitType } = this.state;
     const { cargoInfo, form } = this.props;
     const values = form.getFieldsValue();
 
     const data = {
       data: {
-        cargoId: cargoInfo.id,
+        cargoId: `${cargoInfo.id}`,
         quantity: values.quantity,
         unitPrice: values.unitPrice,
-        unitType,
+        unitType: `${unitType}`,
         type: 'CARGO_APPLY',
       },
       service: 'SERVICE_CARGO',
-      uuid: '',
+      uuid,
       timestamp: '',
       signatures: '',
     };
@@ -63,7 +70,10 @@ class Offer extends React.Component {
       }
     });
   }
-
+  componentDidMount() {
+    const { cargoInfo } = this.props;
+    console.log('drver', cargoInfo);
+  }
   render() {
     const { unitType } = this.state;
     const unitTypeStr = unitType === 1 ? '吨' : '方';
