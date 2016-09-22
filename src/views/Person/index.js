@@ -86,20 +86,21 @@ class Person extends Component {
     };
     request.post(url.webapp)
     .withCredentials()
+    .on('request',function() {
+      this.xhr.responseType='blob';
+    })
     .send(data)
     .then((res) => {
       // const resultData = JSON.parse(res.text);
-      console.log(res);      
-      var binaryData = [];
-      binaryData.push(res.xhr.response);
-      const img = window.URL.createObjectURL(new Blob(binaryData, {type: "application/jpg"}));
-      console.log(img);
+      console.log(res);
+      const img = window.URL.createObjectURL(res.xhr.response);
       this.setState({
         certifyImg: img,
       });
       
     });
   }
+
   componentWillReceiveProps() {
     const { driverInfo } = this.state;
     const _driverInfo = JSON.parse(sessionStorage.getItem('driverInfo'));
