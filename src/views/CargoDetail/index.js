@@ -22,7 +22,7 @@ class CargoDetail extends React.Component {
       // 跳转登录
       loginVisible: false,
       // 详情
-      offerVisible: true,
+      offerVisible: false,
       // 上传
       uploadVisible: false,
       cargoInfo: {},
@@ -30,6 +30,8 @@ class CargoDetail extends React.Component {
 
     };
 
+    this.handleApply = this.handleApply.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
     this.handleMessageOpen = this.handleMessageOpen.bind(this);
     this.handleMessageClose = this.handleMessageClose.bind(this);
 
@@ -42,6 +44,30 @@ class CargoDetail extends React.Component {
     this.handleUploadClose = this.handleUploadClose.bind(this);
   }
 
+  handleApply() {
+    const uuid = 'xx';
+    // const uuid = sessionStorage.getItem('uuid');
+    const status = 99;
+    // 未登录
+    if (uuid === undefined || uuid === null) {
+      return this.setState({ loginVisible: true });
+    }
+
+    // 已登录未上传证件
+    if (uuid && status < 99) {
+      return this.setState({ uploadVisible: true });
+    }
+
+    // 已登录&已上传文件 {
+    if (uuid && status === 99) {
+      return this.setState({ offerVisible: true });
+    }
+    return null;
+  }
+
+  handleSubmit() {
+
+  }
   handleMessageOpen() {
     this.setState({
       messageVisible: true,
@@ -83,7 +109,7 @@ class CargoDetail extends React.Component {
   }
 
   handleJumpLogin() {
-    location.href = '/#/login';
+    this.context.router.push('/login');
   }
 
   // 上传弹出层
@@ -193,7 +219,7 @@ class CargoDetail extends React.Component {
             onClose={this.handleUploadClose}
           />
         </WingBlank>
-        <Button className="apply-for" onClick={this.handleMessageOpen}>申请</Button>
+        <Button className="apply-for" onClick={this.handleApply}>申请</Button>
       </div>
     );
   }
@@ -233,4 +259,7 @@ class CargoDetail extends React.Component {
   }
 }
 
+CargoDetail.contextTypes = {
+  router: React.PropTypes.object,
+};
 export default CargoDetail;

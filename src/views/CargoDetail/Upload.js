@@ -1,5 +1,7 @@
 import React from 'react';
 import { Modal, Button, Toast } from 'antd-mobile';
+import url from '../../utils/url';
+import request from 'superagent-bluebird-promise';
 import Dropzone from 'react-dropzone';
 import png from './upload-demo.png';
 import demo from './default.png';
@@ -27,9 +29,27 @@ class Upload extends React.Component {
 
   handleUpload() {
     const { onClose } = this.props;
-    // const { files } = this.files;
+    const uuid = sessionStorage.getItem('uuid');
+    const { files } = this.state;
     Toast.success('上传');
-    setTimeout(() => onClose(), 2000);
+    const data = {
+      data: {
+        type: 'IMG_UP',
+      },
+      service: 'SERVICE_IMG',
+      uuid,
+      timestamp: '',
+      signatures: '',
+    };
+    request.post(url.webapp)
+    .withCredentials()
+    .field('json', JSON.stringify(data))
+    .attach('image', files[0])
+    // .send(data)
+    .then(res => console.log('res', res))
+    .then(() => onClose())
+    .catch(onClose);
+    // setTimeout(() => onClose(), 2000);
   }
 
   renderImg() {
