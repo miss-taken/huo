@@ -48,13 +48,12 @@ class Img extends React.Component {
     .field('json', JSON.stringify(data))
     // .send(data)
     .then(res => {
-        const returnData = JSON.parse(res.text);
-        if (returnData.success){
-           this.updateDriverCerityfy(returnData.result);
-        }else{
-          Toast.fail(returnData.msg);
-        }
-
+      const returnData = JSON.parse(res.text);
+      if (returnData.success) {
+        this.updateDriverCerityfy(returnData.result);
+      } else {
+        Toast.fail(returnData.msg);
+      }
     });
   }
 
@@ -76,11 +75,17 @@ class Img extends React.Component {
     .withCredentials()
     .send(data)
     .then(res => {
-      const returnData = JSON.parse(res.text);
-      Toast.fail(returnData.msg);
-      console.log(res.text)  
-      if (returnData.success){
-
+      const resultData = JSON.parse(res.text);
+      Toast.fail(resultData.msg);
+      if (resultData.success) {
+        const driverInfo = JSON.parse(sessionStorage.getItem('driverInfo'));
+        driverInfo.imagePath = imagePath;
+        sessionStorage.setItem('driverInfo', JSON.stringify(driverInfo));
+        Toast.success(resultData.msg);
+        this.context.router.push('/person');
+      } else {
+        Toast.fail(resultData.msg);
+        this.context.router.push('/person');
       }
     });
   }
@@ -101,7 +106,6 @@ class Img extends React.Component {
     return (
       <div className="page edit-img">
         <div className="cargo-upload">
-          <div className="text">还差最后一步啦^~^,</div>
           <div className="text">请上传您的行驶证和驾驶证合照</div>
           <img src={png} className="upload-demo"/>
           <Button inline onClick={this.openDrop} className="upload-btn">上传</Button>
