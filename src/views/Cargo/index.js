@@ -113,8 +113,8 @@ class Cargo extends Component {
       row = () => <div></div>;
     } else {
       row = (rowData, sectionID, rowID) => {
-        if (index < 0) {
-          index = cargoList.length - 1;
+        if (index === 0) {
+          return null;
         }
         const obj = cargoList[cargoList.length - (index--)];
         return (

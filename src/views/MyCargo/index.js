@@ -112,11 +112,11 @@ class MyCargo extends Component {
       row = () => <div></div>;
     } else {
       row = (rowData, sectionID, rowID) => {
-        console.log('###1index', orderList.length, index);
-        if (index < 0) {
-          index = orderList.length - 1;
+        if (index === 0) {
+          return null;
         }
         const obj = orderList[orderList.length - (index--)];
+        console.log('index', orderList.length, index, obj);
         return (
             <Link to={`/my-cargo/${obj.id}`}>
               <div key={rowID}

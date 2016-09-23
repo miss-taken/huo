@@ -18,8 +18,8 @@ const columns = [
 class CargoDetail extends React.Component {
 
   constructor(props) {
-    super(props); 
-    
+    super(props);
+
     this.state = {
       // 提示信息
       messageVisible: false,
@@ -31,8 +31,8 @@ class CargoDetail extends React.Component {
       uploadVisible: false,
       cargoInfo: {},
       projectInfo: {},
-      loadAddressInfo:{},
-      unloadAddressInfo:{},
+      loadAddressInfo: {},
+      unloadAddressInfo: {},
     };
 
     this.cloneChildren = this.cloneChildren.bind(this);
@@ -46,6 +46,9 @@ class CargoDetail extends React.Component {
 
     this.handleUploadOpen = this.handleUploadOpen.bind(this);
     this.handleUploadClose = this.handleUploadClose.bind(this);
+
+    // 支付按钮
+    this.renderBtn = this.renderBtn.bind(this);
   }
 
   cloneChildren() {
@@ -148,14 +151,21 @@ class CargoDetail extends React.Component {
     });
   }
 
+  renderBtn() {
+    return <Button className="apply-for" onClick={this.handleMessageOpen}>支付</Button>;
+  }
+
   render() {
     const {
       messageVisible,
       loginVisible,
       offerVisible,
       uploadVisible,
+      cargoInfo,
+      projectInfo,
+      loadAddressInfo,
+      unloadAddressInfo,
     } = this.state;
-    const { cargoInfo, projectInfo, loadAddressInfo, unloadAddressInfo} = this.state;
 
     const data = [{
       title: '司机人数',
@@ -203,18 +213,9 @@ class CargoDetail extends React.Component {
       key: '11',
     }];
 
-    // 伪造数据
-    // cargoInfo.status = 99;
-    // if (cargoInfo.status === 99) {
-    //   data = data1;
-    // } else {
-    //   data = data2;
-    // }
-    // const { projectInfo } = this.state;
-    const loadLinkMobile = `tel: + ${loadAddressInfo.linkMobile}`;
-    const unloadLinkMobile = `tel: + ${unloadAddressInfo.linkMobile}`;
+    const loadLinkMobile = `tel:${loadAddressInfo.linkMobile}`;
+    const unloadLinkMobile = `tel:${unloadAddressInfo.linkMobile}`;
     const linkTo = `/my-cargo/${this.props.params.id}/map`;
-
     return (
       <div className="cargo-detail">
         <div className="order">订单编号：{cargoInfo.orderNum}</div>
@@ -288,18 +289,18 @@ class CargoDetail extends React.Component {
           <div className="people-info">
             <div className="people-info-item">
               <div>装货地址: {loadAddressInfo.address}</div>
-              <a href="{loadLinkMobile}" className="people-contact">联系人电话</a>
+              <a href={loadLinkMobile} className="people-contact">联系人电话</a>
             </div>
             <div className="people-info-item">
               <div>卸货地址: {unloadAddressInfo.address}</div>
-              <a href="unloadLinkMobile" className="people-contact">联系人电话</a>
+              <a href={unloadLinkMobile} className="people-contact">联系人电话</a>
             </div>
-            <Link className="map-icon" to="{linkTo}">
+            <Link className="map-icon" to={linkTo}>
               <img src={mapIcon}/>
             </Link>
           </div>
         </div>
-        <Button className="apply-for" onClick={this.handleMessageOpen}>支付</Button>
+        { Number.parseInt(cargoInfo.status, 10) === 99 ? this.renderBtn() : null}
         <ReactCSSTransitionGroup transitionName="pageSlider"
           transitionEnterTimeout={600} transitionLeaveTimeout={600}>
           {this.cloneChildren()}
