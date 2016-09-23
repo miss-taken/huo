@@ -7,7 +7,6 @@ import './_myCargo';
 
 const NUM_ROWS = 20;
 let pageIndex = 0;
-
 class MyCargo extends Component {
 
   constructor(props) {
@@ -119,7 +118,7 @@ class MyCargo extends Component {
         const obj = orderList[orderList.length - (index--)];
         console.log('index', orderList.length, index, obj);
         return (
-            <Link to={obj.status<100?`/cargo/${obj.cargoId}`:`/my-cargo/${obj.id}`}>
+            <Link to={`/my-cargo/${obj.id}`}>
               <div key={rowID}
                 style={{
                   backgroundColor: 'white',

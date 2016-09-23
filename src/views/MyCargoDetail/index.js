@@ -161,13 +161,36 @@ class CargoDetail extends React.Component {
       loginVisible,
       offerVisible,
       uploadVisible,
-      cargoInfo,
-      projectInfo,
+      cargoInfo, 
+      projectInfo, 
       loadAddressInfo,
       unloadAddressInfo,
     } = this.state;
 
-    const data = [{
+
+    const simpleProjectInfo = [{
+      title: '司机人数',
+      name: projectInfo.driverNum || 1,
+      key: '1',
+    }, {
+      title: '防护环境',
+      name: projectInfo.protect || '无',
+      key: '2',
+    }, {
+      title: '车辆环境',
+      name: projectInfo.envRqmt || '无要求',
+      key: '3',
+    }, {
+      title: '装卸要求',
+      name: projectInfo.loadRqmt || '厂家负责卸货',
+      key: '4',
+    }, {
+      title: '配载要求',
+      name: projectInfo.allocRqmt || '不可配载',
+      key: '5',
+    }];
+
+    const detailProjectInfo = [{
       title: '司机人数',
       name: projectInfo.driverNum || '',
       key: '1',
@@ -212,10 +235,13 @@ class CargoDetail extends React.Component {
       name: projectInfo.loadCast || '',
       key: '11',
     }];
+    
+    if (cargoInfo.status > 99) {
+      data = detailProjectInfo;
+    } else {
+      data = simpleProjectInfo;
+    }
 
-    const loadLinkMobile = `tel:${loadAddressInfo.linkMobile}`;
-    const unloadLinkMobile = `tel:${unloadAddressInfo.linkMobile}`;
-    const linkTo = `/my-cargo/${this.props.params.id}/map`;
     return (
       <div className="cargo-detail">
         <div className="order">订单编号：{cargoInfo.orderNum}</div>
@@ -289,13 +315,13 @@ class CargoDetail extends React.Component {
           <div className="people-info">
             <div className="people-info-item">
               <div>装货地址: {loadAddressInfo.address}</div>
-              <a href={loadLinkMobile} className="people-contact">联系人电话</a>
+              <a href={`tel:${loadAddressInfo.linkMobile}`} className="people-contact">联系人电话</a>
             </div>
             <div className="people-info-item">
               <div>卸货地址: {unloadAddressInfo.address}</div>
-              <a href={unloadLinkMobile} className="people-contact">联系人电话</a>
+              <a href={`tel:${unloadAddressInfo.linkMobile}`} className="people-contact">联系人电话</a>
             </div>
-            <Link className="map-icon" to={linkTo}>
+            <Link className="map-icon" to={`/my-cargo/${this.props.params.id}/map`}>
               <img src={mapIcon}/>
             </Link>
           </div>
