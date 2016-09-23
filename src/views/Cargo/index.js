@@ -99,8 +99,7 @@ class Cargo extends Component {
 
   render() {
     const { cargoList } = this.state;
-    let index = cargoList.length - 1;
-    // let index;
+    let index = cargoList.length;
     const separator = (sectionID, rowID) => (
       <div key={`${sectionID}-${rowID}`} style={{
         backgroundColor: '#F5F5F9',
@@ -117,7 +116,7 @@ class Cargo extends Component {
         if (index < 0) {
           index = cargoList.length - 1;
         }
-        const obj = cargoList[index--];
+        const obj = cargoList[cargoList.length - (index--)];
         return (
           <Link to={`/cargo/${obj.id}`}>
             <div key={rowID}
