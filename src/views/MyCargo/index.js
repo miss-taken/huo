@@ -6,6 +6,8 @@ import url from '../../utils/url';
 import './_myCargo';
 
 
+const NUM_ROWS = 20;
+let pageIndex = 0;
 class MyCargo extends Component {
 
   constructor(props) {
@@ -15,12 +17,11 @@ class MyCargo extends Component {
     const dataSource = new ListView.DataSource({
       rowHasChanged: (row1, row2) => row1 !== row2,
     });
-    this.genData = (pIndex = 1) => {
+    this.genData = (pIndex = 0) => {
       const dataBlob = {};
-      for (let i = 0; i < this.state.orderList.length; i++) {
-        const ii = ((pIndex - 1) * 20) + i;
-        dataBlob[`${ii}`] = this.state.orderList[ii];
-        console.log(dataBlob);
+      for (let i = 0; i < NUM_ROWS; i++) {
+        const ii = (pIndex * NUM_ROWS) + i;
+        dataBlob[`${ii}`] = `row - ${ii}`;
       }
       return dataBlob;
     };
@@ -28,7 +29,7 @@ class MyCargo extends Component {
       currPage: 1,
       totalPage: 2,
       orderList: [],
-      dataSource,
+      dataSource: dataSource.cloneWithRows(this.genData()),
       isLoading: false,
     };
   }
@@ -48,6 +49,9 @@ class MyCargo extends Component {
   }
 
   render() {
+    const { orderList } = this.state;
+    const { orderId } = this.props.params;
+    let index = orderList.length - 1;
     const separator = (sectionID, rowID) => (
       <div key={`${sectionID}-${rowID}`} style={{
         backgroundColor: '#F5F5F9',
@@ -56,34 +60,47 @@ class MyCargo extends Component {
         borderBottom: '1px solid #ECECED',
       }} />
     );
-    const row = (rowData, sectionID, rowID) => (
-        <Link to="/cargo/778">
-          <div key={rowID}
-            style={{
-              backgroundColor: 'white',
-            }}
-          />
-          <div className="panel">
-              <div className="panel-info">
-                <div>{rowData.sendTimeStr}</div>
-                <div>{rowData.startCityStr}→{rowData.arrivalCityStr}</div>
-              </div>
-              <div style={{ display: 'inline-block' }}>
-                <p>
-                  {rowData.cargoName}
-                  <span className="span-divider"></span>
-                  {rowData.weight}吨/{rowData.cubic}立方
-                </p>
-                <p>
-                  {rowData.carTypeStr}
-                  <span className="span-divider"></span>
-                  {rowData.carLengthStr}
-                </p>
-              </div>
-              <div className="trapezoid">{rowData.statusStr}</div>
-          </div>
-        </Link>
-    );
+    let row;    
+    if (index <= 0) {
+      row = () => <div></div>;
+    } else {
+      row = (rowData, sectionID, rowID) => {
+      if (index < 0) {
+          index = orderList.length - 1;
+      }
+      console.log('rowData:::'+rowData);
+      const obj = orderList[index--];
+      console.log('obj :::: '+obj);
+       return (
+          <Link to={`/my-cargo/${obj.id}`}>
+            <div key={rowID}
+              style={{
+                backgroundColor: 'white',
+              }}
+            />
+            <div className="panel">
+                <div className="panel-info">
+                  <div>{obj.sendTimeStr}</div>
+                  <div>{obj.startCityStr}→{obj.arrivalCityStr}</div>
+                </div>
+                <div style={{ display: 'inline-block' }}>
+                  <p>
+                    {obj.cargoName}
+                    <span className="span-divider"></span>
+                    {obj.weight}吨/{obj.cubic}立方
+                  </p>
+                  <p>
+                    {obj.carTypeStr}
+                    <span className="span-divider"></span>
+                    {obj.carLengthStr}
+                  </p>
+                </div>
+                <div className="trapezoid">{obj.statusStr}</div>
+            </div>
+          </Link>
+      );
+      }
+    }
     return (<div className="cargo">
       <ListView
         dataSource={this.state.dataSource}
@@ -133,17 +150,16 @@ class MyCargo extends Component {
     .send(requestData)
     .then((res) => {
       const resultData = JSON.parse(res.text);
-      console.log(this);
       if (resultData.success) {
         Toast.success(resultData.msg);
-        this.state = {
+        this.rData = { ...this.rData, ...this.genData(++pageIndex) };
+        this.setState({
           currPage: resultData.result.currPage,
           totalPage: resultData.result.totalPage,
           orderList: resultData.result.objectArray,
-          dataSource: this.state.dataSource.cloneWithRows(this.genData(this.state.currPage)),
+          dataSource: this.state.dataSource.cloneWithRows(this.rData),
           isLoading: false,
-        };
-        console.log(this.state.orderList);
+        });
       } else {
         Toast.fail(resultData.msg);
       }

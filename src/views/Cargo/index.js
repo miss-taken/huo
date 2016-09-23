@@ -99,7 +99,6 @@ class Cargo extends Component {
 
   render() {
     const { cargoList } = this.state;
-    console.log('dmc', cargoList);
     let index = cargoList.length - 1;
     // let index;
     const separator = (sectionID, rowID) => (
