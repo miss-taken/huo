@@ -88,7 +88,7 @@ class CarTag extends Component {
 
   // 修改车辆附属物
   handleSubmit() {
-    const uuid = sessionStorage.getItem('uuid');
+    const uuid = localStorage.getItem('uuid');
     const { tags } = this.state;
     const carTools = tags
     .filter(tag => tag.selected)
@@ -122,9 +122,9 @@ class CarTag extends Component {
       if (_res.success) {
         location.href = '/#/person';
         Toast.success(_res.msg);
-        const driverInfo = JSON.parse(sessionStorage.getItem('driverInfo'));
+        const driverInfo = JSON.parse(localStorage.getItem('driverInfo'));
         driverInfo.carTools = carTools;
-        sessionStorage.setItem('driverInfo', JSON.stringify(driverInfo));
+        localStorage.setItem('driverInfo', JSON.stringify(driverInfo));
         this.context.router.push('/person');
       } else {
         Toast.fail(_res.msg);

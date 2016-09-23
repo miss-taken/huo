@@ -39,7 +39,7 @@ class Person extends Component {
 
   // 获取司机信息
   prepareData() {
-    const uuid = sessionStorage.getItem('uuid');
+    const uuid = localStorage.getItem('uuid');
     if (uuid === undefined) {
       Toast.fail('请登陆');
       return;
@@ -73,7 +73,7 @@ class Person extends Component {
   }
 
   getImage(path) {
-    const uuid = sessionStorage.getItem('uuid');
+    const uuid = localStorage.getItem('uuid');
     const data = {
       data: {
         path,
@@ -102,7 +102,7 @@ class Person extends Component {
 
   componentWillReceiveProps() {
     const { driverInfo } = this.state;
-    const _driverInfo = JSON.parse(sessionStorage.getItem('driverInfo'));
+    const _driverInfo = JSON.parse(localStorage.getItem('driverInfo'));
     this.setState({
       driverInfo: Object.assign(driverInfo, _driverInfo),
     });
@@ -110,7 +110,7 @@ class Person extends Component {
 
   componentDidMount() {
     this.prepareData();
-    sessionStorage.setItem('driverInfo', JSON.stringify({}));
+    localStorage.setItem('driverInfo', JSON.stringify({}));
   }
 
   renderPaper() {

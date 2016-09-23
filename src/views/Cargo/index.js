@@ -56,7 +56,7 @@ class Cargo extends Component {
   }
 
   requestForCargo(page) {
-    const uuid = sessionStorage.getItem('uuid');
+    const uuid = localStorage.getItem('uuid');
     if (page >= this.state.totalPage) {
       Toast.fail('没有下一页了');
       return;
@@ -118,7 +118,7 @@ class Cargo extends Component {
         }
         const obj = cargoList[cargoList.length - (index--)];
         return (
-          <Link to={`/cargo/${obj.id}`}>
+          <Link to={`/cargo/${obj.cargoId}`}>
             <div key={rowID}
               style={{
                 backgroundColor: 'white',
@@ -167,8 +167,6 @@ class Cargo extends Component {
       <div className="help">联系客服</div>
     </div>);
   }
-
-
 }
 
 export default Cargo;

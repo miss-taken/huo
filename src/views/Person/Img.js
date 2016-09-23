@@ -29,7 +29,7 @@ class Img extends React.Component {
   }
 
   handleUpload() {
-    const uuid = sessionStorage.getItem('uuid');
+    const uuid = localStorage.getItem('uuid');
     const { files } = this.state;
     const data = {
       data: {
@@ -59,7 +59,7 @@ class Img extends React.Component {
 
 
   updateDriverCerityfy(imagePath) {
-    const uuid = sessionStorage.getItem('uuid');
+    const uuid = localStorage.getItem('uuid');
     const data = {
       data: {
         path: imagePath,
@@ -78,9 +78,9 @@ class Img extends React.Component {
       const resultData = JSON.parse(res.text);
       Toast.fail(resultData.msg);
       if (resultData.success) {
-        const driverInfo = JSON.parse(sessionStorage.getItem('driverInfo'));
+        const driverInfo = JSON.parse(localStorage.getItem('driverInfo'));
         driverInfo.imagePath = imagePath;
-        sessionStorage.setItem('driverInfo', JSON.stringify(driverInfo));
+        localStorage.setItem('driverInfo', JSON.stringify(driverInfo));
         Toast.success(resultData.msg);
         this.context.router.push('/person');
       } else {

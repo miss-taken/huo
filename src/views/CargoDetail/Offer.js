@@ -29,7 +29,7 @@ class Offer extends React.Component {
   }
 
   handleOffer() {
-    const uuid = sessionStorage.getItem('uuid');
+    const uuid = localStorage.getItem('uuid');
     if (uuid === undefined) {
       Toast.fail('请登陆');
       return;
@@ -40,9 +40,9 @@ class Offer extends React.Component {
 
     const data = {
       data: {
-        cargoId: `${cargoInfo.id}`,
-        quantity: values.quantity,
-        unitPrice: values.unitPrice,
+        cargoId: `${cargoInfo.cargoId}`,
+        quantity: `${values.quantity}`,
+        unitPrice: `${values.unitPrice}`,
         unitType: `${unitType}`,
         type: 'CARGO_APPLY',
       },

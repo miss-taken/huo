@@ -53,7 +53,7 @@ class CarInfo extends Component {
   }
 
   handleSubmit() {
-    const uuid = sessionStorage.getItem('uuid');
+    const uuid = localStorage.getItem('uuid');
     const car = this.props.form.getFieldProps('car').value;
     let cType = car[0];
     const cLength = car[1];
@@ -89,12 +89,12 @@ class CarInfo extends Component {
     .then((res) => {
       const resultData = handleRes(res);
       if (resultData.success) {
-        const driverInfo = JSON.parse(sessionStorage.getItem('driverInfo'));
+        const driverInfo = JSON.parse(localStorage.getItem('driverInfo'));
         driverInfo.carLeng = cLength;
         driverInfo.carLengthStr = _carLength.find(c => c.value === cLength).label;
         driverInfo.carType = isOther ? 100 : cType;
         driverInfo.carTypeStr = _carType.find(c => c.value === (isOther ? 100 : cType)).label;
-        sessionStorage.setItem('driverInfo', JSON.stringify(driverInfo));
+        localStorage.setItem('driverInfo', JSON.stringify(driverInfo));
         Toast.success(resultData.msg);
         this.context.router.push('/person');
       } else {

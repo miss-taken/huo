@@ -28,7 +28,7 @@ class Upload extends React.Component {
   }
 
   handleUpload() {
-    const uuid = sessionStorage.getItem('uuid');
+    const uuid = localStorage.getItem('uuid');
     const { files } = this.state;
     const data = {
       data: {
