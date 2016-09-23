@@ -7,12 +7,19 @@ class Offer extends React.Component {
     super(props);
 
     this.handleClose = this.handleClose.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleClose() {
     const { onClose } = this.props;
     onClose();
   }
+
+  handleSubmit() {
+    const { onSubmit } = this.props;
+    onSubmit();
+  }
+
   render() {
     const { visible } = this.props;
     return (
@@ -40,7 +47,7 @@ class Offer extends React.Component {
             </div>
           </div>
           <div className="text">实付款：¥{180}</div>
-          <Button inline className="confirm-btn">支付</Button>
+          <Button inline className="confirm-btn" onClick={this.handleSubmit}>支付</Button>
         </div>
       </Modal>
     );

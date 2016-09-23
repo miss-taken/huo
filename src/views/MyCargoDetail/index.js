@@ -7,6 +7,7 @@ import { WingBlank, Table, Toast, Button, Modal } from 'antd-mobile';
 import './_mycargoDetail';
 import request from 'superagent-bluebird-promise';
 import url from '../../utils/url';
+import { handleRes } from '../../utils/web';
 import mapIcon from './map-icon.png';
 
 const columns = [
@@ -49,13 +50,23 @@ class CargoDetail extends React.Component {
 
     // 支付按钮
     this.renderBtn = this.renderBtn.bind(this);
+    // 地址
+    this.renderAddress = this.renderAddress.bind(this);
+    // 获取支付信息
+    this.getPayInfo = this.getPayInfo.bind(this);
+    // 提交支付信息
+    this.postPayInfo = this.postPayInfo.bind(this);
   }
 
   cloneChildren() {
     const path = this.props.location.pathname;
     const { driverInfo } = this.state;
     if (this.props.children) {
-      return React.cloneElement(this.props.children, { key: path, driverInfo });
+      return React.cloneElement(this.props.children, {
+        key: path,
+        driverInfo,
+        // onSubmit: this.postPayInfo,
+      });
     }
     return null;
   }
@@ -117,7 +128,6 @@ class CargoDetail extends React.Component {
     this.prepareData();
   }
 
-
   // 获取货源信息
   prepareData() {
     const uuid = sessionStorage.getItem('uuid');
@@ -151,8 +161,68 @@ class CargoDetail extends React.Component {
     });
   }
 
+  // 获取支付信息
+  getPayInfo() {
+    const { uuid } = sessionStorage.getItem('uuid');
+    const { id } = this.props.params;
+    const data = {
+      data: {
+        orderId: id,
+        type: 'ORDER_PAYINFO',
+      },
+      service: 'SERVICE_PAY',
+      uuid,
+      timestamp: '',
+      signatures: '',
+    };
+    request.post(url.webapp)
+    .withCredentials()
+    .send(data)
+    .then((res) => {
+      const resultData = handleRes(res);
+      if (resultData.success) {
+        console.log('success');
+      } else {
+        Toast.fail(resultData.msg);
+      }
+      this.handleOfferOpen();
+    });
+  }
+
+  // 确认支付
+  postPayInfo() {
+    const { id } = this.props.params;
+    this.handleOfferClose();
+    this.context.router.push(`/my-cargo/${id}/success`);
+  }
+
   renderBtn() {
-    return <Button className="apply-for" onClick={this.handleMessageOpen}>支付</Button>;
+    return <Button className="apply-for" onClick={this.getPayInfo}>支付</Button>;
+  }
+
+  renderAddress() {
+    const {
+      loadAddressInfo,
+      unloadAddressInfo,
+    } = this.state;
+    return (
+      <div className="block">
+        <h4 className="title">装卸货信息</h4>
+        <div className="people-info">
+          <div className="people-info-item">
+            <div>装货地址: {loadAddressInfo.address}</div>
+            <a href={`tel:${loadAddressInfo.linkMobile}`} className="people-contact">联系人电话</a>
+          </div>
+          <div className="people-info-item">
+            <div>卸货地址: {unloadAddressInfo.address}</div>
+            <a href={`tel:${unloadAddressInfo.linkMobile}`} className="people-contact">联系人电话</a>
+          </div>
+          <Link className="map-icon" to={`/my-cargo/${this.props.params.id}/map`}>
+            <img src={mapIcon}/>
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   render() {
@@ -161,13 +231,9 @@ class CargoDetail extends React.Component {
       loginVisible,
       offerVisible,
       uploadVisible,
-      cargoInfo, 
-      projectInfo, 
-      loadAddressInfo,
-      unloadAddressInfo,
+      cargoInfo,
+      projectInfo,
     } = this.state;
-
-
     const simpleProjectInfo = [{
       title: '司机人数',
       name: projectInfo.driverNum || 1,
@@ -235,7 +301,8 @@ class CargoDetail extends React.Component {
       name: projectInfo.loadCast || '',
       key: '11',
     }];
-    
+
+    let data;
     if (cargoInfo.status > 99) {
       data = detailProjectInfo;
     } else {
@@ -301,6 +368,7 @@ class CargoDetail extends React.Component {
                 <div>您还没注册，需要先注册哦</div>
               </Modal>
               <Offer
+                onSubmit={this.postPayInfo}
                 visible={offerVisible}
                 onClose={this.handleOfferClose}
               />
@@ -310,22 +378,7 @@ class CargoDetail extends React.Component {
               />
             </WingBlank>
         </div>
-        <div className="block">
-          <h4 className="title">装卸货信息</h4>
-          <div className="people-info">
-            <div className="people-info-item">
-              <div>装货地址: {loadAddressInfo.address}</div>
-              <a href={`tel:${loadAddressInfo.linkMobile}`} className="people-contact">联系人电话</a>
-            </div>
-            <div className="people-info-item">
-              <div>卸货地址: {unloadAddressInfo.address}</div>
-              <a href={`tel:${unloadAddressInfo.linkMobile}`} className="people-contact">联系人电话</a>
-            </div>
-            <Link className="map-icon" to={`/my-cargo/${this.props.params.id}/map`}>
-              <img src={mapIcon}/>
-            </Link>
-          </div>
-        </div>
+        { Number.parseInt(cargoInfo.status, 10) > 99 ? this.renderAddress() : null}
         { Number.parseInt(cargoInfo.status, 10) === 99 ? this.renderBtn() : null}
         <ReactCSSTransitionGroup transitionName="pageSlider"
           transitionEnterTimeout={600} transitionLeaveTimeout={600}>
@@ -335,5 +388,9 @@ class CargoDetail extends React.Component {
     );
   }
 }
+
+CargoDetail.contextTypes = {
+  router: React.PropTypes.object,
+};
 
 export default CargoDetail;

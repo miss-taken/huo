@@ -99,14 +99,14 @@ class MyCargo extends Component {
   render() {
     const { orderList } = this.state;
     let index = orderList.length;
-    const separator = (sectionID, rowID) => (
-      <div key={`${sectionID}-${rowID}`} style={{
-        backgroundColor: '#F5F5F9',
-        height: 8,
-        borderTop: '1px solid #ECECED',
-        borderBottom: '1px solid #ECECED',
-      }} />
-    );
+    // const separator = (sectionID, rowID) => (
+    //   <div key={`${sectionID}-${rowID}`} style={{
+    //     backgroundColor: '#F5F5F9',
+    //     height: 8,
+    //     borderTop: '1px solid #ECECED',
+    //     borderBottom: '1px solid #ECECED',
+    //   }} />
+    // );
     let row;
     if (index <= 0) {
       row = () => <div></div>;
@@ -155,7 +155,6 @@ class MyCargo extends Component {
           {this.state.isLoading ? '加载中...' : '加载完毕'}
         </div>}
         renderRow={row}
-        renderSeparator={separator}
         pageSize={4}
         scrollRenderAheadDistance={500}
         scrollEventThrottle={20}
