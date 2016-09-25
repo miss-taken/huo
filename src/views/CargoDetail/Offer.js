@@ -16,6 +16,10 @@ class Offer extends React.Component {
     this.handleClose = this.handleClose.bind(this);
     this.handleOffer = this.handleOffer.bind(this);
     this.handleTypeToggle = this.handleTypeToggle.bind(this);
+    // 单价变化
+    this.handleUnitChange = this.handleUnitChange.bind(this);
+    // 总价变化
+    this.handleTotalPriceChange = this.handleTotalPriceChange.bind(this);
   }
 
   handleTypeToggle() {
@@ -67,6 +71,31 @@ class Offer extends React.Component {
     });
   }
 
+  handleUnitChange(val) {
+    const { form } = this.props;
+    const { quantity } = form.getFieldsValue();
+    if (!quantity || !val) {
+      return form.setFieldsValue({
+        totalPrice: '',
+      });
+    }
+    return form.setFieldsValue({
+      totalPrice: quantity * Number.parseInt(val, 10),
+    });
+  }
+
+  handleTotalPriceChange(val) {
+    const { form } = this.props;
+    const { quantity } = form.getFieldsValue();
+    if (!quantity || !val) {
+      return form.setFieldsValue({
+        unitPrice: '',
+      });
+    }
+    return form.setFieldsValue({
+      unitPrice: (Number.parseInt(val, 10) / quantity).toFixed(2),
+    });
+  }
   render() {
     const { unitType } = this.state;
     const unitTypeStr = unitType === 1 ? '吨' : '方';
@@ -104,6 +133,7 @@ class Offer extends React.Component {
                 <InputItem
                   {...getFieldProps('unitPrice', {
                     initialValue: '',
+                    onChange: this.handleUnitChange,
                   })}
                   type="number"
                   extra={`元/${unitTypeStr}`}
@@ -112,6 +142,7 @@ class Offer extends React.Component {
                 <InputItem
                   {...getFieldProps('totalPrice', {
                     initialValue: '',
+                    onChange: this.handleTotalPriceChange,
                   })}
                   type="number"
                   extra="元"
