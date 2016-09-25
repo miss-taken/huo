@@ -86,9 +86,9 @@ class Person extends Component {
     };
     request.post(url.webapp)
     .withCredentials()
-    .on('request',function () {
-        this.xhr.responseType = 'blob';
-      })
+    .on('request', () => {
+      this.xhr.responseType = 'blob';
+    })
     .send(data)
     .then((res) => {
       // const resultData = JSON.parse(res.text);
@@ -151,7 +151,10 @@ class Person extends Component {
               <Icon type="mobile"/>
               <span>{driverInfo.mobile}</span>
             </h4>
-            <p className="panel-text-desc">{driverInfo.driverStatusStr}</p>
+            <p className="panel-text-desc">
+              <span>{driverInfo.driverStatusStr}</span>
+              <span>幸运豆: {driverInfo.luckyBean}</span>
+            </p>
             <div></div>
           </div>
         </div>
@@ -163,10 +166,6 @@ class Person extends Component {
                 extra={driverInfo.name}
               >姓名</List.Item>
             </Link>
-            <List.Item
-              arrow="horizontal"
-              extra={driverInfo.luckyBean}
-            >幸运豆</List.Item>
             <Link to="/person/car-img">
               {
                 this.renderPaper()

@@ -65,6 +65,9 @@
       display: -webkit-box;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 2;
+      &>span:first-child {
+        padding-right: 14px;
+      }
     }
   }
   .am-button {
