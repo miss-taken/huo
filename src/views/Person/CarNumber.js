@@ -33,7 +33,7 @@ class CarNumber extends Component {
       }
       return tag;
     });
-    const $buttons = document.querySelectorAll('.flex-button-container button');
+    const $buttons = Array.from(document.querySelectorAll('.flex-button-container button'));
     $buttons.forEach((button) => {
       button.classList.remove('active');
     });
