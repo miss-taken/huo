@@ -60,11 +60,11 @@ class CargoDetail extends React.Component {
 
   cloneChildren() {
     const path = this.props.location.pathname;
-    const { driverInfo } = this.state;
+    const { cargoInfo } = this.state;
     if (this.props.children) {
       return React.cloneElement(this.props.children, {
         key: path,
-        driverInfo,
+        cargoInfo,
         // onSubmit: this.postPayInfo,
       });
     }

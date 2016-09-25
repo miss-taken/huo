@@ -57,11 +57,15 @@
   // List
   .am-list-item {
     height: 50px;
+    line-height: 50px;
     min-height: 50px;
   }
   // Input
   .am-list .am-list-item .am-input-control input {
-    line-height: 50px;
+    // line-height: 50px;
+    line-height: 25px;
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
   // Picker
   .am-list-item.am-list-item-middle .am-list-line {

@@ -15,18 +15,19 @@ import CargoDetail from './views/CargoDetail';
 import MyCargo from './views/MyCargo';
 import MyCargoDetail from './views/MyCargoDetail';
 import MyCargoSuccess from './views/MyCargoDetail/OfferSuccess';
+import MyCargoMap from './views/MyCargoDetail/Map';
 
-function redirectToDashboad(nextState, replace) {
-  if (sessionStorage.getItem('uuid')) {
-    replace('/');
-  }
-}
-
-function redirectToLogin(nextState, replace) {
-  if (!sessionStorage.getItem('uuid')) {
-    replace('/login');
-  }
-}
+// function redirectToDashboad(nextState, replace) {
+//   if (sessionStorage.getItem('uuid')) {
+//     replace('/');
+//   }
+// }
+//
+// function redirectToLogin(nextState, replace) {
+//   if (!sessionStorage.getItem('uuid')) {
+//     replace('/login');
+//   }
+// }
 
 class Routes extends React.Component {
   constructor(props) {
@@ -54,6 +55,7 @@ class Routes extends React.Component {
           <Route path="my-cargo" component={MyCargo}/>
           <Route path="my-cargo/:id" component={MyCargoDetail}>
             <Route path="success" component={MyCargoSuccess}/>
+            <Route path="map" component={MyCargoMap}/>
           </Route>
         </Route>
       </Router>
