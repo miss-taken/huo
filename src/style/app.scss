@@ -167,3 +167,20 @@
   z-index: 1000px;
   background: #f9f8f4;
 }
+
+// 清楚表单字段数据
+.am-list .am-list-item .am-input-clear {
+  width: 21px!important;
+  height: 21px!important;
+  background-size: 21px auto;
+}
+
+// Toast
+.am-toast-text {
+  & > .anticon {
+    font-size: 50px!important;
+  }
+  & > div {
+    font-size: 18px!important;
+  }
+}
