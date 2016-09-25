@@ -56,7 +56,7 @@ class MyCargo extends Component {
   }
 
   requestForCargo(page) {
-    const uuid = sessionStorage.getItem('uuid');
+    const uuid = localStorage.getItem('uuid');
     if (page >= this.state.totalPage) {
       Toast.fail('没有下一页了');
       return;

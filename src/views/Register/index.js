@@ -52,7 +52,6 @@ class Login extends Component {
     const re = new RegExp('[&,?]code=([^//&]*)', 'i');
     const weChatCode = re.exec(location.href)[1];
 
-    console.log(carProp);
     const data = {
       data: {
         mobile: this.props.form.getFieldProps('username').value.toString(),
@@ -73,7 +72,7 @@ class Login extends Component {
     .then((res) => {
       const resultData = JSON.parse(res.text);
       if (resultData.success) {
-        sessionStorage.setItem('uuid', resultData.result.uuid);
+        localStorage.setItem('uuid', resultData.result.uuid);
         Toast.success(resultData.msg.toString());
       } else {
         Toast.fail(resultData.msg.toString());

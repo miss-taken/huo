@@ -38,7 +38,7 @@ class Name extends Component {
   }
 
   handleSubmit() {
-    const uuid = sessionStorage.getItem('uuid');
+    const uuid = localStorage.getItem('uuid');
     const name = this.props.form.getFieldProps('name').value;
     if (name === undefined) {
       Toast.fail('请填写姓名');
@@ -64,9 +64,9 @@ class Name extends Component {
     .then((res) => {
       const resultData = handleRes(res);
       if (resultData.success) {
-        const driverInfo = JSON.parse(sessionStorage.getItem('driverInfo'));
+        const driverInfo = JSON.parse(localStorage.getItem('driverInfo'));
         driverInfo.name = name;
-        sessionStorage.setItem('driverInfo', JSON.stringify(driverInfo));
+        localStorage.setItem('driverInfo', JSON.stringify(driverInfo));
         Toast.success(resultData.msg);
         this.context.router.push('/person');
       } else {

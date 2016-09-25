@@ -130,7 +130,7 @@ class CargoDetail extends React.Component {
 
   // 获取货源信息
   prepareData() {
-    const uuid = sessionStorage.getItem('uuid');
+    const uuid = localStorage.getItem('uuid');
     const _data = {
       data: {
         orderId: this.props.params.id.toString(),
@@ -163,7 +163,7 @@ class CargoDetail extends React.Component {
 
   // 获取支付信息
   getPayInfo() {
-    const { uuid } = sessionStorage.getItem('uuid');
+    const { uuid } = localStorage.getItem('uuid');
     const { id } = this.props.params;
     const data = {
       data: {

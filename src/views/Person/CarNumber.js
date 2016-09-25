@@ -105,7 +105,7 @@ class CarNumber extends Component {
 
   handleSubmit() {
     location.href = '/#/person';
-    const uuid = sessionStorage.getItem('uuid');
+    const uuid = localStorage.getItem('uuid');
     const carNum = this.props.form.getFieldProps('carNum').value;
     const { tag } = this.state;
     const _carNum = `${tag}${carNum}`;
@@ -133,9 +133,9 @@ class CarNumber extends Component {
     .then((res) => {
       const _res = handleRes(res);
       if (_res.success) {
-        const driverInfo = JSON.parse(sessionStorage.getItem('driverInfo'));
+        const driverInfo = JSON.parse(localStorage.getItem('driverInfo'));
         driverInfo.carNum = _carNum;
-        sessionStorage.setItem('driverInfo', JSON.stringify(driverInfo));
+        localStorage.setItem('driverInfo', JSON.stringify(driverInfo));
         Toast.success(_res.msg);
         this.context.router.push('/person');
       } else {

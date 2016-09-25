@@ -50,7 +50,7 @@ class Weight extends Component {
  // 修改吨位放量
   handleSubmit() {
     location.href = '/#/person';
-    const uuid = sessionStorage.getItem('uuid');
+    const uuid = localStorage.getItem('uuid');
     const weight = this.props.form.getFieldProps('weight').value;
     const cubic = this.props.form.getFieldProps('cubic').value;
 
@@ -83,10 +83,10 @@ class Weight extends Component {
     .then((res) => {
       const resultData = handleRes(res);
       if (resultData.success) {
-        const driverInfo = JSON.parse(sessionStorage.getItem('driverInfo'));
+        const driverInfo = JSON.parse(localStorage.getItem('driverInfo'));
         driverInfo.weight = weight.toString();
         driverInfo.cubic = cubic.toString();
-        sessionStorage.setItem('driverInfo', JSON.stringify(driverInfo));
+        localStorage.setItem('driverInfo', JSON.stringify(driverInfo));
         Toast.success(resultData.msg);
         this.context.router.push('/person');
       } else {
