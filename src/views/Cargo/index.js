@@ -118,7 +118,7 @@ class Cargo extends Component {
         }
         const obj = cargoList[cargoList.length - (index--)];
         return (
-          <Link to={`/cargo/${obj.id}`}>
+          <Link to={`/cargo/${obj.cargoId}`}>
             <div key={rowID}
               style={{
                 backgroundColor: 'white',
