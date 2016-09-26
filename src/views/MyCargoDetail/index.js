@@ -1,9 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Offer from './Offer';
-import Upload from './Upload';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import { WingBlank, Table, Button, Modal } from 'antd-mobile';
+import { WingBlank, Table, Button } from 'antd-mobile';
 import './_mycargoDetail';
 import request from 'superagent-bluebird-promise';
 import url from '../../utils/url';
@@ -24,29 +23,19 @@ class CargoDetail extends React.Component {
     this.state = {
       // 提示信息
       messageVisible: false,
-      // 跳转登录
-      loginVisible: false,
       // 详情
       offerVisible: false,
-      // 上传
-      uploadVisible: false,
       cargoInfo: {},
       projectInfo: {},
       loadAddressInfo: {},
       unloadAddressInfo: {},
+      payInfo: {},
     };
 
     this.cloneChildren = this.cloneChildren.bind(this);
-    this.handleMessageOpen = this.handleMessageOpen.bind(this);
-    this.handleMessageClose = this.handleMessageClose.bind(this);
 
     this.handleOfferOpen = this.handleOfferOpen.bind(this);
     this.handleOfferClose = this.handleOfferClose.bind(this);
-    this.handleLoginOpen = this.handleLoginOpen.bind(this);
-    this.handleJumpLogin = this.handleJumpLogin.bind(this);
-
-    this.handleUploadOpen = this.handleUploadOpen.bind(this);
-    this.handleUploadClose = this.handleUploadClose.bind(this);
 
     // 支付按钮
     this.renderBtn = this.renderBtn.bind(this);
@@ -71,12 +60,6 @@ class CargoDetail extends React.Component {
     return null;
   }
 
-  handleMessageOpen() {
-    this.setState({
-      messageVisible: true,
-    });
-  }
-
   // 报价弹出层
   handleOfferOpen() {
     this.setState({
@@ -88,40 +71,6 @@ class CargoDetail extends React.Component {
     this.setState({
       offerVisible: false,
     });
-  }
-
-  // 成功弹出层
-  handleMessageClose() {
-    this.setState({
-      messageVisible: false,
-    });
-  }
-
-  handleLoginOpen() {
-    this.setState({
-      messageVisible: false,
-    });
-  }
-
-  // 注册提示弹出层
-  handleLoginOpen() {
-    setTimeout(() => (location.href = '/#/login'), 5000);
-    this.setState({
-      loginVisible: true,
-    });
-  }
-
-  handleJumpLogin() {
-    location.href = '/#/login';
-  }
-
-  // 上传弹出层
-  handleUploadOpen() {
-    this.setState({ uploadVisible: true });
-  }
-
-  handleUploadClose() {
-    this.setState({ uploadVisible: false });
   }
 
   componentDidMount() {
@@ -154,14 +103,13 @@ class CargoDetail extends React.Component {
           loadAddressInfo: resultData.result.loadAddressInfo,
           unloadAddressInfo: resultData.result.unloadAddressInfo,
         });
-      } else {
       }
     });
   }
 
   // 获取支付信息
   getPayInfo() {
-    const { uuid } = localStorage.getItem('uuid');
+    // const uuid = localStorage.getItem('uuid');
     const { id } = this.props.params;
     const data = {
       data: {
@@ -169,7 +117,7 @@ class CargoDetail extends React.Component {
         type: 'ORDER_PAYINFO',
       },
       service: 'SERVICE_PAY',
-      uuid,
+      // uuid,
       timestamp: '',
       signatures: '',
     };
@@ -177,10 +125,10 @@ class CargoDetail extends React.Component {
     .withCredentials()
     .send(data)
     .then((res) => {
+      console.log('res', res);
       const resultData = handleRes(res);
-      if (resultData.success) {
-        console.log('success');
-      } else {
+      if (!resultData.success) {
+        this.setState({ payInfo: resultData.result });
       }
       this.handleOfferOpen();
     });
@@ -188,9 +136,84 @@ class CargoDetail extends React.Component {
 
   // 确认支付
   postPayInfo() {
-    const { id } = this.props.params;
-    this.handleOfferClose();
-    this.context.router.push(`/my-cargo/${id}/success`);
+    // const uuid = localStorage.getItem('uuid');
+    const { orderNum } = this.state.cargoInfo;
+    // const re = new RegExp('[&,?]code=([^//&]*)', 'i');
+    // const weChatCode = re.exec(location.href)[1];
+    const code = '123456';
+    const data = {
+      data: {
+        code,
+        orderNum,
+        type: 'ORDER_PAY_POST',
+      },
+      service: 'SERVICE_PAY',
+      uuid: '1212',
+      timestamp: '',
+      signatures: '',
+    };
+    request.post(url.webapp)
+    .withCredentials()
+    .send(data)
+    .then(res => {
+      const resultData = handleRes(res);
+      if (resultData.success) {
+        const {
+          appId,
+          nonceStr,
+          timeStamp,
+          signatures,
+          packageName,
+          signType,
+          paySign,
+          outTradeNo,
+        } = resultData.result;
+        wx.config({
+          // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+          debug: false,
+          // 必填，公众号的唯一标识
+          appId,
+          // 必填，生成签名的时间戳
+          timeStamp,
+          // 必填，生成签名的随机串
+          nonceStr,
+          // 必填，签名，见附录1
+          signatures,
+          // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+          jsApiList: [
+            'checkJsApi',
+            'chooseWXPay',
+          ],
+        });
+        wx.ready(() => {
+          wx.chooseWXPay({
+            timeStamp,
+            nonceStr,
+            package: packageName,
+            signType,
+            paySign,
+            success: (res) => {
+              WeixinJSBridge.log(res.err_msg);
+              if (!res.err_msg) {
+                location.href = `mobile/pay/wechat_pay_ok.htm?orderId=${outTradeNo}`;
+              }
+            }
+          });
+        });
+
+        wx.error((err) => {
+          console.log('res', err);
+        });
+
+        wx.checkJsApi({
+          jsApiList: ['chooseWXPay'],
+          success: () => null,
+        });
+      }
+      return null;
+    });
+    // this.handleOfferClose();
+    // this.context.router.push(`/my-cargo/${id}/success`);
   }
 
   renderBtn() {
@@ -224,12 +247,10 @@ class CargoDetail extends React.Component {
 
   render() {
     const {
-      messageVisible,
-      loginVisible,
       offerVisible,
-      uploadVisible,
       cargoInfo,
       projectInfo,
+      payInfo,
     } = this.state;
     const simpleProjectInfo = [{
       title: '司机人数',
@@ -339,39 +360,11 @@ class CargoDetail extends React.Component {
                 columns={columns}
                 dataSource={data}
               />
-              <Modal
-                transparent
-                onClose={this.handleMessageClose}
-                visible={messageVisible}
-                className="message-modal"
-                style={{
-                  width: 'auto',
-                  height: 'auto',
-                }}
-                footer={[{ text: '返回', onPress: this.handleMessageClose }]}
-              >
-                <div>提交成功，等待客服联系您...</div>
-              </Modal>
-              <Modal
-                transparent
-                visible={loginVisible}
-                className="login-modal"
-                style={{
-                  width: 'auto',
-                  height: 'auto',
-                }}
-                footer={[{ text: '确认', onPress: this.handleJumpLogin }]}
-                >
-                <div>您还没注册，需要先注册哦</div>
-              </Modal>
               <Offer
                 onSubmit={this.postPayInfo}
                 visible={offerVisible}
                 onClose={this.handleOfferClose}
-              />
-              <Upload
-                visible={uploadVisible}
-                onClose={this.handleUploadClose}
+                payInfo={payInfo}
               />
             </WingBlank>
         </div>
