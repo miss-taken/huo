@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { InputItem, Toast, WingBlank, Button, Picker } from 'antd-mobile';
+import { List, InputItem, Toast, WingBlank, Button, Picker } from 'antd-mobile';
 import { createForm } from 'rc-form';
 import url from '../../utils/url';
 import { handleRes } from '../../utils/web';
@@ -29,7 +29,10 @@ class Weight extends Component {
           cols={1}
           extra="请选择车轴数量"
           data={this.state.data}
-        />
+        >
+          <List.Item>
+          </List.Item>
+        </Picker>
         <InputItem
           {...getFieldProps('weight', {
             initialValue: weight,
