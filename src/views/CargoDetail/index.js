@@ -1,7 +1,7 @@
 import React from 'react';
 import Offer from './Offer';
 import Upload from './Upload';
-import { WingBlank, Table, Toast, Button, Modal } from 'antd-mobile';
+import { WingBlank, Table, Button, Modal } from 'antd-mobile';
 import './_cargoDetail';
 import request from 'superagent-bluebird-promise';
 import url from '../../utils/url';
@@ -265,13 +265,11 @@ class CargoDetail extends React.Component {
     .then((res) => {
       const resultData = JSON.parse(res.text);
       if (resultData.success) {
-        Toast.success(resultData.msg);
         this.setState({
           cargoInfo: resultData.result,
           projectInfo: resultData.result.projectInfo,
         });
       } else {
-        Toast.fail(resultData.msg);
       }
     });
   }

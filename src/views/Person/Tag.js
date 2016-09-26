@@ -95,7 +95,6 @@ class CarTag extends Component {
     .map(tag => tag.name).join(';') || '';
     
     if (uuid === undefined) {
-      Toast.fail('请登陆');
       return;
     }
     if (carTools === undefined) {
@@ -121,7 +120,6 @@ class CarTag extends Component {
       const _res = handleRes(res);
       if (_res.success) {
         location.href = '/#/person';
-        Toast.success(_res.msg);
         const driverInfo = JSON.parse(localStorage.getItem('driverInfo'));
         driverInfo.carTools = carTools;
         localStorage.setItem('driverInfo', JSON.stringify(driverInfo));

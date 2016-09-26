@@ -76,12 +76,10 @@ class Img extends React.Component {
     .send(data)
     .then(res => {
       const resultData = JSON.parse(res.text);
-      Toast.fail(resultData.msg);
       if (resultData.success) {
         const driverInfo = JSON.parse(localStorage.getItem('driverInfo'));
         driverInfo.imagePath = imagePath;
         localStorage.setItem('driverInfo', JSON.stringify(driverInfo));
-        Toast.success(resultData.msg);
         this.context.router.push('/person');
       } else {
         Toast.fail(resultData.msg);

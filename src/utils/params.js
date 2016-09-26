@@ -1,3 +1,4 @@
+
 const carLength = [
   { label: '11米', value: 8 },
   { label: '13米', value: 2 },
@@ -29,31 +30,50 @@ const carType = [
   { label: '高栏车(高栏可拆)', value: 12, children: carLength },
 ];
 
+const carAxis = [
+  { label: '2轴', value: 2 },
+  { label: '3轴', value: 3 },
+  { label: '4轴', value: 4 },
+  { label: '5轴', value: 5 },
+];
+
 const tags = [
   { name: '京' },
   { name: '津' },
+  { name: '沪' },
+  { name: '渝' },
+  { name: '冀' },
+  { name: '豫' },
+  { name: '云' },
+  { name: '辽' },
+  { name: '黑' },
+  { name: '湘' },
+  { name: '皖' },
+  { name: '鲁' },
+  { name: '新' },
+  { name: '苏' },
   { name: '浙' },
+  { name: '赣' },
+  { name: '鄂' },
+  { name: '桂' },
+  { name: '甘' },
+  { name: '晋' },
+  { name: '蒙' },
+  { name: '陕' },
+  { name: '吉' },
+  { name: '闽' },
+  { name: '贵' },
+  { name: '粤' },
+  { name: '青' },
+  { name: '藏' },
   { name: '川' },
-  { name: 'x' },
-  { name: 'a' },
-  { name: 'b' },
-  { name: 'd' },
-  { name: 'e' },
-  { name: 'r' },
-  { name: 'p' },
-  { name: 'o' },
-  { name: 'i' },
-  { name: 'u' },
-  { name: 'y' },
-  { name: 'h' },
-  { name: 'j' },
-  { name: 'k' },
-  { name: 'l' },
-  { name: ';' },
+  { name: '宁' },
+  { name: '琼' },
 ];
 
 export default {
   carLength,
   carType,
   tags,
+  carAxis,
 };

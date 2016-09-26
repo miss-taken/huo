@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import Offer from './Offer';
 import Upload from './Upload';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import { WingBlank, Table, Toast, Button, Modal } from 'antd-mobile';
+import { WingBlank, Table, Button, Modal } from 'antd-mobile';
 import './_mycargoDetail';
 import request from 'superagent-bluebird-promise';
 import url from '../../utils/url';
@@ -148,7 +148,6 @@ class CargoDetail extends React.Component {
     .then((res) => {
       const resultData = JSON.parse(res.text);
       if (resultData.success) {
-        Toast.success(resultData.msg);
         this.setState({
           cargoInfo: resultData.result,
           projectInfo: resultData.result.projectInfo,
@@ -156,7 +155,6 @@ class CargoDetail extends React.Component {
           unloadAddressInfo: resultData.result.unloadAddressInfo,
         });
       } else {
-        Toast.fail(resultData.msg);
       }
     });
   }
@@ -183,7 +181,6 @@ class CargoDetail extends React.Component {
       if (resultData.success) {
         console.log('success');
       } else {
-        Toast.fail(resultData.msg);
       }
       this.handleOfferOpen();
     });

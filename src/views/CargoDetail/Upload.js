@@ -39,7 +39,6 @@ class Upload extends React.Component {
       timestamp: '',
       signatures: '',
     };
-    Toast.success('上传');
     request.post(url.webapp)
     .withCredentials()
     .field('file', files[0])

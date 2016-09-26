@@ -45,7 +45,6 @@ class Name extends Component {
       return;
     }
     if (uuid === undefined) {
-      Toast.fail('请登陆');
       return;
     }
     const data = {
@@ -67,7 +66,6 @@ class Name extends Component {
         const driverInfo = JSON.parse(localStorage.getItem('driverInfo'));
         driverInfo.name = name;
         localStorage.setItem('driverInfo', JSON.stringify(driverInfo));
-        Toast.success(resultData.msg);
         this.context.router.push('/person');
       } else {
         Toast.fail(resultData.msg);

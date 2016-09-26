@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ListView, Toast } from 'antd-mobile';
+import { ListView } from 'antd-mobile';
 import { Link } from 'react-router';
 import request from 'superagent-bluebird-promise';
 import url from '../../utils/url';
@@ -58,11 +58,9 @@ class Cargo extends Component {
   requestForCargo(page) {
     const uuid = localStorage.getItem('uuid');
     if (page >= this.state.totalPage) {
-      Toast.fail('没有下一页了');
       return;
     }
     if (uuid === undefined) {
-      Toast.fail('请登陆');
       return;
     }
 
@@ -82,7 +80,6 @@ class Cargo extends Component {
     .then((res) => {
       const resultData = JSON.parse(res.text);
       if (resultData.success) {
-        Toast.success(resultData.msg);
         this.rData = { ...this.rData, ...this.genData(++pageIndex) };
         this.setState({
           currPage: resultData.result.currPage,
@@ -92,7 +89,7 @@ class Cargo extends Component {
           isLoading: false,
         });
       } else {
-        Toast.fail(resultData.msg);
+        
       }
     });
   }

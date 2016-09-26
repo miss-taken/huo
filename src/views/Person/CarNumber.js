@@ -136,7 +136,6 @@ class CarNumber extends Component {
         const driverInfo = JSON.parse(localStorage.getItem('driverInfo'));
         driverInfo.carNum = _carNum;
         localStorage.setItem('driverInfo', JSON.stringify(driverInfo));
-        Toast.success(_res.msg);
         this.context.router.push('/person');
       } else {
         Toast.fail(_res.msg);

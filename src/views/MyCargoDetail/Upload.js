@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Button, Toast } from 'antd-mobile';
+import { Modal, Button } from 'antd-mobile';
 import Dropzone from 'react-dropzone';
 import png from './upload-demo.png';
 import demo from './default.png';
@@ -28,7 +28,6 @@ class Upload extends React.Component {
   handleUpload() {
     const { onClose } = this.props;
     // const { files } = this.files;
-    Toast.success('上传');
     setTimeout(() => onClose(), 2000);
   }
 

@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
-import { Icon, List, Toast } from 'antd-mobile';
+import { Icon, List } from 'antd-mobile';
 import { Link } from 'react-router';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-// import Weight from './Weight';
-// import Name from './Name';
-// import Fu from './Tag';
 import request from 'superagent-bluebird-promise';
 import url from '../../utils/url';
 import './_person';
@@ -41,7 +38,6 @@ class Person extends Component {
   prepareData() {
     const uuid = localStorage.getItem('uuid');
     if (uuid === undefined) {
-      Toast.fail('请登陆');
       return;
     }
     const data = {
@@ -62,12 +58,12 @@ class Person extends Component {
         if (resultData.result.imageName) {
           this.getImage(resultData.result.imageName);
         }
-        Toast.success(resultData.msg);
+
         this.setState({
           driverInfo: resultData.result,
         });
       } else {
-        Toast.fail(resultData.msg);
+
       }
     });
   }

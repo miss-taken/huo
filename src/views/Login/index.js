@@ -44,7 +44,6 @@ class Login extends Component {
         const resultData = JSON.parse(res.text);
         if (resultData.success) {
           localStorage.setItem('uuid', resultData.result.uuid);
-          Toast.success(resultData.msg);
           this.context.router.push('/person');
         } else {
           Toast.fail(resultData.msg);

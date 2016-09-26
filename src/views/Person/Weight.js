@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
-import { InputItem, Toast, WingBlank, Button } from 'antd-mobile';
+import { InputItem, Toast, WingBlank, Button, Picker } from 'antd-mobile';
 import { createForm } from 'rc-form';
 import url from '../../utils/url';
 import { handleRes } from '../../utils/web';
 import request from 'superagent-bluebird-promise';
+import params from '../../utils/params';
 
 class Weight extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      data: params.carAxis,
+    };
+    console.log(this.state.data);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -17,6 +22,14 @@ class Weight extends Component {
     const { getFieldProps } = this.props.form;
     return (
       <div className="page">
+        <Picker
+          {...getFieldProps('carAxis')}
+          className="reg-picker"
+          labelNumber={1}
+          cols={1}
+          extra="请选择车轴数量"
+          data={this.state.data}
+        />
         <InputItem
           {...getFieldProps('weight', {
             initialValue: weight,
@@ -25,7 +38,7 @@ class Weight extends Component {
           placeholder="请输入吨位"
           className="weight-input"
           type="number"
-        />
+          />
         <InputItem
           {...getFieldProps('cubic', {
             initialValue: cubic,
@@ -63,7 +76,6 @@ class Weight extends Component {
       return;
     }
     if (uuid === undefined) {
-      Toast.fail('请登陆');
       return;
     }
     const data = {
@@ -87,7 +99,6 @@ class Weight extends Component {
         driverInfo.weight = weight.toString();
         driverInfo.cubic = cubic.toString();
         localStorage.setItem('driverInfo', JSON.stringify(driverInfo));
-        Toast.success(resultData.msg);
         this.context.router.push('/person');
       } else {
         Toast.fail(resultData.msg);

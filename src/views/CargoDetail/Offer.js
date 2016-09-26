@@ -35,7 +35,6 @@ class Offer extends React.Component {
   handleOffer() {
     const uuid = localStorage.getItem('uuid');
     if (uuid === undefined) {
-      Toast.fail('请登陆');
       return;
     }
     const { unitType } = this.state;

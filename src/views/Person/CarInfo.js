@@ -95,7 +95,6 @@ class CarInfo extends Component {
         driverInfo.carType = isOther ? 100 : cType;
         driverInfo.carTypeStr = _carType.find(c => c.value === (isOther ? 100 : cType)).label;
         localStorage.setItem('driverInfo', JSON.stringify(driverInfo));
-        Toast.success(resultData.msg);
         this.context.router.push('/person');
       } else {
         Toast.fail(resultData.msg);
