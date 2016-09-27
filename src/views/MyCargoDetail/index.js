@@ -145,6 +145,7 @@ class CargoDetail extends React.Component {
       data: {
         code,
         orderNum,
+        url: location.href,
         type: 'ORDER_PAY_POST',
       },
       service: 'SERVICE_PAY',
