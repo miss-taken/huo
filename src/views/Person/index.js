@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Icon, List } from 'antd-mobile';
+import { Icon, List, Toast } from 'antd-mobile';
 import { Link } from 'react-router';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import request from 'superagent-bluebird-promise';
@@ -25,7 +25,33 @@ class Person extends Component {
     this.getImage = this.getImage.bind(this);
     this.renderPaper = this.renderPaper.bind(this);
     this.httpRequest = postRequest.bind(this);
+
+    this.modifyDriverInfo = this.modifyDriverInfo.bind(this);
+    this.modifyCertifyImg = this.modifyCertifyImg.bind(this);
   }
+
+
+  modifyDriverInfo(e){
+    const { driverInfo } = this.state;
+    if(driverInfo.driverStatus === 10){
+      e.preventDefault();
+      Toast.info('您已认证，不能编辑信息',0.8);
+      return false;
+    }
+    return true;
+  }
+  
+  modifyCertifyImg(e){
+    const { driverInfo } = this.state;
+    if(driverInfo.certifyStatus === 10){
+      e.preventDefault();
+      Toast.info('车辆信息已认证，不能编辑信息',0.8);
+      return false;
+    }
+    return true;
+  }
+
+ 
 
   cloneChildren() {
     const path = this.props.location.pathname;
@@ -55,7 +81,7 @@ class Person extends Component {
         this.setState({
           driverInfo: returnData.result,
         });
-        localStorage.setItem('driverInfo', JSON.stringify(returnData.result));
+        // localStorage.setItem('driverInfo', JSON.stringify(returnData.result));
 
     },(returnData)=>{
 
@@ -148,36 +174,36 @@ class Person extends Component {
         </div>
         <List>
           <List.Body>
-            <Link to="/person/name">
+            <Link to="/person/name" onClick={this.modifyDriverInfo}>
               <List.Item
                 arrow="horizontal"
                 extra={driverInfo.name}
               >姓名</List.Item>
             </Link>
-            <Link to="/person/car-img">
+            <Link to="/person/car-img" onClick={this.modifyCertifyImg}>
               {
                 this.renderPaper()
               }
             </Link>
-            <Link to="/person/car-number">
+            <Link to="/person/car-number" onClick={this.modifyDriverInfo}>
               <List.Item
                 arrow="horizontal"
                 extra={driverInfo.carNum}
               >车牌号</List.Item>
             </Link>
-            <Link to="/person/car-info">
+            <Link to="/person/car-info" onClick={this.modifyDriverInfo}>
               <List.Item
                 arrow="horizontal"
                 extra= {carDesc}
               >车型车长</List.Item>
             </Link>
-            <Link to="/person/car-weight">
+            <Link to="/person/car-weight" onClick={this.modifyDriverInfo}>
               <List.Item
               arrow="horizontal"
               extra={weightDesc}
             >吨位/方量/轴数</List.Item>
             </Link>
-            <Link to="/person/car-tag">
+            <Link to="/person/car-tag" onClick={this.modifyDriverInfo}>
               <List.Item
               arrow="horizontal"
               extra={driverInfo.carTools}

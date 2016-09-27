@@ -20,7 +20,6 @@ class CarTag extends Component {
     const { carTools } = this.props.driverInfo;
     let tags;
     if (carTools) {
-      console.log(initTags);
       tags = carTools.split(';');
       tags = initTags.map(tag => {
         if (tags.includes(tag.name)) {
