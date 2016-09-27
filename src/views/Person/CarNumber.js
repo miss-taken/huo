@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import { InputItem, WingBlank, Toast, Button, Popup, Flex } from 'antd-mobile';
 import { createForm } from 'rc-form';
-import url from '../../utils/url';
 import params from '../../utils/params';
-import { handleRes } from '../../utils/web';
-import request from 'superagent-bluebird-promise';
+import { postRequest } from '../../utils/web';
 
 class CarNumber extends Component {
   constructor(props) {
@@ -18,6 +16,7 @@ class CarNumber extends Component {
     this.handleToggle = this.handleToggle.bind(this);
     this.handleSelectTag = this.handleSelectTag.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.httpRequest = postRequest.bind(this);
   }
 
   handleToggle(selectTag, index) {
@@ -118,29 +117,16 @@ class CarNumber extends Component {
       return;
     }
     const data = {
-      data: {
         carNum: _carNum,
         type: '	DRIVER_CAR_NUM',
-      },
-      service: 'SERVICE_DRIVER',
-      uuid,
-      timestamp: '',
-      signatures: '',
-    };
-    request.post(url.webapp)
-    .withCredentials()
-    .send(data)
-    .then((res) => {
-      const _res = handleRes(res);
-      if (_res.success) {
-        const driverInfo = JSON.parse(localStorage.getItem('driverInfo'));
-        driverInfo.carNum = _carNum;
-        localStorage.setItem('driverInfo', JSON.stringify(driverInfo));
+      };
+    const service = 'SERVICE_DRIVER';
+
+    this.httpRequest(data,service,(returnData)=>{
         this.context.router.push('/person');
-      } else {
-        Toast.fail(_res.msg);
-        this.context.router.push('/person');
-      }
+    },(returnData)=>{
+        Toast.fail(returnData.msg);
+
     });
   }
 }

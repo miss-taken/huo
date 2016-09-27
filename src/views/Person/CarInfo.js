@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import { WingBlank, Toast, Button, Picker, List } from 'antd-mobile';
 import { createForm } from 'rc-form';
-import url from '../../utils/url';
 import params from '../../utils/params';
-import { handleRes } from '../../utils/web';
-import request from 'superagent-bluebird-promise';
+import { postRequest } from '../../utils/web';
 
 const _carType = params.carType;
 const _carLength = params.carLength;
@@ -16,6 +14,7 @@ class CarInfo extends Component {
       data: _carType,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.httpRequest = postRequest(this);
   }
 
   render() {
@@ -71,35 +70,18 @@ class CarInfo extends Component {
     if (cType === 100) {
       cType = 0;
     }
-
     const data = {
-      data: {
         carType: `${cType}`,
         carLength: `${cLength}`,
         type: 'DRIVER_CAR',
-      },
-      service: 'SERVICE_DRIVER',
-      uuid,
-      timestamp: '',
-      signatures: '',
     };
-    request.post(url.webapp)
-    .withCredentials()
-    .send(data)
-    .then((res) => {
-      const resultData = handleRes(res);
-      if (resultData.success) {
-        const driverInfo = JSON.parse(localStorage.getItem('driverInfo'));
-        driverInfo.carLeng = cLength;
-        driverInfo.carLengthStr = _carLength.find(c => c.value === cLength).label;
-        driverInfo.carType = isOther ? 100 : cType;
-        driverInfo.carTypeStr = _carType.find(c => c.value === (isOther ? 100 : cType)).label;
-        localStorage.setItem('driverInfo', JSON.stringify(driverInfo));
+    const  service = 'SERVICE_DRIVER';
+    this.httpRequest(data,service,(returnData)=>{
         this.context.router.push('/person');
-      } else {
-        Toast.fail(resultData.msg);
-        this.context.router.push('/person');
-      }
+
+    },(returnData)=>{
+        Toast.fail(returnData.msg);
+
     });
   }
 }

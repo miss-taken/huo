@@ -4,9 +4,7 @@ import Offer from './Offer';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { WingBlank, Table, Button } from 'antd-mobile';
 import './_mycargoDetail';
-import request from 'superagent-bluebird-promise';
-import url from '../../utils/url';
-import { handleRes } from '../../utils/web';
+import { postRequest } from '../../utils/web';
 import mapIcon from './map-icon.png';
 
 const columns = [
@@ -45,6 +43,7 @@ class CargoDetail extends React.Component {
     this.getPayInfo = this.getPayInfo.bind(this);
     // 提交支付信息
     this.postPayInfo = this.postPayInfo.bind(this);
+    this.httpRequest = postRequest.bind(this);
   }
 
   cloneChildren() {
@@ -80,30 +79,20 @@ class CargoDetail extends React.Component {
   // 获取货源信息
   prepareData() {
     const uuid = localStorage.getItem('uuid');
-    const _data = {
-      data: {
+    const data = {
         orderId: this.props.params.id.toString(),
         type: 'ORDER_DETAIL',
-      },
-      service: 'SERVICE_ORDER',
-      uuid,
-      timestamp: '',
-      signatures: '',
-    };
-
-    request.post(url.webapp)
-    .withCredentials()
-    .send(_data)
-    .then((res) => {
-      const resultData = JSON.parse(res.text);
-      if (resultData.success) {
+      };
+    const  service = 'SERVICE_ORDER';
+    this.httpRequest(data,service,(returnData)=>{
         this.setState({
-          cargoInfo: resultData.result,
-          projectInfo: resultData.result.projectInfo,
-          loadAddressInfo: resultData.result.loadAddressInfo,
-          unloadAddressInfo: resultData.result.unloadAddressInfo,
+          cargoInfo: returnData.result,
+          projectInfo: returnData.result.projectInfo,
+          loadAddressInfo: returnData.result.loadAddressInfo,
+          unloadAddressInfo: returnData.result.unloadAddressInfo,
         });
-      }
+    },(returnData)=>{
+
     });
   }
 
@@ -112,26 +101,15 @@ class CargoDetail extends React.Component {
     // const uuid = localStorage.getItem('uuid');
     const { id } = this.props.params;
     const data = {
-      data: {
         orderId: id,
         type: 'ORDER_PAYINFO',
-      },
-      service: 'SERVICE_PAY',
-      // uuid,
-      timestamp: '',
-      signatures: '',
-    };
-    request.post(url.webapp)
-    .withCredentials()
-    .send(data)
-    .then((res) => {
-      console.log('res', res);
-      const resultData = handleRes(res);
-      if (!resultData.success) {
-        this.setState({ payInfo: resultData.result });
-      }
-      this.handleOfferOpen();
-    });
+      };
+   const   service = 'SERVICE_PAY';
+   this.httpRequest(data,service,(returnData)=>{
+        console.log('success');
+   },(returnData)=>{
+
+   });
   }
 
   // 确认支付

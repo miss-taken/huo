@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { ListView } from 'antd-mobile';
 import { Link } from 'react-router';
-import request from 'superagent-bluebird-promise';
-import url from '../../utils/url';
+import { postRequest } from "../../utils/web";
 import './_cargo';
 
 const NUM_ROWS = 20;
@@ -36,6 +35,7 @@ class Cargo extends Component {
 
     this.requestForCargo = this.requestForCargo.bind(this);
     this.onEndReached = this.onEndReached.bind(this);
+    this.httpRequest = postRequest.bind(this);
   }
 
   onEndReached(event) {
@@ -55,6 +55,7 @@ class Cargo extends Component {
     this.requestForCargo(this.state.currPage = 1);
   }
 
+
   requestForCargo(page) {
     const uuid = localStorage.getItem('uuid');
     if (page >= this.state.totalPage) {
@@ -63,35 +64,24 @@ class Cargo extends Component {
     if (uuid === undefined) {
       return;
     }
-
-    const requestData = {
-      data: {
+    const data = {
         currPage: page.toString(),
         type: 'CARGO_LIST_COMMEN',
-      },
-      service: 'SERVICE_CARGO',
-      uuid,
-      timestamp: '',
-      signatures: '',
     };
-    request.post(url.webapp)
-    .withCredentials()
-    .send(requestData)
-    .then((res) => {
-      const resultData = JSON.parse(res.text);
-      if (resultData.success) {
-        this.rData = { ...this.rData, ...this.genData(++pageIndex) };
-        this.setState({
-          currPage: resultData.result.currPage,
-          totalPage: resultData.result.totalPage,
-          cargoList: resultData.result.objectArray,
-          dataSource: this.state.dataSource.cloneWithRows(this.rData),
-          isLoading: false,
-        });
-      } else {
-        
-      }
-    });
+    const  serviceName = 'SERVICE_CARGO';
+    this.httpRequest(data,serviceName,
+       (returnData)=>{
+          this.rData = { ...this.rData, ...this.genData(++pageIndex) };
+          this.setState({
+            currPage: returnData.result.currPage,
+            totalPage: returnData.result.totalPage,
+            cargoList: returnData.result.objectArray,
+            dataSource: this.state.dataSource.cloneWithRows(this.rData),
+            isLoading: false,
+          });
+      }, (returnData)=>{
+
+      });
   }
 
   render() {

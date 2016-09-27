@@ -3,51 +3,42 @@ import { Link } from 'react-router';
 import { createForm } from 'rc-form';
 import { Icon, List, InputItem, Toast, Button, WingBlank } from 'antd-mobile';
 import request from 'superagent-bluebird-promise';
-import url from '../../utils/url';
+import { postRequest } from '../../utils/web';
 import './_login';
 
 
 class Login extends Component {
   constructor(props) {
     super(props);
-
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.httpRequest = postRequest.bind(this);
+    console.log(this.context);
+    console.log(history);
   }
 
  // 登陆请求
   handleSubmit() {
     const { form } = this.props;
-
+    this.context.router.goback();
     const re = new RegExp('[&,?]code=([^//&]*)', 'i');
     const weChatCode = re.exec(location.href)[1];
-
+    
     form.validateFields((errors, values) => {
       if (!!errors) {
         console.log('Errors in form!!!');
         return;
       }
       const data = {
-        data: {
           mobile: values.username,
           passWord: values.password,
           weChatCode,
-        },
-        service: 'SERVICE_LOGIN',
-        uuid: '',
-        timestamp: '',
-        signatures: '',
-      };
-      request.post(url.webapp)
-      .withCredentials()
-      .send(data)
-      .then((res) => {
-        const resultData = JSON.parse(res.text);
-        if (resultData.success) {
-          localStorage.setItem('uuid', resultData.result.uuid);
+        };
+      const serviceName = 'SERVICE_LOGIN';
+      this.httpRequest(data,serviceName,(returnData)=>{
+          localStorage.setItem('uuid', returnData.result.uuid);
           this.context.router.push('/person');
-        } else {
-          Toast.fail(resultData.msg);
-        }
+      },(returnData)=>{
+          Toast.fail(returnData.msg);
       });
     });
   }
