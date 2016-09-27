@@ -1,8 +1,17 @@
 import React, { Component } from 'react';
 import { Tag, Toast, WingBlank, Button } from 'antd-mobile';
 import { createForm } from 'rc-form';
-import { initTags } from '../../utils/params';
 import { postRequest } from '../../utils/web';
+
+const initTags = [
+  { name: '车内无杂物' },
+  { name: '自带工具' },
+  { name: '篷布' },
+  { name: '绳索' },
+  { name: '枕木' },
+  { name: '棉被' },
+  { name: '架高杆' },
+];
 
 class CarTag extends Component {
   constructor(props) {
@@ -11,6 +20,7 @@ class CarTag extends Component {
     const { carTools } = this.props.driverInfo;
     let tags;
     if (carTools) {
+      console.log(initTags);
       tags = carTools.split(';');
       tags = initTags.map(tag => {
         if (tags.includes(tag.name)) {
@@ -99,8 +109,10 @@ class CarTag extends Component {
       };
      const service = 'SERVICE_DRIVER';
     this.httpRequest(data,service,(returnData)=>{
-        location.href = '/#/person';
-        this.context.router.push('/person');
+      const driverInfo = JSON.parse(localStorage.getItem('driverInfo'));
+      driverInfo.carTools = carTools;
+      localStorage.setItem('driverInfo', JSON.stringify(driverInfo));
+      this.context.router.push('/person');
     },(returnData)=>{
         Toast.fail(returnData.msg);
     });

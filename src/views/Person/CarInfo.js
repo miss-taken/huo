@@ -14,7 +14,7 @@ class CarInfo extends Component {
       data: _carType,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.httpRequest = postRequest(this);
+    this.httpRequest = postRequest.bind(this);
   }
 
   render() {
@@ -77,7 +77,14 @@ class CarInfo extends Component {
     };
     const  service = 'SERVICE_DRIVER';
     this.httpRequest(data,service,(returnData)=>{
-        this.context.router.push('/person');
+      const driverInfo = JSON.parse(localStorage.getItem('driverInfo'));
+      driverInfo.carLeng = cLength;
+      driverInfo.carLengthStr = _carLength.find(c => c.value === cLength).label;
+      driverInfo.carType = isOther ? 100 : cType;
+      driverInfo.carTypeStr = _carType.find(c => c.value === (isOther ? 100 : cType)).label;
+      localStorage.setItem('driverInfo', JSON.stringify(driverInfo));
+
+      this.context.router.push('/person');
 
     },(returnData)=>{
         Toast.fail(returnData.msg);

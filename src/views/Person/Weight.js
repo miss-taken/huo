@@ -65,7 +65,6 @@ class Weight extends Component {
 
  // 修改吨位放量
   handleSubmit() {
-    location.href = '/#/person';
     const uuid = localStorage.getItem('uuid');
     const { form } = this.props;
 
@@ -93,7 +92,11 @@ class Weight extends Component {
       };
       const service = 'SERVICE_DRIVER';
       this.httpRequest(data,service,(returnData)=>{
-          this.context.router.push('/person');
+        const driverInfo = JSON.parse(localStorage.getItem('driverInfo'));
+        driverInfo.weight = weight.toString();
+        driverInfo.cubic = cubic.toString();
+        localStorage.setItem('driverInfo', JSON.stringify(driverInfo));
+        this.context.router.push('/person');
       },(returnData)=>{
           Toast.fail(returnData.msg);
       });

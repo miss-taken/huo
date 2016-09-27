@@ -18,19 +18,20 @@ import MyCargoSuccess from './views/MyCargoDetail/OfferSuccess';
 import MyCargoMap from './views/MyCargoDetail/Map';
 
 function redirectToDashboad(nextState, replace) {
-  if (sessionStorage.getItem('uuid')) {
+  if (localStorage.getItem('uuid') != null) {
     replace('/');
   }
 }
 
 function redirectToLogin(nextState, replace) {
-  if (!sessionStorage.getItem('uuid')) {
+  if (localStorage.getItem('uuid') == null) {
     replace('/login');
   }
 }
 
 function redirectToCargo(nextState, replace) {
-  if (sessionStorage.getItem('uuid')) {
+  if (localStorage.getItem('uuid') != null) {
+
      replace('/cargo');
   }
 }

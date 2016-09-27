@@ -12,14 +12,11 @@ class Login extends Component {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.httpRequest = postRequest.bind(this);
-    console.log(this.context);
-    console.log(history);
   }
 
  // 登陆请求
   handleSubmit() {
-    const { form } = this.props;
-    this.context.router.goback();
+    const { form } = this.props;    
     const re = new RegExp('[&,?]code=([^//&]*)', 'i');
     const weChatCode = re.exec(location.href)[1];
     

@@ -53,7 +53,10 @@ class Name extends Component {
     const  service = 'SERVICE_DRIVER';
     
     this.httpRequest(data,service,(returnData)=>{
-        this.context.router.push('/person');
+      const driverInfo = JSON.parse(localStorage.getItem('driverInfo'));
+      driverInfo.name = name;
+      localStorage.setItem('driverInfo', JSON.stringify(driverInfo));
+      this.context.router.push('/person');
     },(returnData)=>{
         
     });

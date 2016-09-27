@@ -103,7 +103,6 @@ class CarNumber extends Component {
   }
 
   handleSubmit() {
-    location.href = '/#/person';
     const uuid = localStorage.getItem('uuid');
     const carNum = this.props.form.getFieldProps('carNum').value;
     const { tag } = this.state;
@@ -123,7 +122,12 @@ class CarNumber extends Component {
     const service = 'SERVICE_DRIVER';
 
     this.httpRequest(data,service,(returnData)=>{
-        this.context.router.push('/person');
+      
+      const driverInfo = JSON.parse(localStorage.getItem('driverInfo'));
+      driverInfo.carNum = _carNum;
+      localStorage.setItem('driverInfo', JSON.stringify(driverInfo));
+      this.context.router.push('/person');
+
     },(returnData)=>{
         Toast.fail(returnData.msg);
 

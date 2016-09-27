@@ -55,6 +55,8 @@ class Person extends Component {
         this.setState({
           driverInfo: returnData.result,
         });
+        localStorage.setItem('driverInfo', JSON.stringify(returnData.result));
+
     },(returnData)=>{
 
     });
