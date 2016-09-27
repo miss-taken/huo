@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import { InputItem, WingBlank, Toast, Button } from 'antd-mobile';
 import { createForm } from 'rc-form';
-import url from '../../utils/url';
-import { handleRes } from '../../utils/web';
-import request from 'superagent-bluebird-promise';
+import postRequest from '../../utils/web';
 
 class Name extends Component {
   constructor(props) {
     super(props);
 
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.httpRequest = postRequest.bind(this);
   }
 
   render() {
@@ -48,29 +47,15 @@ class Name extends Component {
       return;
     }
     const data = {
-      data: {
         name,
         type: 'DRIVER_NAME',
-      },
-      service: 'SERVICE_DRIVER',
-      uuid,
-      timestamp: '',
-      signatures: '',
-    };
-    request.post(url.webapp)
-    .withCredentials()
-    .send(data)
-    .then((res) => {
-      const resultData = handleRes(res);
-      if (resultData.success) {
-        const driverInfo = JSON.parse(localStorage.getItem('driverInfo'));
-        driverInfo.name = name;
-        localStorage.setItem('driverInfo', JSON.stringify(driverInfo));
+      };
+    const  service = 'SERVICE_DRIVER';
+    
+    this.httpRequest(data,service,(returnData)=>{
         this.context.router.push('/person');
-      } else {
-        Toast.fail(resultData.msg);
-        this.context.router.push('/person');
-      }
+    },(returnData)=>{
+        
     });
   }
 }

@@ -3,8 +3,7 @@ import Offer from './Offer';
 import Upload from './Upload';
 import { WingBlank, Table, Button, Modal } from 'antd-mobile';
 import './_cargoDetail';
-import request from 'superagent-bluebird-promise';
-import url from '../../utils/url';
+import { postRequest } from '../../utils/web';
 
 const columns = [
   { title: '标题', dataIndex: 'title', key: 'title' },
@@ -48,6 +47,7 @@ class CargoDetail extends React.Component {
     this.renderBtn = this.renderBtn.bind(this);
 
     this.handleHiddenBtn = this.handleHiddenBtn.bind(this);
+    this.httpRequest = postRequest.bind(this);
   }
 
   handleHiddenBtn() {
@@ -249,29 +249,18 @@ class CargoDetail extends React.Component {
   // 获取货源信息
   prepareData() {
     const _data = {
-      data: {
         cargoId: this.props.params.id,
         type: 'CARGO_SIMPLE',
-      },
-      service: 'SERVICE_CARGO',
-      uuid: '',
-      timestamp: '',
-      signatures: '',
-    };
+      };
+    const service = 'SERVICE_CARGO';
+   this.httpRequest(data,service,(returnData)=>{
+      this.setState({
+        cargoInfo: returnData.result,
+        projectInfo: returnData.result.projectInfo,
+      });
+   },(returnData)=>{
 
-    request.post(url.webapp)
-    .withCredentials()
-    .send(_data)
-    .then((res) => {
-      const resultData = JSON.parse(res.text);
-      if (resultData.success) {
-        this.setState({
-          cargoInfo: resultData.result,
-          projectInfo: resultData.result.projectInfo,
-        });
-      } else {
-      }
-    });
+   });
   }
 }
 

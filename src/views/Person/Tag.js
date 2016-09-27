@@ -1,19 +1,8 @@
 import React, { Component } from 'react';
 import { Tag, Toast, WingBlank, Button } from 'antd-mobile';
 import { createForm } from 'rc-form';
-import url from '../../utils/url';
-import { handleRes } from '../../utils/web';
-import request from 'superagent-bluebird-promise';
-
-const initTags = [
-  { name: '车内无杂物' },
-  { name: '自带工具' },
-  { name: '篷布' },
-  { name: '绳索' },
-  { name: '枕木' },
-  { name: '棉被' },
-  { name: '架高杆' },
-];
+import { initTags } from '../../utils/params';
+import { postRequest } from '../../utils/web';
 
 class CarTag extends Component {
   constructor(props) {
@@ -35,6 +24,7 @@ class CarTag extends Component {
     };
     this.handleSelectTag = this.handleSelectTag.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.httpRequest = postRequest.bind(this);
   }
 
   handleSelectTag(_tag) {
@@ -104,30 +94,15 @@ class CarTag extends Component {
 
     console.log(carTools);
     const data = {
-      data: {
         carTools,
         type: 'DRIVER_CAR_TOOLS',
-      },
-      service: 'SERVICE_DRIVER',
-      uuid,
-      timestamp: '',
-      signatures: '',
-    };
-    request.post(url.webapp)
-    .withCredentials()
-    .send(data)
-    .then((res) => {
-      const _res = handleRes(res);
-      if (_res.success) {
+      };
+     const service = 'SERVICE_DRIVER';
+    this.httpRequest(data,service,(returnData)=>{
         location.href = '/#/person';
-        const driverInfo = JSON.parse(localStorage.getItem('driverInfo'));
-        driverInfo.carTools = carTools;
-        localStorage.setItem('driverInfo', JSON.stringify(driverInfo));
         this.context.router.push('/person');
-      } else {
-        Toast.fail(_res.msg);
-        this.context.router.push('/person');
-      }
+    },(returnData)=>{
+        Toast.fail(returnData.msg);
     });
   }
 }

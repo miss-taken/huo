@@ -1,8 +1,7 @@
 import React from 'react';
 import { Modal, Button, InputItem, Toast } from 'antd-mobile';
 import { createForm } from 'rc-form';
-import request from 'superagent-bluebird-promise';
-import url from '../../utils/url';
+import { postRequest } from '../../utils/web';
 
 class Offer extends React.Component {
   constructor(props) {
@@ -20,6 +19,8 @@ class Offer extends React.Component {
     this.handleUnitChange = this.handleUnitChange.bind(this);
     // 总价变化
     this.handleTotalPriceChange = this.handleTotalPriceChange.bind(this);
+    this.handleQuantityChange = this.handleQuantityChange.bind(this);
+    this.httpRequest = postRequest.bind(this);
   }
 
   handleTypeToggle() {
@@ -41,33 +42,22 @@ class Offer extends React.Component {
     const { cargoInfo, form } = this.props;
     const values = form.getFieldsValue();
 
-    const data = {
-      data: {
+    const  data = {
         cargoId: `${cargoInfo.cargoId}`,
         quantity: `${values.quantity}`,
         unitPrice: `${values.unitPrice}`,
         unitType: `${unitType}`,
         type: 'CARGO_APPLY',
-      },
-      service: 'SERVICE_CARGO',
-      uuid,
-      timestamp: '',
-      signatures: '',
-    };
+      };
+    const serviceName = 'SERVICE_CARGO';
 
-    request.post(url.webapp)
-    .withCredentials()
-    .send(data)
-    .then((res) => {
-      const resultData = JSON.parse(res.text);
-      if (resultData.success) {
-        Toast.success(resultData.msg);
+    this.httpRequest(data,serviceName,(returnData)=>{
         this.props.onClose();
         this.props.onHidden();
-      } else {
-        Toast.fail(resultData.msg);
-      }
+    },(returnData)=>{
+        Toast.fail(returnData.msg);
     });
+
   }
 
   handleUnitChange(val) {
@@ -80,6 +70,14 @@ class Offer extends React.Component {
     }
     return form.setFieldsValue({
       totalPrice: quantity * Number.parseInt(val, 10),
+    });
+  }
+
+  handleQuantityChange(val){
+    const { form } = this.props;
+    return form.setFieldsValue({
+      totalPrice: '',
+      unitPrice: '',
     });
   }
 
@@ -122,11 +120,11 @@ class Offer extends React.Component {
                 <InputItem
                   {...getFieldProps('quantity', {
                     initialValue: '',
+                    onChange: this.handleQuantityChange
                   })}
                   type="number"
                   extra={unitTypeStr}
                   >装载数量</InputItem>
-                <span className="unit-toggle" onClick={this.handleTypeToggle}></span>
               </div>
               <div className="form-item price-wrapper">
                 <InputItem

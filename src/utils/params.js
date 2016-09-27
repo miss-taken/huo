@@ -71,9 +71,20 @@ const tags = [
   { name: '琼' },
 ];
 
+const initTags = [
+  { name: '车内无杂物' },
+  { name: '自带工具' },
+  { name: '篷布' },
+  { name: '绳索' },
+  { name: '枕木' },
+  { name: '棉被' },
+  { name: '架高杆' },
+];
+
 export default {
   carLength,
   carType,
   tags,
   carAxis,
+  initTags,
 };

@@ -17,17 +17,23 @@ import MyCargoDetail from './views/MyCargoDetail';
 import MyCargoSuccess from './views/MyCargoDetail/OfferSuccess';
 import MyCargoMap from './views/MyCargoDetail/Map';
 
-// function redirectToDashboad(nextState, replace) {
-//   if (sessionStorage.getItem('uuid')) {
-//     replace('/');
-//   }
-// }
-//
-// function redirectToLogin(nextState, replace) {
-//   if (!sessionStorage.getItem('uuid')) {
-//     replace('/login');
-//   }
-// }
+function redirectToDashboad(nextState, replace) {
+  if (sessionStorage.getItem('uuid')) {
+    replace('/');
+  }
+}
+
+function redirectToLogin(nextState, replace) {
+  if (!sessionStorage.getItem('uuid')) {
+    replace('/login');
+  }
+}
+
+function redirectToCargo(nextState, replace) {
+  if (sessionStorage.getItem('uuid')) {
+     replace('/cargo');
+  }
+}
 
 class Routes extends React.Component {
   constructor(props) {
@@ -38,11 +44,11 @@ class Routes extends React.Component {
   render() {
     return (
       <Router history={hashHistory}>
-        <Route path="login" component={Login}/>
-        <Route path="register" component={Register}/>
+        <Route path="login" component={Login} onEnter={redirectToCargo}/>
+        <Route path="register" component={Register} onEnter={redirectToCargo}/>
         <Route path="/" component={App}>
-          <IndexRoute component={Person}/>
-          <Route path="person" component={Person}>
+          <IndexRoute component={Cargo}/>
+          <Route path="person" component={Person} onEnter={redirectToLogin}>
             <Route path="name" component={EditName}/>
             <Route path="car-number" component={EditNumber}/>
             <Route path="car-info" component={EditInfo}/>
@@ -52,8 +58,8 @@ class Routes extends React.Component {
           </Route>
           <Route path="cargo" component={Cargo}/>
           <Route path="cargo/:id" component={CargoDetail}/>
-          <Route path="my-cargo" component={MyCargo}/>
-          <Route path="my-cargo/:id" component={MyCargoDetail}>
+          <Route path="my-cargo" component={MyCargo} onEnter={redirectToLogin}/>
+          <Route path="my-cargo/:id" component={MyCargoDetail} onEnter={redirectToLogin}>
             <Route path="success" component={MyCargoSuccess}/>
             <Route path="map" component={MyCargoMap}/>
           </Route>

@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import request from 'superagent-bluebird-promise';
 import url from '../../utils/url';
+import { postRequest } from '../../utils/web';
 import './_person';
 
 class Person extends Component {
@@ -23,6 +24,7 @@ class Person extends Component {
     this.prepareData = this.prepareData.bind(this);
     this.getImage = this.getImage.bind(this);
     this.renderPaper = this.renderPaper.bind(this);
+    this.httpRequest = postRequest.bind(this);
   }
 
   cloneChildren() {
@@ -41,30 +43,20 @@ class Person extends Component {
       return;
     }
     const data = {
-      data: {
         type: 'DRIVER_INFO',
-      },
-      service: 'SERVICE_DRIVER',
-      uuid,
-      timestamp: '',
-      signatures: '',
-    };
-    request.post(url.webapp)
-    .withCredentials()
-    .send(data)
-    .then((res) => {
-      const resultData = JSON.parse(res.text);
-      if (resultData.success) {
-        if (resultData.result.imageName) {
-          this.getImage(resultData.result.imageName);
+      };
+    const service = 'SERVICE_DRIVER';
+    this.httpRequest(data,service,(returnData)=>{
+
+        if (returnData.result.imageName) {
+          this.getImage(returnData.result.imageName);
         }
 
         this.setState({
-          driverInfo: resultData.result,
+          driverInfo: returnData.result,
         });
-      } else {
+    },(returnData)=>{
 
-      }
     });
   }
 
@@ -87,8 +79,6 @@ class Person extends Component {
     })
     .send(data)
     .then((res) => {
-      // const resultData = JSON.parse(res.text);
-      console.log(res);
       const img = window.URL.createObjectURL(res.xhr.response);
       this.setState({
         certifyImg: img,
@@ -134,7 +124,7 @@ class Person extends Component {
   render() {
     const { driverInfo } = this.state;
     const carDesc = `${driverInfo.carTypeStr}/${driverInfo.carLengthStr}`;
-    const weightDesc = `${driverInfo.weight}吨/${driverInfo.cubic}方`;
+    const weightDesc = `${driverInfo.weight}吨/${driverInfo.cubic}方/${driverInfo.carAxis}`;
     return (
       <div className="person">
         <div className="panel">
@@ -183,7 +173,7 @@ class Person extends Component {
               <List.Item
               arrow="horizontal"
               extra={weightDesc}
-            >方位吨量</List.Item>
+            >吨位/方量/轴数</List.Item>
             </Link>
             <Link to="/person/car-tag">
               <List.Item

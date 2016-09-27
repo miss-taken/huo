@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { ListView } from 'antd-mobile';
 import { Link } from 'react-router';
 import request from 'superagent-bluebird-promise';
-import url from '../../utils/url';
+import { postRequest } from '../../utils/web';
 import './_myCargo';
 
 const NUM_ROWS = 20;
@@ -36,11 +36,11 @@ class MyCargo extends Component {
 
     this.requestForCargo = this.requestForCargo.bind(this);
     this.onEndReached = this.onEndReached.bind(this);
+    this.httpRequest = postRequest.bind(this);
   }
 
   onEndReached(event) {
     // load new data
-    console.log('reach end', event);
     this.setState({ isLoading: true });
     setTimeout(() => {
       this.rData = { ...this.rData, ...this.genData(++pageIndex) };
@@ -64,32 +64,25 @@ class MyCargo extends Component {
       return;
     }
 
-    const requestData = {
-      data: {
+    const data = {
         currPage: page.toString(),
         type: 'ORDER_LIST_DRIVER',
-      },
-      service: 'SERVICE_ORDER',
-      uuid,
-      timestamp: '',
-      signatures: '',
-    };
-    request.post(url.webapp)
-    .withCredentials()
-    .send(requestData)
-    .then((res) => {
-      const resultData = JSON.parse(res.text);
-      if (resultData.success) {
+      };
+    const service = 'SERVICE_ORDER';
+
+    this.httpRequest(data,service,(returnData)=>{
+      
         this.rData = { ...this.rData, ...this.genData(++pageIndex) };
         this.setState({
-          currPage: resultData.result.currPage,
-          totalPage: resultData.result.totalPage,
-          orderList: resultData.result.objectArray,
+          currPage: returnData.result.currPage,
+          totalPage: returnData.result.totalPage,
+          orderList: returnData.result.objectArray,
           dataSource: this.state.dataSource.cloneWithRows(this.rData),
           isLoading: false,
         });
-      } else {
-      }
+
+    },(returnData)=>{
+
     });
   }
 
@@ -113,7 +106,6 @@ class MyCargo extends Component {
           return null;
         }
         const obj = orderList[orderList.length - (index--)];
-        console.log('index', orderList.length, index, obj);
         return (
             <Link to={`/my-cargo/${obj.id}`}>
               <div key={rowID}

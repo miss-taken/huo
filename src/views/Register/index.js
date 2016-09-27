@@ -4,8 +4,7 @@ import { createForm } from 'rc-form';
 import _ from 'lodash';
 import { Icon, List, InputItem, Button, Toast, WingBlank, Picker } from 'antd-mobile';
 import './_register';
-import url from '../../utils/url';
-import request from 'superagent-bluebird-promise';
+import { postRequest } from '../../utils/web';
 import params from '../../utils/params';
 
 class Login extends Component {
@@ -18,38 +17,30 @@ class Login extends Component {
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.sendVerify = _.throttle(this.sendVerify.bind(this), 60000);
+    this.httpRequest = postRequest.bind(this);
   }
 
   handleSubmit() {
+    
     const carProp = this.props.form.getFieldProps('car').value;
     const re = new RegExp('[&,?]code=([^//&]*)', 'i');
     const weChatCode = re.exec(location.href)[1];
 
     const data = {
-      data: {
         mobile: this.props.form.getFieldProps('username').value.toString(),
         code: this.props.form.getFieldProps('verify').value.toString(),
         carLength: carProp[0].toString(),
         carType: carProp[1].toString(),
         type: 'DRIVER_REGISTER',
         weChatCode,
-      },
-      service: 'SERVICE_REGISTER',
-      uuid: '',
-      timestamp: '',
-      signatures: '',
-    };
-    request.post(url.webapp)
-    .withCredentials()
-    .send(data)
-    .then((res) => {
-      const resultData = JSON.parse(res.text);
-      if (resultData.success) {
-        localStorage.setItem('uuid', resultData.result.uuid);
-      } else {
-        Toast.fail(resultData.msg.toString());
-      }
-    });
+      };
+     const service = 'SERVICE_REGISTER';
+     this.httpRequest(data,service,(returnData)=>{
+        localStorage.setItem('uuid', returnData.result.uuid);
+     },(returnData)=>{
+         Toast.fail(returnData.msg);
+
+     });
   }
 
   sendVerify() {
@@ -60,26 +51,14 @@ class Login extends Component {
       clearInterval(text);
     }, 60000);
     const data = {
-      data: {
         mobile: this.props.form.getFieldProps('username').value,
         type: 'DRIVER_REGISTER',
-      },
-      service: 'SERVICE_IDENTIFY_CODE',
-      uuid: '',
-      timestamp: '',
-      signatures: '',
-    };
-    console.log('values', data);
-    request.post(url.webapp)
-    .withCredentials()
-    .send(data)
-    .then((res) => {
-      const resultData = JSON.parse(res.text);
-      if (resultData.sucess) {
-        Toast.success(resultData.msg);
-      } else {
-        Toast.fail(resultData.msg);
-      }
+      };
+    const  service = 'SERVICE_IDENTIFY_CODE';
+    this.httpRequest(data,service,(returnData)=>{
+       Toast.success(returnData.msg);
+    },(returnData)=>{
+        Toast.fail(returnData.msg);
     });
   }
   render() {
