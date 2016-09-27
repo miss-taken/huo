@@ -1,18 +1,16 @@
 import React from 'react';
-import './style/antd-mobile';
+// import './style/antd-mobile';
 import './style/app';
 // import Home from './views/Home';
+import url from './utils/url';
+import request from 'superagent-bluebird-promise';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-    };
+    
   }
-
-  componentWillMount() {
-  }
-
+  
   render() {
     return (
       <div>

@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { ListView } from 'antd-mobile';
 import { Link } from 'react-router';
-import { postRequest } from "../../utils/web";
-import './_cargo';
+import request from 'superagent-bluebird-promise';
+import { postRequest } from '../../utils/web';
+import './_myCargo';
 
 const NUM_ROWS = 20;
 let pageIndex = 0;
-class Cargo extends Component {
+class MyCargo extends Component {
 
   constructor(props) {
     super(props);
@@ -26,9 +27,9 @@ class Cargo extends Component {
 
     this.rData = {};
     this.state = {
-      currPage: 0,
+      currPage: 1,
       totalPage: 2,
-      cargoList: [],
+      orderList: [],
       dataSource: ds.cloneWithRows(this.genData()),
       isLoading: false,
     };
@@ -40,7 +41,6 @@ class Cargo extends Component {
 
   onEndReached(event) {
     // load new data
-    console.log('reach end', event);
     this.setState({ isLoading: true });
     setTimeout(() => {
       this.rData = { ...this.rData, ...this.genData(++pageIndex) };
@@ -55,7 +55,6 @@ class Cargo extends Component {
     this.requestForCargo(this.state.currPage = 1);
   }
 
-
   requestForCargo(page) {
     const uuid = localStorage.getItem('uuid');
     if (page >= this.state.totalPage) {
@@ -64,37 +63,40 @@ class Cargo extends Component {
     if (uuid === undefined) {
       return;
     }
+
     const data = {
         currPage: page.toString(),
-        type: 'CARGO_LIST_COMMEN',
-    };
-    const  serviceName = 'SERVICE_CARGO';
-    this.httpRequest(data,serviceName,
-       (returnData)=>{
-          this.rData = { ...this.rData, ...this.genData(++pageIndex) };
-          this.setState({
-            currPage: returnData.result.currPage,
-            totalPage: returnData.result.totalPage,
-            cargoList: returnData.result.objectArray,
-            dataSource: this.state.dataSource.cloneWithRows(this.rData),
-            isLoading: false,
-          });
-      }, (returnData)=>{
+        type: 'ORDER_LIST_DRIVER',
+      };
+    const service = 'SERVICE_ORDER';
 
-      });
+    this.httpRequest(data,service,(returnData)=>{
+      
+        this.rData = { ...this.rData, ...this.genData(++pageIndex) };
+        this.setState({
+          currPage: returnData.result.currPage,
+          totalPage: returnData.result.totalPage,
+          orderList: returnData.result.objectArray,
+          dataSource: this.state.dataSource.cloneWithRows(this.rData),
+          isLoading: false,
+        });
+
+    },(returnData)=>{
+
+    });
   }
 
   render() {
-    const { cargoList } = this.state;
-    let index = cargoList.length;
-    const separator = (sectionID, rowID) => (
-      <div key={`${sectionID}-${rowID}`} style={{
-        backgroundColor: '#F5F5F9',
-        height: 8,
-        borderTop: '1px solid #ECECED',
-        borderBottom: '1px solid #ECECED',
-      }} />
-    );
+    const { orderList } = this.state;
+    let index = orderList.length;
+    // const separator = (sectionID, rowID) => (
+    //   <div key={`${sectionID}-${rowID}`} style={{
+    //     backgroundColor: '#F5F5F9',
+    //     height: 8,
+    //     borderTop: '1px solid #ECECED',
+    //     borderBottom: '1px solid #ECECED',
+    //   }} />
+    // );
     let row;
     if (index <= 0) {
       row = () => <div></div>;
@@ -103,38 +105,37 @@ class Cargo extends Component {
         if (index === 0) {
           return null;
         }
-        const obj = cargoList[cargoList.length - (index--)];
+        const obj = orderList[orderList.length - (index--)];
         return (
-          <Link to={`/cargo/${obj.cargoId}`}>
-            <div key={rowID}
-              style={{
-                backgroundColor: 'white',
-              }}
-            />
-            <div className="panel">
-                <div className="panel-info">
-                  <div>{obj.sendTimeStr}</div>
-                  <div>{obj.startCityStr}→{obj.arrivalCityStr}</div>
-                </div>
-                <div style={{ display: 'inline-block' }}>
-                  <p>
-                    {obj.cargoName}
-                    <span className="span-divider"></span>
-                    {obj.weight}吨/{obj.cubic}立方
-                  </p>
-                  <p>
-                    {obj.carTypeStr}
-                    <span className="span-divider"></span>
-                    {obj.carLengthStr}
-                  </p>
-                </div>
-                <div className="trapezoid">{obj.statusStr}</div>
-            </div>
-          </Link>
+            <Link to={`/my-cargo/${obj.id}`}>
+              <div key={rowID}
+                style={{
+                  backgroundColor: 'white',
+                }}
+              />
+              <div className="panel">
+                  <div className="panel-info">
+                    <div>{obj.sendTimeStr}</div>
+                    <div>{obj.startCityStr}→{obj.arrivalCityStr}</div>
+                  </div>
+                  <div style={{ display: 'inline-block' }}>
+                    <p>
+                      {obj.cargoName}
+                      <span className="span-divider"></span>
+                      {obj.weight}吨/{obj.cubic}立方
+                    </p>
+                    <p>
+                      {obj.carTypeStr}
+                      <span className="span-divider"></span>
+                      {obj.carLengthStr}
+                    </p>
+                  </div>
+                  <div className="trapezoid">{obj.statusStr}</div>
+              </div>
+            </Link>
         );
       };
     }
-
     return (<div className="cargo">
       <ListView
         dataSource={this.state.dataSource}
@@ -143,10 +144,10 @@ class Cargo extends Component {
           {this.state.isLoading ? '加载中...' : '加载完毕'}
         </div>}
         renderRow={row}
-        renderSeparator={separator}
         pageSize={4}
         scrollRenderAheadDistance={500}
         scrollEventThrottle={20}
+        onScroll={() => { console.log('scroll'); }}
         useBodyScroll
         onEndReached={this.onEndReached}
         onEndReachedThreshold={10}
@@ -154,6 +155,8 @@ class Cargo extends Component {
       <div className="help">联系客服</div>
     </div>);
   }
+
+
 }
 
-export default Cargo;
+export default MyCargo;

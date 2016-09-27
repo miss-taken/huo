@@ -1,24 +1,32 @@
 import React, { Component } from 'react';
 import { InputItem, WingBlank, Toast, Button } from 'antd-mobile';
 import { createForm } from 'rc-form';
-import url from '../../utils/url';
-import request from 'superagent-bluebird-promise';
+import postRequest from '../../utils/web';
 
-class Weight extends Component {
+class Name extends Component {
+  constructor(props) {
+    super(props);
+
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.httpRequest = postRequest.bind(this);
+  }
+
   render() {
+    const { name } = this.props.driverInfo;
     const { getFieldProps } = this.props.form;
     return (
-      <div>
+      <div className="page edit-name">
         <InputItem
           {...getFieldProps('name', {
-            initialValue: '林丹',
+            initialValue: name,
           })}
           clear
           placeholder="请输入姓名"
+          className="name-input"
         />
         <WingBlank>
           <Button
-            className="login-submit"
+            className="submit-btn"
             type="warning"
             onClick={this.handleSubmit}>
             确定
@@ -29,39 +37,35 @@ class Weight extends Component {
   }
 
   handleSubmit() {
-    const uuid = sessionStorage.getItem('uuid');
+    const uuid = localStorage.getItem('uuid');
     const name = this.props.form.getFieldProps('name').value;
     if (name === undefined) {
       Toast.fail('请填写姓名');
       return;
     }
     if (uuid === undefined) {
-      Toast.fail('请登陆');
       return;
     }
     const data = {
-      data: {
         name,
         type: 'DRIVER_NAME',
-      },
-      service: 'SERVICE_DRIVER',
-      uuid,
-      timestamp: '',
-      signatures: '',
-    };
-    console.log('values', data);
-    request.post(url.webapp)
-    .withCredentials()
-    .send(data)
-    .then((res) => {
-      if (res.sucess) {
-        // to-do 更新个人中心司机姓名
-        Toast.success(res.msg);
-      } else {
-        Toast.fail(res.msg);
-      }
+      };
+    const  service = 'SERVICE_DRIVER';
+    
+    this.httpRequest(data,service,(returnData)=>{
+      const driverInfo = JSON.parse(localStorage.getItem('driverInfo'));
+      driverInfo.name = name;
+      localStorage.setItem('driverInfo', JSON.stringify(driverInfo));
+      this.context.router.push('/person');
+    },(returnData)=>{
+        
     });
   }
 }
-const _Weight = createForm()(Weight);
-export default _Weight;
+
+Name.contextTypes = {
+  router: React.PropTypes.object,
+};
+
+const _Name = createForm()(Name);
+export default _Name;
